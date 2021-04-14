@@ -33,6 +33,13 @@ def read_from_db(table_name, select_query, arguments):
     if row:
         return row
 
+def view_views(select_query, view_name):
+    cursor.execute(f"select {select_query} from {view_name}")
+
+    row = cursor.fetchall()
+    if row:
+        return row
+
 '''
 Funktion för att skriva till db.
 Parametrar = {
