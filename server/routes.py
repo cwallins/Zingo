@@ -68,13 +68,18 @@ def list_of_games():
 
 def view_question_package(selected_qp):
     #qp: name, description, creator
-    qp_name = selected_qp
-    qp_description = db_zingo.read_from_db("question_package", "qp_description", f"where qp_name = {qp_name}")
-    qp_creator = db_zingo.read_from_db("nickname", "vw_qp_with_nick", f"where qp_name = {qp_name}")
-    qp_tags = db_zingo.read_from_db("tag", "vw_question_package_with_tag", f"where question_package = {qp_name}")
-    qp_rating = db_zingo.read_from_db("rating", "vw_qp_rating", f"where question_package = {qp_name}")
-    qp_questions = db_zingo.execute_procedure(f"sp_get_questions '{qp_name}'")
+    qp_name = db_zingo.read_from_db("question_package", "qp_name", f"where qp_name = '{selected_qp}'")
+    print(qp_name)
+    qp_description = db_zingo.read_from_db("question_package", "qp_description", f"where qp_name = '{selected_qp}'")
+    print(qp_description)
+    qp_creator = db_zingo.read_from_db("vw_qp_with_nick", "nickname", f"where qp_name = '{selected_qp}'")
+    print(qp_creator)
+    qp_tags = db_zingo.read_from_db("vw_question_package_with_tag", "tag", f"where question_package = '{selected_qp}'")
+    print(qp_tags)
+    '''qp_rating = db_zingo.read_from_db("vw_qp_rating", "rating", f"where question_package = '{selected_qp}'")
+    print(qp_rating)'''
+    qp_questions = db_zingo.execute_procedure(f"sp_get_questions '{selected_qp}'") #fixa en view för enbart frågor.
+    print(qp_questions)
 
-    print(qp_name, qp_description, qp_creator, qp_tags, qp_rating, qp_questions)
-
-view_question_package("Blandade sportfrågor")
+list_of_games()
+view_question_package('Blandade sportfrågor')
