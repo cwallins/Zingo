@@ -69,11 +69,11 @@ def user_login():
     email = request.form["email"]
     password = request.form["password"]
 
-    ans = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
-    if ans == '0':
-        print("false")
+    account = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
+    if account:
+        print("logging in!")
     else:
-        print("true")
+        print("incorrect username/pass")
     return redirect(url_for("my_profile"))
 
 def list_of_games():

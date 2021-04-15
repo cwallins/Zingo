@@ -89,7 +89,6 @@ def execute_procedure(string):
         try:
             rows = cursor.fetchall()
             if rows:
-                print(rows)
                 return rows
         except:
             print("Nothing to report back!")
