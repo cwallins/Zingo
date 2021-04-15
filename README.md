@@ -7,3 +7,7 @@ We're five students from Malmö University in Sweden who are developing a quiz-w
 3. Ladda ner zip-fil
 4. Extrahera mappen 
 5. KLAR! 
+
+# Python
+
+1. 
