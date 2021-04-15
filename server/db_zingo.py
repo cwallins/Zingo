@@ -29,7 +29,14 @@ def read_from_db(table_name, select_query, arguments):
     cursor.execute(
         f"select {select_query} from {database_name}.dbo.{table_name} {arguments}")
 
-    row = cursor.fetchone()
+    row = cursor.fetchall()
+    if row:
+        return row
+
+def view_views(select_query, view_name):
+    cursor.execute(f"select {select_query} from {view_name}")
+
+    row = cursor.fetchall()
     if row:
         return row
 
