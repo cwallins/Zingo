@@ -6,7 +6,7 @@ import db_zingo
 #create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
 
 # 2021-04-15:
-#    routes: register, kunna logga in och my_profile, eventuellt create_game och log_out  
+#    routes: register, kunna logga in och my_profile, eventuellt create_game och log_out  !!engelska? CE
 
 app = Flask(__name__)
 
@@ -14,22 +14,22 @@ app = Flask(__name__)
 def home():
     return render_template("home_page.html")
 
-@app.route('/register') #redigerad av chris och emil
+@app.route('/register') #Edited by Chris and Emil
 def register():
     return render_template("register.html")
 
-@app.route('/sign_in') #tillagd av Chris och Emil 
+@app.route('/sign_in') #Edited by Chris and Emil 
 def sign_in():
     return render_template("sign_in.html")
 
-@app.route('/profile_settings') #tillagd av Chris och Emil 
+@app.route('/profile_settings') #Edited by Chris and Emil
 def profile_settings():
     return render_template("profile_settings.html")
 
 @app.route('/my_profile')
 def my_profile():
     return render_template("my_profile.html")
-    #Ska vi skicka med skapade frågepaket, userinfo, tidigare spelade frågepaket, (vänner)
+    #Ska vi skicka med skapade frågepaket, userinfo, tidigare spelade frågepaket, (vänner) !!Engelska? CE
 
 @app.route('/create_game')
 def create_game():
