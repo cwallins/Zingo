@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+<!--Title block-->
+{% block title %}
+    Home page
+{% endblock %}
+
+<!--Content block-->
+{% block content %}
+ <!--Välkomen och profil-->
+<div class="row">
+    <div class="col-12">
+        <h2>My Profile</h2>
+    </div> 
+    <div class="col-12">
+        <img src="#"> <!--en bild på en animerad gubbe-->
+    </div>
+    <div class="col-12">
+        {{username}} 
+    </div>
+</div>
+ <!--Skapa ett frågepaket--> 
+<div class="row">
+    <a href="create_game.html">Create Game</a>
+</div>
+
+ <!--Favoritspel-->
+
+<div class="row">
+    <h2>Här ska favoritspel visas</h2>
+</div>
+
+ <!--Se skapade frågepaket-->
+<div class="row">
+    <h2>Här ska skapade frågepaket från inloggad användare visas</h2>
+</div>
+
+<!--Länk till profilinställningar-->
+<div class="row">
+    <a href="profile_settings.html">Profile Settings</a>
+</div>
+ 
+{% endblock %}
+
