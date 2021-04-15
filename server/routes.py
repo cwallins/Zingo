@@ -63,6 +63,19 @@ def add_new_user():
 
     return redirect(url_for("my_profile"))
 
+@app.route('/login', methods=["GET", "POST"])
+def user_login():
+
+    email = request.form["email"]
+    password = request.form["password"]
+
+    ans = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
+    if ans == '0':
+        print("false")
+    else:
+        print("true")
+    return redirect(url_for("my_profile"))
+
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 

@@ -63,4 +63,3 @@ def show_result():
 def save_result():
     # spara slutresultat i databas'''
 
-play_question_game(chosen_qp)
