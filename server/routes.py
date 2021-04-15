@@ -59,10 +59,10 @@ def add_new_user():
     if password1 != password2:
         error_message = "The passwords must be the same"
     else:
-        db_zingo.execute_procedure(f"sp_add_user '{email}' '{password2}' '{username}' '{surname}' '{lastname}'")
+        db_zingo.execute_procedure(f"sp_add_user '{email}', '{password2}', '{username}', '{firstname}', '{lastname}'")
 
     return redirect(url_for("my_profile"))
-
+'''
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
@@ -84,8 +84,8 @@ def view_question_package(selected_qp):
     #listor
     qp_tags = db_zingo.read_from_db("vw_question_package_with_tag", "tag", f"where question_package = '{selected_qp}'")
     print(qp_tags)
-    '''qp_rating = db_zingo.read_from_db("vw_qp_rating", "rating", f"where question_package = '{selected_qp}'")
-    print(qp_rating)'''
+    #qp_rating = db_zingo.read_from_db("vw_qp_rating", "rating", f"where question_package = '{selected_qp}'")
+    #print(qp_rating)
     qp_questions = db_zingo.execute_procedure(f"sp_get_questions '{selected_qp}'") #fixa en view för enbart frågor.
     print(qp_questions)
     #1. hämta data från db
@@ -94,4 +94,4 @@ def view_question_package(selected_qp):
     #4. skicka lista till html
 
 list_of_games()
-view_question_package('Blandade sportfrågor')
+view_question_package('Blandade sportfrågor')'''
