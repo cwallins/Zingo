@@ -46,20 +46,20 @@ def view_one_game():
 #funktion för att hämta alla frågepaket från db
 
 #route för formulär, get/post vid registrering, logga in
-@app.route('/add_new_user', methods=["GET", "POST"])
+@app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
 
     username = request.form["username"] #ska vara unikt
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
+    password_1 = request.form["password1"]
+    password_2 = request.form["password2"]
     email = request.form["email"]
     firstname = request.form["firstname"]
     lastname = request.form["lastname"]
 
-    if password1 != password2:
+    if password_1 != password_2:
         error_message = "The passwords must be the same"
     else:
-        db_zingo.execute_procedure(f"sp_add_user '{email}', '{password2}', '{username}', '{firstname}', '{lastname}'")
+        db_zingo.execute_procedure(f"sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
 
     return redirect(url_for("my_profile"))
 
