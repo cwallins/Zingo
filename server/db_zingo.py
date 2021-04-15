@@ -99,3 +99,4 @@ def execute_procedure(string):
         sqlstate = ex.args[0]
         if sqlstate == '28000':
             print("LDAP Connection failed: check password")
+
