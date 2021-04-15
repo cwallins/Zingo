@@ -22,6 +22,10 @@ def register():
 def sign_in():
     return render_template("sign_in.html")
 
+@app.route('/profile_settings') #tillagd av Chris och Emil 
+def profile_settings():
+    return render_template("profile_settings.html")
+
 @app.route('/my_profile')
 def my_profile():
     return render_template("my_profile.html")
