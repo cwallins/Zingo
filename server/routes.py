@@ -6,7 +6,7 @@ import db_zingo
 #create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
 
 # 2021-04-15:
-#    routes: register och my_profile, eventuellt create_game och log_out  
+#    routes: register, kunna logga in och my_profile, eventuellt create_game och log_out  
 
 app = Flask(__name__)
 
@@ -62,7 +62,7 @@ def add_new_user():
         db_zingo.execute_procedure(f"sp_add_user '{email}', '{password2}', '{username}', '{firstname}', '{lastname}'")
 
     return redirect(url_for("my_profile"))
-'''
+
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
@@ -94,4 +94,4 @@ def view_question_package(selected_qp):
     #4. skicka lista till html
 
 list_of_games()
-view_question_package('Blandade sportfrågor')'''
+view_question_package('Blandade sportfrågor')
