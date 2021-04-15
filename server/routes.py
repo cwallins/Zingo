@@ -14,9 +14,13 @@ app = Flask(__name__)
 def home():
     return render_template("home_page.html")
 
-@app.route('/register')
+@app.route('/register') #redigerad av chris och emil
 def register():
-    return render_template("register_sign_in.html")
+    return render_template("register.html")
+
+@app.route('/sign_in') #tillagd av Chris och Emil 
+def sign_in():
+    return render_template("sign_in.html")
 
 @app.route('/my_profile')
 def my_profile():
