@@ -8,6 +8,10 @@ We're five students from Malmö University in Sweden who are developing a quiz-w
 4. Extrahera mappen 
 5. KLAR! 
 
+# Databas
+1. Ladda ned Zingo_DB210416.bak
+2. Återställ databasen i en databashanterare
+
 # Python
 
 1. För att köra python filerna krävs att följande ramverk är installderade:
