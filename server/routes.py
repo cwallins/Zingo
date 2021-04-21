@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
 from os import listdir, path, remove, rename
 import codecs
 import db_zingo
@@ -51,9 +51,7 @@ def view_all_games():
 def view_one_game():
     return render_template("view_one_game.html")
 
-#funktion för att hämta alla frågepaket från db
-
-#route för formulär, get/post vid registrering, logga in
+#ADD NEW USER: DONE
 @app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
 
@@ -84,6 +82,15 @@ def user_login():
         print("incorrect username/pass")
     return redirect(url_for("my_profile"))
 
+@app.route('/logout')
+def user_logout():
+    # Remove session data, this will log the user out
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    # Redirect to login page
+    return redirect(url_for('sign_in'))
+
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
@@ -113,6 +120,3 @@ def view_question_package(selected_qp):
     #2. spara lista med data från db
     #3. sortera lista i python
     #4. skicka lista till html
-
-list_of_games()
-view_question_package('Blandade sportfrågor')
