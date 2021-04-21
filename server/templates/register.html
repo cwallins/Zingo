@@ -11,7 +11,7 @@ Register/Sign In
         <div class="col-sm-12">
             <h1>Register</h1>
             <hr>
-            <form class="register" action="/add_new_user" method="POST">
+            <form class="register" action="{{ url_for('add_new_user')}}" method="POST">
                 <div class="form-group mb-3">
                     <label for="exampleInputPassword1">First Name</label>
                     <input name="firstname" type="Firstname" class="form-control" id="exampleInputPassword1"
