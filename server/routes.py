@@ -1,14 +1,33 @@
 from flask import Flask, redirect, url_for, render_template, request, session
 from os import listdir, path, remove, rename
 import codecs
-import db_zingo
+import pyodbc
 
 #create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
-
 # 2021-04-15:
 #    routes: register, kunna logga in och my_profile, eventuellt create_game och log_out  !!engelska? CE
 
 app = Flask(__name__)
+app.secret_key = 'zingo'
+
+''' DATABSE '''
+
+server_host = "localhost"
+database_name = "Zingo_DB"
+
+try:
+    conn = pyodbc.connect('driver={ODBC Driver 17 for SQL Server};'
+                        f'server={server_host};'  
+                        f'database={database_name};'
+                        'trusted_connection=yes;')
+
+    cursor = conn.cursor()
+    print("Connected")
+    
+except:
+    print("Could't find database")
+
+''' ROUTES '''
 
 @app.route('/')
 def home():
@@ -28,16 +47,16 @@ def profile_settings():
 
 @app.route('/my_profile')
 def my_profile():
-    return render_template("my_profile.html")
+    try:
+        return render_template("my_profile.html", username=session['username'])
+    except(KeyError):
+        return redirect(url_for('sign_in'))
+
     #Ska vi skicka med skapade frågepaket, userinfo, tidigare spelade frågepaket, (vänner) !!Engelska? CE
 
 @app.route('/create_game')
 def create_game():
     return render_template("create_game.html")
-
-@app.route('/log_out')
-def log_out():
-    return render_template("log_out.html")
 
 @app.route('/join_game')
 def join_game():
@@ -68,7 +87,7 @@ def add_new_user():
         db_zingo.execute_procedure(f"sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
 
     return redirect(url_for("my_profile"))
-
+'''
 @app.route('/login', methods=["GET", "POST"])
 def user_login():
 
@@ -78,22 +97,52 @@ def user_login():
     password = request.form["password"]
 
     account = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
+    print(account)
     if account:
-        session["loggedin"] = True
-        session["username"] = account["nickname"]
-        session["email"] = account["e_mail"]
+        session['loggedin'] = True
+        session['username'] = account['nickname']
+        session['email'] = account['e_mail']
         print("logging in!")
         return redirect(url_for("my_profile"))
     else:
         msg = "incorrect email/password!"
         return redirect(url_for("sign_in", msg=msg))
-    
+'''
+
+@app.route('/login', methods=['GET', 'POST'])
+def user_login():
+    # Output message if something goes wrong...
+    msg = ''
+    # Check if "username" and "password" POST requests exist (user submitted form)
+    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+        # Create variables for easy access
+        username = request.form['email']
+        password = request.form['password']
+        # Check if account exists using MySQL
+        cursor.execute(f"exec sp_user_login '{username}', '{password}'") 
+        #accounts WHERE username = %s AND password = %s', (username, password,))
+        # Fetch one record and return result
+        account = cursor.fetchone()
+        print(account)
+        # If account exists in accounts table in out database
+        if account:
+            # Create session data, we can access this data in other routes
+            session['loggedin'] = True
+            session['email'] = account[1]
+            session['username'] = account[3]
+            # Redirect to home page
+            msg = 'Logged in'
+        else:
+            # Account doesnt exist or username/password incorrect
+            msg = 'Incorrect username/password!'
+    # Show the login form with message (if any)
+    return redirect(url_for('my_profile'))
 
 @app.route('/logout')
 def user_logout():
     # Remove session data, this will log the user out
     session.pop('loggedin', None)
-    session.pop('id', None)
+    session.pop('email', None)
     session.pop('username', None)
     # Redirect to login page
     return redirect(url_for('sign_in'))
