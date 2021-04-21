@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session
 from os import listdir, path, remove, rename
 import codecs
 import db_zingo
@@ -74,15 +74,22 @@ def add_new_user():
 @app.route('/login', methods=["GET", "POST"])
 def user_login():
 
+    msg = ""
+
     email = request.form["email"]
     password = request.form["password"]
 
     account = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
     if account:
+        session["loggedin"] = True
+        session["username"] = account["nickname"]
+        session["email"] = account["e_mail"]
         print("logging in!")
+        return redirect(url_for("my_profile"))
     else:
-        print("incorrect username/pass")
-    return redirect(url_for("my_profile"))
+        msg = "incorrect email/password!"
+        return redirect(url_for("sign_in", msg=msg))
+    
 
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
