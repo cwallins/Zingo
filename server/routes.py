@@ -83,7 +83,11 @@ def add_new_user():
     if password_1 != password_2:
         error_message = "The passwords must be the same"
     else:
-        db_zingo.execute_procedure(f"sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
+        cursor.execute(f"exec sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
+        cursor.commit()
+        session['loggedin'] = True
+        session['email'] = email
+        session['username'] = username
 
     return redirect(url_for("my_profile"))
 
