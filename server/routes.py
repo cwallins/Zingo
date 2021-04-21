@@ -93,23 +93,6 @@ def add_new_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
-
-    msg = ""
-
-    email = request.form["email"]
-    password = request.form["password"]
-
-    account = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
-    if account:
-        session["loggedin"] = True
-        session["username"] = account["nickname"]
-        session["email"] = account["e_mail"]
-        print("logging in!")
-        return redirect(url_for("my_profile"))
-    else:
-        msg = "incorrect email/password!"
-        return redirect(url_for("sign_in", msg=msg))
-    
     # Output message if something goes wrong...
     msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -119,7 +102,6 @@ def user_login():
         password = request.form['password']
         # Check if account exists using MySQL
         cursor.execute(f"exec sp_user_login '{username}', '{password}'") 
-        #accounts WHERE username = %s AND password = %s', (username, password,))
         # Fetch one record and return result
         account = cursor.fetchone()
         print(account)
