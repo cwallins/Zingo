@@ -90,7 +90,6 @@ def user_login():
         msg = "incorrect email/password!"
         return redirect(url_for("sign_in", msg=msg))
     
-
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
