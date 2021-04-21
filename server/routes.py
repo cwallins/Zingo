@@ -70,7 +70,6 @@ def view_all_games():
 def view_one_game():
     return render_template("view_one_game.html")
 
-#ADD NEW USER: DONE
 @app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
 
@@ -87,27 +86,6 @@ def add_new_user():
         db_zingo.execute_procedure(f"sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
 
     return redirect(url_for("my_profile"))
-'''
-@app.route('/login', methods=["GET", "POST"])
-def user_login():
-
-    msg = ""
-
-    email = request.form["email"]
-    password = request.form["password"]
-
-    account = db_zingo.execute_procedure(f"sp_user_login '{email}', '{password}'")
-    print(account)
-    if account:
-        session['loggedin'] = True
-        session['username'] = account['nickname']
-        session['email'] = account['e_mail']
-        print("logging in!")
-        return redirect(url_for("my_profile"))
-    else:
-        msg = "incorrect email/password!"
-        return redirect(url_for("sign_in", msg=msg))
-'''
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
