@@ -24,8 +24,16 @@
   <!--All games-->
   <div class="row">
     <div class="col-md-9">
-      <h2>All Games</h2>
-      <p>listade frågepaket</p>
+      {% for question_package in question_packages %}
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title"> {{ qp_name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted"> {{ created_by }}</h6>
+          <p class="card-text"> {{ qp_description }}</p>
+          <button type="button" class="btn btn-success" href="#">PLAY GAME</button>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
 

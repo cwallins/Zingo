@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+<!--Title block-->
+{% block title %}
+    Home page
+{% endblock %}
+
+<!--Content block-->
+{% block content %}
+  <!--Frågeformulär-->
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="" method="">
+            <div class="form-gruop">
+                <label for="question">Question</label>
+                <input type="text" name="question" id="question">
+            </div>
+            <div class="form-gruop">
+                <label for="answer_1_correct">Correct answer</label>
+                <input type="text" name="answer_1_correct" id="answer_1_correct">
+            </div>
+            <div class="form-gruop">
+                <label for="answer_2">Example answer 1</label>
+                <input type="text" name="answer_2" id="answer_2">
+            </div>
+            <div class="form-gruop">
+                <label for="answer_3">Example answer 2</label>
+                <input type="text" name="answer_3" id="answer_3">
+            </div>
+            <div class="form-gruop">
+                <label for="answer_4">Example answer 3</label>
+                <input type="text" name="answer_4" id="answer_4">
+            </div>
+            <button type="submit">Add question</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <article>
+            <!--En ruta där sammanfattning av frågepaket visas + Edit + Delete-->
+            <h2>Question summary</h2>
+            <ul>
+                {% for question in questions %}
+                    <li>
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+        <form action="#" method="#">
+            <!--spara frågepaket-->
+
+            <button type="submit" value="save_qp">Save game</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

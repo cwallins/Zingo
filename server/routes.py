@@ -56,7 +56,24 @@ def my_profile():
 
 @app.route('/create_game')
 def create_game():
-    return render_template("create_game.html")
+    cursor.execute("select tag_description from tag")
+    tags = cursor.fetchall()
+
+    '''list_of_tags = []
+
+    for i in tags:
+        list_of_tags.append(i)
+
+    for item in list_of_tags:
+        list_of_tags.append(item.replace(("(", "", ")", "", ",", ""))) 
+
+    print(list_of_tags)'''
+
+    return render_template("create_game.html", tags=tags)
+
+@app.route('/create_question')
+def create_question():
+    return render_template("create_question.html")
 
 @app.route('/join_game')
 def join_game():
@@ -157,3 +174,5 @@ def view_question_package(selected_qp):
     #2. spara lista med data från db
     #3. sortera lista i python
     #4. skicka lista till html
+
+#create_game()

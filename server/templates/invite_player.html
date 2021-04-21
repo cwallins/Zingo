@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+<!--Title block-->
+{% block title %}
+    Home page
+{% endblock %}
+
+<!--Content block-->
+{% block content %}
+ <!--Join game-->
+
+ <h2>Invite players</h2>
+ <form action="#" method="#">
+    <div class="form-group mb-3">
+        <label for="Invite_player_url">Game URL</label>
+        <input name="Invite_player_url" type="Invite_player_url" class="form-control" id="Invite_player_url">
+        <button type="submit" onclick= "myFunction()" class="btn btn-warning">Copy URL</button>
+    </div>
+    <div class="form-group mb-3">
+        <!--Lista av spelare-->
+        <p>Lista med spelare</p>
+        
+        <button type="submit" class="btn btn-warning">Start Game</button>
+    </div>
+</form>
+ 
+{% endblock %}
