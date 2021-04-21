@@ -127,7 +127,7 @@ def user_logout():
     session.pop('username', None)
     # Redirect to login page
     return redirect(url_for('sign_in'))
-
+'''
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
@@ -153,7 +153,31 @@ def view_question_package(selected_qp):
     #print(qp_rating)
     qp_questions = db_zingo.execute_procedure(f"sp_get_questions '{selected_qp}'") #fixa en view för enbart frågor.
     print(qp_questions)
-    #1. hämta data från db
-    #2. spara lista med data från db
-    #3. sortera lista i python
-    #4. skicka lista till html
+'''
+
+''' CREATE QUESTION PACKAGE '''
+
+def control_question_package():
+    # Review question packages content before saving to database.
+        # banned words
+    # create qp, add questions -> then control and save/inform user of banned words.
+
+def create_question_package():
+    # insert function here:
+    # name qp, description of qp.
+    qp_name = request.form['qp_name'] #ska vara unikt
+    qp_description = request.form['qp_description']
+
+def add_question_to_qp():
+    # add question, with 4 answers which of one correct alternative.
+    question = request.form['question']
+    answer_1 = request.form['answer_1']
+    answer_2 = request.form['answer_2']
+    answer_3 = request.form['answer_3']
+    answer_4 = request.form['answer_4']
+
+    # answer_1 is the correct answer!
+
+def edit_questions_of_qp():
+
+def add_tags_to_qp():
