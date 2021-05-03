@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+<!--Title block-->
+{% block title %}
+    Home page
+{% endblock %}
+
+<!--Content block-->
+{% block content %}
+ <!--Join game-->
+
+<div class="row"> <h2>RESULT</h2>
+</div>
+<div class="row">
+    <h4>THE CORRECT ANSWER WAS</h4>
+</div>
+<div class="row">
+    <p class="lead">
+        HÄR ÄR DET RÄTTA SVARET <!--hämta rätt svar från databas för just det frågepaketet-->
+    </p>
+</div>
+<div class="row">
+    <!--en tidtagning för hur länge resultatet ska visas och nästa fråga dyker upp-->
+</div>
+<div class="row">
+    <h3>TOP PLAYERS</h3>
+</div> 
+<div class="row">
+ <table class="table table-success table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Points</th>
+      </tr>
+    </thead>
+    <tbody>
+        <!--hämtar aktuell ställning efter varje fråga, skriver ut username och points-->
+      <tr>
+        <th scope="row">1</th>
+        <td> {{ Username }} </td>
+        <td> {{ points }} </td>
+        
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td> {{ Username }} </td>
+        <td> {{ points }} </td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td> {{ Username }} </td>
+        <td> {{ points }} </td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+<div class="row">
+    <p>NEXT QUESTION IS LOADING, BE READY!</p>
+</div>
+<!--Denna raden nedan kan endast värden se-->
+<div class="row">
+    <div class="col-md-6">
+        <button type="submit" action="#" class="btn btn-primary">NEXT QUESTION</button> <!-- funktion som överskrider tidtagning och kallar på nästa fråga i frågepaketet-->
+    </div>
+    <div class="col-md-6">
+        <button type="submit" action="#" class="btn btn-primary">END GAME</button> <!-- funktion som avbryter spel och en href till mina spel?-->
+    </div>
+</div>
+ 
+{% endblock %}
