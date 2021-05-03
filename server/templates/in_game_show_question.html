@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+<!--Title block-->
+{% block title %}
+    Home page
+{% endblock %}
+
+<!--Content block-->
+{% block content %} 
+
+<div class="row">
+
+</div>
+
+<div class="container">
+    {% for question_package in question_packages %}
+    <div class="row">
+        <div class="col-md-9">
+            {{ Question X }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            {{ Question text }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ answer_1}}
+        </div>
+        <div class="col-md-6">
+            {{ answer_2}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ answer_3}}
+        </div>
+        <div class="col-md-6">
+            {{ answer_4}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
