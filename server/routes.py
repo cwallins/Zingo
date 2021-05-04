@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from os import listdir, path, remove, rename
 import codecs
 import pyodbc
+import play_question_package
 
 #create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
 # 2021-04-15:
@@ -79,6 +80,31 @@ def create_question():
 def join_game():
     return render_template("join_game.html")
 
+@app.route('/add_questions_to_qp')
+def add_questions_to_qp():
+    return render_template("add_questions_to_qp.html")
+
+@app.route('/create_qp', methods = ['GET', 'POST'])
+def create_qp():
+    return render_template('create_qp.html')
+
+@app.route('/control_qp')
+def control_qp():
+    play_question_package.question()
+
+@app.route('/save_qp_to_db', methods = ['GET', 'POST'])
+def save_qp_to_db():
+    qp_name = request.form['qp_name']
+    qp_desc = request.form['qp_desc']
+    #!add session id for user to relate 'created_by' in db, also add it into insert!
+    try:
+        cursor.execute(f"insert into Zingo_DB.dbo.question_package (qp_description, qp_name) values ('{qp_desc}', '{qp_name}')")
+        conn.commit()
+        return redirect('add_questions_to_qp.html')
+    except:
+        print('Det finns redan ett frågepaket med samma namn!')
+        return redirect(url_for('create_qp'))
+    
 @app.route('/view_all_games')
 def view_all_games():
     return render_template("view_all_games.html")
@@ -144,7 +170,7 @@ def user_logout():
     session.pop('username', None)
     # Redirect to login page
     return redirect(url_for('sign_in'))
-
+'''
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
 
@@ -176,3 +202,31 @@ def view_question_package(selected_qp):
     #4. skicka lista till html
 
 #create_game()
+'''
+
+''' CREATE QUESTION PACKAGE '''
+'''
+def control_question_package():
+    # Review question packages content before saving to database.
+        # banned words
+    # create qp, add questions -> then control and save/inform user of banned words.
+
+def create_question_package():
+    # insert function here:
+    # name qp, description of qp.
+    qp_name = request.form['qp_name'] #ska vara unikt
+    qp_description = request.form['qp_description']
+
+def add_question_to_qp():
+    # add question, with 4 answers which of one correct alternative.
+    question = request.form['question']
+    answer_1 = request.form['answer_1']
+    answer_2 = request.form['answer_2']
+    answer_3 = request.form['answer_3']
+    answer_4 = request.form['answer_4']
+
+    # answer_1 is the correct answer!
+
+def edit_questions_of_qp():
+
+def add_tags_to_qp():'''
