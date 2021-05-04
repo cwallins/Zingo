@@ -9,7 +9,7 @@
 {% block content %} 
   <!--View all games-->
   <div class="row">
-    <h2>New Games!</h2>
+    <h2>New Games!</h2> 
   </div>
   <!--Slideshow-->
   <div class="row">
@@ -30,7 +30,7 @@
           <h5 class="card-title"> {{ qp_name }}</h5>
           <h6 class="card-subtitle mb-2 text-muted"> {{ created_by }}</h6>
           <p class="card-text"> {{ qp_description }}</p>
-          <button type="button" class="btn btn-success" href="#">PLAY GAME</button>
+          <button type="button" class="btn btn-success" href="view_one_game">View game</button>
         </div>
       </div>
       {% endfor %}

@@ -13,15 +13,26 @@
  <form action="#" method="#">
     <div class="form-group mb-3">
         <label for="Invite_player_url">Game URL</label>
-        <input name="Invite_player_url" type="Invite_player_url" class="form-control" id="Invite_player_url">
+        <input name="Invite_player_url" type="Invite_player_url" class="form-control" id="Invite_player_url"> <!--Generera en URL till spelet-->
         <button type="submit" onclick= "myFunction()" class="btn btn-warning">Copy URL</button>
     </div>
-    <div class="form-group mb-3">
-        <!--Lista av spelare-->
-        <p>Lista med spelare</p>
-
-        <button type="submit" class="btn btn-warning">Start Game</button>
-    </div>
+<!--Ovan kod kan endast ses av värden-->
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="temporary_username" class="sr-only">Enter Username</label> <br>
+          <input type="username" class="form-control" id="temporary_username" placeholder="username">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" a href="#">Join</button>
+    </form>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Player 1</li>
+        <li class="list-group-item">Player 2</li>
+        <li class="list-group-item">Player 3</li>
+        <li class="list-group-item">Player 4</li>
+        <li class="list-group-item">Player 5</li>
+    </ul>
+    <!--nedan kod kan endast ses av värden-->
+    <button type="submit" class="btn btn-warning">Start Game</button>
 </form>
  
 {% endblock %}
