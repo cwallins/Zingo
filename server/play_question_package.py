@@ -72,7 +72,7 @@ def save_qp_to_db1():
     return qp_name
 
 def get_question():
-    #get form from client
+    # get form from client
     question = request.form['question']
     answer_1 = request.form['answer_1']
     answer_2 = request.form['answer_2']

@@ -60,17 +60,16 @@ def create_game():
     cursor.execute("select tag_description from tag")
     tags = cursor.fetchall()
 
-    '''list_of_tags = []
+    list_of_tags = []
 
     for i in tags:
-        list_of_tags.append(i)
+        y = filter(str.isalnum, i)
+        t = "".join(y)
+        list_of_tags.append(t)
+    
+    list_of_tags.sort()
 
-    for item in list_of_tags:
-        list_of_tags.append(item.replace(("(", "", ")", "", ",", ""))) 
-
-    print(list_of_tags)'''
-
-    return render_template("create_game.html", tags=tags)
+    return render_template("create_game.html", tags=list_of_tags)
 
 @app.route('/create_question')
 def create_question():
@@ -148,7 +147,7 @@ def user_login():
         # Fetch one record and return result
         account = cursor.fetchone()
         print(account)
-        # If account exists in accounts table in out database
+        # If account exists in accounts table in database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
