@@ -3,6 +3,7 @@ from os import listdir, path, remove, rename
 import codecs
 import pyodbc
 import play_question_package
+import create_question_package
 
 #create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
 # 2021-04-15:
@@ -77,7 +78,7 @@ def create_game():
 
 @app.route('/create_question')
 def create_question():
-    return render_template("create_question.html")
+    return render_template("create_question.html", qp_name = session['qp_name'])
 
 @app.route('/join_game')
 def join_game():
@@ -97,6 +98,7 @@ def control_qp_name_desc():
     qp_desc = request.form['qp_description']
     qp_tags = request.form['qp_tag']
     play_question_package.save_qp_to_db1(qp_name, qp_desc, qp_tags)
+    return redirect(url_for('create_question'))
 
 @app.route('/control_questions_answers')
 def control_questions_answers():
