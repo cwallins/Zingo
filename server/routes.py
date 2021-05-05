@@ -86,10 +86,10 @@ def create_question_package():
 
         list_of_tags = []
 
-        for i in tags:
-            y = filter(str.isalnum, i)
-            t = "".join(y)
-            list_of_tags.append(t)
+        for tag in tags:
+            letter = filter(str.isalnum, tag)
+            word = "".join(letter)
+            list_of_tags.append(word)
         
         list_of_tags.sort()
 
@@ -100,7 +100,17 @@ def create_question_package():
 
 @app.route('/create_question')
 def create_question():
-    return render_template("create_question.html", qp_name = session['qp_name'])
+
+    cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
+    questions = cursor.fetchall()
+    print(questions)
+    
+    list_of_questions = []
+    
+    for i in questions:    
+        list_of_questions.append(i[0])
+    
+    return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions)
 
 @app.route('/invite_player')
 def invite_player():
@@ -142,7 +152,7 @@ def control_qp_name_desc():
     save_qp_to_db(qp_name, qp_desc, qp_tags)
     return redirect(url_for('create_question'))
 
-@app.route('/control_questions_answers')
+@app.route('/control_questions_answers', methods = ['GET', 'POST'])
 def control_questions_answers():
     question = request.form['question']
     answer_1 = request.form['answer_1']
