@@ -1,19 +1,18 @@
 from flask import Flask, redirect, url_for, render_template, request, session
-from os import listdir, path, remove, rename
-import codecs
 import pyodbc
-import play_question_package
-import create_question_package
-
-#create_game, home_page, join_game, log_out, my_profile, register_sign_in, view_all_games, view_one_game
-# 2021-04-15:
-#    routes: register, kunna logga in och my_profile, eventuellt create_game och log_out  !!engelska? CE
+from random import shuffle
+import time
 
 app = Flask(__name__)
 app.secret_key = 'zingo'
 
-''' DATABSE '''
-
+''' 
+database connection:
+    server_host (str)
+    database_name (str)
+    
+    cursor will be used by other functions to execute sql queries.
+'''
 server_host = "localhost"
 database_name = "Zingo_DB"
 
@@ -23,11 +22,36 @@ try:
                         f'database={database_name};'
                         'trusted_connection=yes;')
 
-    cursor = conn.cursor()
-    print("Connected")
-    
+    cursor = conn.cursor()   
 except:
     print("Could't find database")
+
+def execute_procedure(string): 
+    # string behöver procedure namn + parametrar
+    try:
+        sql = f"exec [{database_name}].[dbo].{string};"
+        cursor.execute(sql)
+        try:
+            rows = cursor.fetchall()
+            if rows:
+                return rows
+        except:
+            print("Nothing to report back!")
+
+        conn.commit()
+
+    except pyodbc.Error as ex:
+        sqlstate = ex.args[0]
+        if sqlstate == '28000':
+            print("LDAP Connection failed: check password")
+
+def read_from_db(table_name, select_query, arguments):
+    cursor.execute(
+        f"select {select_query} from {database_name}.dbo.{table_name} {arguments}")
+
+    row = cursor.fetchall()
+    if row:
+        return row
 
 ''' ROUTES '''
 
@@ -35,17 +59,13 @@ except:
 def home():
     return render_template("home_page.html")
 
-@app.route('/register') #Edited by Chris and Emil
+@app.route('/register') 
 def register():
     return render_template("register.html")
 
-@app.route('/sign_in') #Edited by Chris and Emil 
+@app.route('/sign_in') 
 def sign_in():
     return render_template("sign_in.html")
-
-@app.route('/profile_settings') #Edited by Chris and Emil
-def profile_settings():
-    return render_template("profile_settings.html")
 
 @app.route('/my_profile')
 def my_profile():
@@ -54,10 +74,12 @@ def my_profile():
     except(KeyError):
         return redirect(url_for('sign_in'))
 
-    #Ska vi skicka med skapade frågepaket, userinfo, tidigare spelade frågepaket, (vänner) !!Engelska? CE
+@app.route('/profile_settings')
+def profile_settings():
+    return render_template("profile_settings.html")
 
-@app.route('/create_game')
-def create_game():
+@app.route('/create_question_package')
+def create_question_package():
     if 'loggedin' in session:
         cursor.execute("select tag_description from tag")
         tags = cursor.fetchall()
@@ -71,7 +93,7 @@ def create_game():
         
         list_of_tags.sort()
 
-        return render_template("create_game.html", tags=list_of_tags)
+        return render_template("create_question_package.html", tags=list_of_tags)
 
     else:
         return redirect(url_for('sign_in'))
@@ -80,24 +102,44 @@ def create_game():
 def create_question():
     return render_template("create_question.html", qp_name = session['qp_name'])
 
+@app.route('/invite_player')
+def invite_player():
+    return render_template("invite_player.html")
+
 @app.route('/join_game')
 def join_game():
     return render_template("join_game.html")
 
-@app.route('/add_questions_to_qp')
-def add_questions_to_qp():
-    return render_template("add_questions_to_qp.html")
+@app.route('/view_all_question_package')
+def view_all_question_package():
+    return render_template("view_all_question_package.html")
 
-@app.route('/create_qp', methods = ['GET', 'POST'])
-def create_qp():
-    return render_template('create_qp.html')
+@app.route('/view_one_question_package')
+def view_one_question_package():
+    return render_template("view_one_question_package.html")
+
+@app.route('/in_game_final_result')
+def in_game_final_result():
+    return render_template("in_game_final_result.html")
+
+@app.route('/in_game_result')
+def in_game_result():
+    return render_template("in_game_result.html")
+
+@app.route('/in_game_show_question')
+def in_game_show_question():
+    return render_template("in_game_show_question.html")
+
+@app.route('/play_game')
+def play_game():
+    return render_template("play_game.html")
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
     qp_name = request.form['qp_name']
     qp_desc = request.form['qp_description']
     qp_tags = request.form['qp_tag']
-    play_question_package.save_qp_to_db1(qp_name, qp_desc, qp_tags)
+    save_qp_to_db(qp_name, qp_desc, qp_tags)
     return redirect(url_for('create_question'))
 
 @app.route('/control_questions_answers')
@@ -107,33 +149,12 @@ def control_questions_answers():
     answer_2 = request.form['answer_2']
     answer_3 = request.form['answer_3']
     answer_4 = request.form['answer_4']
-    play_question_package.get_question(question, answer_1, answer_2, answer_3, answer_4)
-
-@app.route('/save_qp_to_db', methods = ['GET', 'POST'])
-def save_qp_to_db():
-    qp_name = request.form['qp_name']
-    qp_desc = request.form['qp_desc']
-    #!add session id for user to relate 'created_by' in db, also add it into insert!
-    try:
-        cursor.execute(f"insert into Zingo_DB.dbo.question_package (qp_description, qp_name) values ('{qp_desc}', '{qp_name}')")
-        conn.commit()
-        return redirect('add_questions_to_qp.html')
-    except:
-        print('Det finns redan ett frågepaket med samma namn!')
-        return redirect(url_for('create_qp'))
-    
-@app.route('/view_all_games')
-def view_all_games():
-    return render_template("view_all_games.html")
-
-@app.route('/view_one_game')
-def view_one_game():
-    return render_template("view_one_game.html")
+    get_question(question, answer_1, answer_2, answer_3, answer_4)
+    return redirect(url_for('create_question'))
 
 @app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
-
-    username = request.form["username"] #ska vara unikt
+    username = request.form["username"]
     password_1 = request.form["password1"]
     password_2 = request.form["password2"]
     email = request.form["email"]
@@ -148,44 +169,31 @@ def add_new_user():
         session['loggedin'] = True
         session['email'] = email
         session['username'] = username
-
     return redirect(url_for("my_profile"))
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
-    # Output message if something goes wrong...
     msg = ''
-    # Check if "username" and "password" POST requests exist (user submitted form)
+
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
-        # Create variables for easy access
         username = request.form['email']
         password = request.form['password']
-        # Check if account exists using MySQL
         cursor.execute(f"exec sp_user_login '{username}', '{password}'") 
-        # Fetch one record and return result
         account = cursor.fetchone()
-        print(account)
-        # If account exists in accounts table in database
         if account:
-            # Create session data, we can access this data in other routes
             session['loggedin'] = True
             session['email'] = account[1]
             session['username'] = account[3]
-            # Redirect to home page
             msg = 'Logged in'
         else:
-            # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
-    # Show the login form with message (if any)
     return redirect(url_for('my_profile'))
 
 @app.route('/logout')
 def user_logout():
-    # Remove session data, this will log the user out
     session.pop('loggedin', None)
     session.pop('email', None)
     session.pop('username', None)
-    # Redirect to login page
     return redirect(url_for('sign_in'))
 '''
 def list_of_games():
@@ -247,3 +255,140 @@ def add_question_to_qp():
 def edit_questions_of_qp():
 
 def add_tags_to_qp():'''
+
+
+
+
+'''
+chosen_qp = "Blandade sportfrågor"
+
+def play_question_game(chosen_qp):
+    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
+    shuffle(question_list)
+    
+    ask_questions(question_list)
+
+def ask_questions(question_list):
+    #seperate question from answers, seperate answers from right answer
+    #i[0] = question, i[1] = correct_answer
+    question = []
+    correct_answer = []
+    all_answers = []
+
+    #show question, put correct_answer in 1-4, put wrong_answers in 1-4 if not allready taken.
+
+    for i in question_list:
+        question.append(i[0])
+        correct_answer.append(i[1])
+        all_answers.append(i[1])
+        all_answers.append(i[2])
+        all_answers.append(i[3])
+        all_answers.append(i[4])
+        print(question[0])
+        time.sleep(1)
+        shuffle(all_answers)
+        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
+        print(f"Rätt svar: {correct_answer[0]}")
+        time.sleep(1)
+        #ask question
+        #display all answers (randomly)
+        #show_result, question + correct_answer and score
+        question.clear()
+        correct_answer.clear()
+        all_answers.clear()
+    
+    # visa en fråga i turordning 1-n1
+    # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
+    # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
+
+def display_awnsers(question_list):
+
+def show_result():
+    #show question and correct answer
+    for i in question_list:
+        print(i[0], i[1])
+
+    # resultat sparas "lokalt" efter varje fråga och sammanställs. resultatet förs vidare till nästa besvarde fråga och adderas, summeras och skickas vidare... ->
+
+    
+    # när inga fler frågor finns, visa slutresultat
+
+def save_result():
+    # spara slutresultat i databas
+'''
+
+def apply_tags_to_qp(tag_list):
+    cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
+    res = cursor.fetchone()
+    qp_id = res[0]
+    tags = []
+    tags.append(tag_list)
+    print(qp_id)
+    print(tag_list)
+    print(tags)
+    for i in tags:
+        print(i)
+        cursor.execute(f"select tag_id from tag where tag_description = '{i}'")
+        row = cursor.fetchone()
+        tag_id = row[0]
+        cursor.execute(f"insert into question_package_tag (qp_id, tag_id) values ({qp_id}, {tag_id})")
+        cursor.commit()
+
+def save_qp_to_db(qp_name, qp_desc, qp_tags):
+    cursor.execute(f"select [user_id] from [user] where e_mail = '{session['email']}'")
+    res = cursor.fetchone()
+    user_id = res[0]
+    #!add session id for user to relate 'created_by' in db, also add it into insert!
+    qp_ndu = []
+    nl = []
+    qp_ndu.append(qp_name.split(" "))
+    qp_ndu.append(qp_desc.split(" "))
+    for i in qp_ndu:
+        for x in i:
+            y = filter(str.isalnum, x)
+            t = "".join(y)
+            nl.append(t)
+
+    if check_words_aginst_db(nl):
+        word = check_words_aginst_db(nl)
+
+    else:
+        session['qp_name'] = qp_name
+        cursor.execute(f"insert into question_package (qp_description, created_by, qp_name) values ('{qp_desc}', {user_id}, '{qp_name}')")
+        cursor.commit()
+        apply_tags_to_qp(qp_tags)
+
+def get_question(question, answer_1, answer_2, answer_3, answer_4):
+    ql = []
+    nt = []
+    ql.append(question.split(" "))
+    ql.append(answer_1.split(" "))
+    ql.append(answer_2.split(" "))
+    ql.append(answer_3.split(" "))
+    ql.append(answer_4.split(" "))
+    for i in ql:
+        for x in i:
+            y = filter(str.isalnum, x)
+            t = "".join(y)
+            nt.append(t)
+
+    if check_words_aginst_db(nt):
+        word = check_words_aginst_db(nt)
+    else:
+        #-- before running: !Control that a session with qp_name is created during creation of new qp!
+        qp_name = session['qp_name']
+
+        current_qp_id = cursor.execute(f"select qp_id from question_package where qp_name = '{qp_name}'")
+        cursor.execute(f"insert into Zingo_DB.dbo.question (question, answer_1_correct, answer_2, answer_3, answer_4, qp_id) values ('{question}', '{answer_1}', '{answer_2}', '{answer_3}', '{answer_4}', '{current_qp_id}')")
+        cursor.commit()
+
+def check_words_aginst_db(all_words):
+    l = []
+
+    for word in all_words:
+        profanity = read_from_db("ugly_words", "*", f"where profanity = '{word}'")
+        if profanity:
+            l.append(word)
+
+    if len(l) > 0:
+        return l
