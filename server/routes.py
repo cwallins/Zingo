@@ -57,20 +57,23 @@ def my_profile():
 
 @app.route('/create_game')
 def create_game():
-    cursor.execute("select tag_description from tag")
-    tags = cursor.fetchall()
+    if 'loggedin' in session:
+        cursor.execute("select tag_description from tag")
+        tags = cursor.fetchall()
 
-    '''list_of_tags = []
+        list_of_tags = []
 
-    for i in tags:
-        list_of_tags.append(i)
+        for i in tags:
+            y = filter(str.isalnum, i)
+            t = "".join(y)
+            list_of_tags.append(t)
+        
+        list_of_tags.sort()
 
-    for item in list_of_tags:
-        list_of_tags.append(item.replace(("(", "", ")", "", ",", ""))) 
+        return render_template("create_game.html", tags=list_of_tags)
 
-    print(list_of_tags)'''
-
-    return render_template("create_game.html", tags=tags)
+    else:
+        return redirect(url_for('sign_in'))
 
 @app.route('/create_question')
 def create_question():
@@ -88,9 +91,21 @@ def add_questions_to_qp():
 def create_qp():
     return render_template('create_qp.html')
 
-@app.route('/control_qp')
-def control_qp():
-    play_question_package.question()
+@app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
+def control_qp_name_desc():
+    qp_name = request.form['qp_name']
+    qp_desc = request.form['qp_description']
+    qp_tags = request.form['qp_tag']
+    play_question_package.save_qp_to_db1(qp_name, qp_desc, qp_tags)
+
+@app.route('/control_questions_answers')
+def control_questions_answers():
+    question = request.form['question']
+    answer_1 = request.form['answer_1']
+    answer_2 = request.form['answer_2']
+    answer_3 = request.form['answer_3']
+    answer_4 = request.form['answer_4']
+    play_question_package.get_question(question, answer_1, answer_2, answer_3, answer_4)
 
 @app.route('/save_qp_to_db', methods = ['GET', 'POST'])
 def save_qp_to_db():
@@ -148,7 +163,7 @@ def user_login():
         # Fetch one record and return result
         account = cursor.fetchone()
         print(account)
-        # If account exists in accounts table in out database
+        # If account exists in accounts table in database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True

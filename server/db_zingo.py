@@ -2,7 +2,7 @@ import pyodbc
 
 '''
 Anslutningen till DB
-database_name global fär att kunna användas i funktionerna
+database_name global för att kunna användas i funktionerna
 '''
 
 # global_variables
