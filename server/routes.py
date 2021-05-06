@@ -206,82 +206,8 @@ def user_logout():
     session.pop('username', None)
     return redirect(url_for('sign_in'))
 
-def apply_tags_to_qp(tag_list):
-    cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
-    res = cursor.fetchone()
-    qp_id = res[0]
-    tags = []
-    tags.append(tag_list)
-    print(qp_id)
-    print(tag_list)
-    print(tags)
-    for i in tags:
-        print(i)
-        cursor.execute(f"select tag_id from tag where tag_description = '{i}'")
-        row = cursor.fetchone()
-        tag_id = row[0]
-        cursor.execute(f"insert into question_package_tag (qp_id, tag_id) values ({qp_id}, {tag_id})")
-        cursor.commit()
 
-def save_qp_to_db(qp_name, qp_desc, qp_tags):
-    cursor.execute(f"select [user_id] from [user] where e_mail = '{session['email']}'")
-    res = cursor.fetchone()
-    user_id = res[0]
-    #!add session id for user to relate 'created_by' in db, also add it into insert!
-    qp_ndu = []
-    nl = []
-    qp_ndu.append(qp_name.split(" "))
-    qp_ndu.append(qp_desc.split(" "))
-    for i in qp_ndu:
-        for x in i:
-            y = filter(str.isalnum, x)
-            t = "".join(y)
-            nl.append(t)
-
-    if check_words_aginst_db(nl):
-        word = check_words_aginst_db(nl)
-
-    else:
-        session['qp_name'] = qp_name
-        cursor.execute(f"insert into question_package (qp_description, created_by, qp_name) values ('{qp_desc}', {user_id}, '{qp_name}')")
-        cursor.commit()
-        apply_tags_to_qp(qp_tags)
-
-def get_question(question, answer_1, answer_2, answer_3, answer_4):
-    ql = []
-    nt = []
-    ql.append(question.split(" "))
-    ql.append(answer_1.split(" "))
-    ql.append(answer_2.split(" "))
-    ql.append(answer_3.split(" "))
-    ql.append(answer_4.split(" "))
-    for i in ql:
-        for x in i:
-            y = filter(str.isalnum, x)
-            t = "".join(y)
-            nt.append(t)
-
-    if check_words_aginst_db(nt):
-        word = check_words_aginst_db(nt)
-    else:
-        #-- before running: !Control that a session with qp_name is created during creation of new qp!
-        qp_name = session['qp_name']
-
-        current_qp_id = cursor.execute(f"select qp_id from question_package where qp_name = '{qp_name}'")
-        cursor.execute(f"insert into Zingo_DB.dbo.question (question, answer_1_correct, answer_2, answer_3, answer_4, qp_id) values ('{question}', '{answer_1}', '{answer_2}', '{answer_3}', '{answer_4}', '{current_qp_id}')")
-        cursor.commit()
-
-def check_words_aginst_db(all_words):
-    l = []
-
-    for word in all_words:
-        profanity = read_from_db("ugly_words", "*", f"where profanity = '{word}'")
-        if profanity:
-            l.append(word)
-
-    if len(l) > 0:
-        return l
-
+    print()
 '''
 def list_of_games():
     all_games = db_zingo.view_views("*", "vw_qp_with_nick")
@@ -403,3 +329,81 @@ def show_result():
 def save_result():
     # spara slutresultat i databas
 '''
+
+def apply_tags_to_qp(tag_list):
+    cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
+    res = cursor.fetchone()
+    qp_id = res[0]
+    tags = []
+    tags.append(tag_list)
+    print(qp_id)
+    print(tag_list)
+    print(tags)
+    for i in tags:
+        print(i)
+        cursor.execute(f"select tag_id from tag where tag_description = '{i}'")
+        row = cursor.fetchone()
+        tag_id = row[0]
+        cursor.execute(f"insert into question_package_tag (qp_id, tag_id) values ({qp_id}, {tag_id})")
+        cursor.commit()
+
+def save_qp_to_db(qp_name, qp_desc, qp_tags):
+    cursor.execute(f"select [user_id] from [user] where e_mail = '{session['email']}'")
+    res = cursor.fetchone()
+    user_id = res[0]
+    #!add session id for user to relate 'created_by' in db, also add it into insert!
+    qp_ndu = []
+    nl = []
+    qp_ndu.append(qp_name.split(" "))
+    qp_ndu.append(qp_desc.split(" "))
+    for i in qp_ndu:
+        for x in i:
+            y = filter(str.isalnum, x)
+            t = "".join(y)
+            nl.append(t)
+
+    if check_words_aginst_db(nl):
+        word = check_words_aginst_db(nl)
+
+    else:
+        session['qp_name'] = qp_name
+        cursor.execute(f"insert into question_package (qp_description, created_by, qp_name) values ('{qp_desc}', {user_id}, '{qp_name}')")
+        cursor.commit()
+        apply_tags_to_qp(qp_tags)
+
+def get_question(question, answer_1, answer_2, answer_3, answer_4):
+    question_list = []
+    alnum_list = []
+    question_list.append(question.split(" "))
+    question_list.append(answer_1.split(" "))
+    question_list.append(answer_2.split(" "))
+    question_list.append(answer_3.split(" "))
+    question_list.append(answer_4.split(" "))
+    for i in question_list:
+        for x in i:
+            y = filter(str.isalnum, x)
+            t = "".join(y)
+            alnum_list.append(t)
+
+    if check_words_aginst_db(alnum_list):
+        word = check_words_aginst_db(alnum_list)
+    else:
+        #-- before running: !Control that a session with qp_name is created during creation of new qp!
+        qp_name = session['qp_name']
+
+        cursor.execute(f"select qp_id from question_package where qp_name = '{qp_name}'")
+        res = cursor.fetchone()
+        current_qp_id = res[0]
+        cursor.execute(f"insert into question (question, answer_1_correct, answer_2, answer_3, answer_4, qp_id) values ('{question}', '{answer_1}', '{answer_2}', '{answer_3}', '{answer_4}', {current_qp_id})")
+        cursor.commit()
+
+def check_words_aginst_db(all_words):
+    l = []
+
+    for word in all_words:
+        profanity = read_from_db("ugly_words", "*", f"where profanity = '{word}'")
+        if profanity:
+            l.append(word)
+
+    if len(l) > 0:
+        return l
