@@ -29,22 +29,22 @@
                   <a class="nav-link active" aria-current="page" href="/">Homepage</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/view_all_games">View Games</a>
+                  <a class="nav-link" href="{{ url_for('view_all_question_package') }}">View question packages</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('my_profile') }}">My Profile</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/create_game">Create Game</a>
+                    <a class="nav-link" href="{{ url_for('create_question_package') }}">Create Game</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/join_game">Join Game</a>
+                    <a class="nav-link" href="{{ url_for('join_game') }}">Join Game</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/sign_in">Sign In</a>
+                    <a class="nav-link" href="{{ url_for('sign_in') }}">Sign In</a>
                   </li>
                   <li class="nav-item">
                     <button type="button" class="btn btn-outline-warning"><a href="{{ url_for('user_logout') }}">Log Out</a></button>

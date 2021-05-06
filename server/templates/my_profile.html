@@ -21,7 +21,7 @@
 </div>
  <!--Skapa ett frågepaket--> 
 <div class="row">
-    <a href="create_game.html">Create Game</a>
+    <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
 </div>
 
  <!--Favoritspel-->
@@ -37,7 +37,7 @@
 
 <!--Länk till profilinställningar-->
 <div class="row">
-    <a href="profile_settings.html">Profile Settings</a>
+    <a href="{{ url_for('profile_settings') }}">Profile Settings</a>
 </div>
  
 {% endblock %}

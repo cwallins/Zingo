@@ -37,19 +37,17 @@
     </div>
     <div class="col-md-6">
         <article>
-            <!--En ruta där sammanfattning av frågepaket visas + Edit + Delete-->
-            <h2>Question summary</h2>
+            <h2>Question summary: {{ qp_name }}</h2>
             <ul>
                 {% for question in questions %}
                     <li>
-                            
+                        {{ question }}
                     </li>
                 {% endfor %}
             </ul>
         </article>
         <form action="#" method="#">
-            <!--spara frågepaket-->
-
+            <!--save question package-->
             <button type="submit" value="save_qp">Save game</button>
         </form>
     </div>
