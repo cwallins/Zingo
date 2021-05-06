@@ -8,37 +8,49 @@
 <!--Content block-->
 {% block content %}
  <!--Välkomen och profil-->
-<div class="row">
-    <div class="col-12">
-        <h2>My Profile</h2>
-    </div> 
-    <div class="col-12">
-        <img src="#"> <!--en bild på en animerad gubbe-->
+<div class="container my_profile">
+  <div class="row">
+      <div class="col-12">
+          <h2>My Profile</h2>
+      </div> 
+      <div class="col-12">
+          <img src="#"> <!--en bild på en animerad gubbe-->
+      </div>
+      <div class="col-12">
+          <p>{{ username }}</p> 
+      </div>
+  </div>
+  <!--Skapa ett frågepaket--> 
+  <div class="row">
+      <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
+  </div>
+
+  <!--Favoritspel-->
+
+  <div class="row">
+      <h2>Här ska favoritspel visas, om tid finns för att implenetera</h2>
+  </div>
+
+  <!--Se skapade frågepaket, tänk på att det ska visas spel från unik användare-->
+  <div class="row">
+      <div class="col-md-12">
+        {% for question_package in question_packages %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"> {{ qp_name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted"> {{ created_by }}</h6>
+            <p class="card-text"> {{ qp_description }}</p>
+            <button type="button" class="btn btn-success" href="view_one_game">View game</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <div class="col-12">
-        <p>{{ username }}</p> 
-    </div>
-</div>
- <!--Skapa ett frågepaket--> 
-<div class="row">
-    <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
-</div>
 
- <!--Favoritspel-->
-
-<div class="row">
-    <h2>Här ska favoritspel visas</h2>
-</div>
-
- <!--Se skapade frågepaket-->
-<div class="row">
-    <h2>Här ska skapade frågepaket från inloggad användare visas</h2>
-</div>
-
-<!--Länk till profilinställningar-->
-<div class="row">
-    <a href="{{ url_for('profile_settings') }}">Profile Settings</a>
-</div>
- 
+  <!--Länk till profilinställningar-->
+  <div class="row">
+      <a href="{{ url_for('profile_settings') }}">Profile Settings</a>
+  </div>
+</div> 
 {% endblock %}
 

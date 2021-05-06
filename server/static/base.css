@@ -1,16 +1,31 @@
+body {
+  background: url(http://bdbackgrounds.com/images/product-images/backdrops/background-paper/light-yellow/1-lightyellow-paper.jpg);
+  background-size: cover;
+}
 
+body a {
+  color:black
+}
 
-body > main.main  {
+body a:hover {
+  color:rgb(78, 78, 78)
+}
+.homepage  {
   margin:auto !important; 
-  width: 500px !important;
-  background-color: solid black !important;
-  border: yellow;
 }
 
-/*.container-form {
+.form {
+  margin: auto;
+  width: 700px;
+}
+
+.my_profile {
+  
+}
+
+.create_game {
 
 }
-*/
 
 .footer {
   position: absolute;
@@ -18,6 +33,7 @@ body > main.main  {
   width: 100%;
   height: 60px; /* Set the fixed height of the footer here */
   line-height: 60px; /* Vertically center the text there */
-  background-color: #ffffff;
+  background-color: #212529;
+  color: #ffffff;
 }
 
