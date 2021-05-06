@@ -70,7 +70,8 @@ def sign_in():
 @app.route('/my_profile')
 def my_profile():
     try:
-        return render_template("my_profile.html", username=session['username'])
+        qp_list = list_of_games()
+        return render_template("my_profile.html", username=session['username'], games = qp_list)
     except(KeyError):
         return redirect(url_for('sign_in'))
 
@@ -106,11 +107,49 @@ def create_question():
     print(questions)
     
     list_of_questions = []
-    
+    qna = []
     for i in questions:    
         list_of_questions.append(i[0])
     
-    return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions)
+    return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions, qna = qna)
+
+@app.route('/edit_qp/<qp_name>')
+def edit_qp(qp_name):
+    session['qp_name'] = qp_name
+    cursor.execute(f"exec sp_get_questions '{qp_name}'")
+    questions = cursor.fetchall()
+    print(questions)
+    
+    qna = []
+
+    list_of_questions = []
+    
+    for i in questions:    
+        list_of_questions.append(i[0])
+
+    return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = qna)
+
+@app.route('/edit_qp/<qp_name>/<question>')
+def edit_q(qp_name, question):
+    cursor.execute(f"exec sp_get_questions '{qp_name}'")
+    questions = cursor.fetchall()
+    print(questions)
+    
+    list_of_questions = []
+    
+    for i in questions:    
+        list_of_questions.append(i[0])
+
+    question_and_answers = []
+    for i in questions:
+        if question in i:
+            for x in i:
+                question_and_answers.append(x)
+    print(question_and_answers)
+
+    session['question'] = question_and_answers[0]
+
+    return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = question_and_answers)
 
 @app.route('/invite_player')
 def invite_player():
@@ -140,10 +179,6 @@ def in_game_result():
 def in_game_show_question():
     return render_template("in_game_show_question.html")
 
-@app.route('/play_game')
-def play_game():
-    return render_template("play_game.html")
-
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
     qp_name = request.form['qp_name']
@@ -161,6 +196,25 @@ def control_questions_answers():
     answer_4 = request.form['answer_4']
     get_question(question, answer_1, answer_2, answer_3, answer_4)
     return redirect(url_for('create_question'))
+
+@app.route('/edit_questions_and_answers', methods = ['GET', 'POST'],)
+def edit_question():
+    question = request.form['question']
+    answer_1 = request.form['answer_1']
+    answer_2 = request.form['answer_2']
+    answer_3 = request.form['answer_3']
+    answer_4 = request.form['answer_4']
+
+    cursor.execute(f"select q_id from question where question = '{session['question']}'")
+    res = cursor.fetchone()
+    question_id = res[0]
+
+    cursor.execute(f"delete from question where q_id = {question_id}")
+    cursor.commit()
+
+    get_question(question, answer_1, answer_2, answer_3, answer_4)
+
+    return redirect(url_for('edit_qp', qp_name=session['qp_name']))
 
 @app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
@@ -208,15 +262,19 @@ def user_logout():
 
 
     print()
-'''
+
 def list_of_games():
-    all_games = db_zingo.view_views("*", "vw_qp_with_nick")
-
-    for i in all_games:
-        print(", ".join(i))
-    
+    cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
+    res = cursor.fetchall()
+    print(res)
+    qp_list = []
+    for i in res:
+        qp_list.append(i[0])
+           
+    print(qp_list)
+    return qp_list
     #sorterings algroitmer för name asc/desc, rating asc/desc, most played, asc/desc
-
+'''
 def view_question_package(selected_qp):
     #qp: name, description, creator
     #items
@@ -407,3 +465,4 @@ def check_words_aginst_db(all_words):
 
     if len(l) > 0:
         return l
+

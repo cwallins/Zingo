@@ -11,28 +11,35 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form action="/control_questions_answers" method="POST">
+        <form action="" method="POST">
             <div class="form-gruop">
                 <label for="question">Question</label>
-                <input type="text" name="question" id="question">
+                <input type="text" name="question" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}'>
             </div>
             <div class="form-gruop">
                 <label for="answer_1">Correct answer</label>
-                <input type="text" name="answer_1" id="answer_1">
+                <input type="text" name="answer_1" id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}'>
             </div>
             <div class="form-gruop">
                 <label for="answer_2">Example answer 1</label>
-                <input type="text" name="answer_2" id="answer_2">
+                <input type="text" name="answer_2" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}'>
             </div>
             <div class="form-gruop">
                 <label for="answer_3">Example answer 2</label>
-                <input type="text" name="answer_3" id="answer_3">
+                <input type="text" name="answer_3" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}'>
             </div>
             <div class="form-gruop">
                 <label for="answer_4">Example answer 3</label>
-                <input type="text" name="answer_4" id="answer_4">
+                <input type="text" name="answer_4" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}'>
             </div>
-            <button type="submit">Add question</button>
+            
+            <button type="submit" formaction = "/control_questions_answers">Add question</button> 
+            <br>
+            <button type="submit" formaction = "{{ url_for('edit_question') }}">Edit</button>
+        
+            
+            
+            
         </form>
     </div>
     <div class="col-md-6">
@@ -41,7 +48,7 @@
             <ul>
                 {% for question in questions %}
                     <li>
-                        {{ question }}
+                        <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }}</a>
                     </li>
                 {% endfor %}
             </ul>

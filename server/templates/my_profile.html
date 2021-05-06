@@ -28,6 +28,9 @@
 
 <div class="row">
     <h2>Här ska favoritspel visas</h2>
+    {% for i in games %}
+        <li>{{ i }} <a href="{{ url_for('edit_qp', qp_name = i) }}">Edit</a> <a href="#">Play</a></li> 
+    {% endfor %}
 </div>
 
  <!--Se skapade frågepaket-->
