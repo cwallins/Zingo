@@ -1,3 +1,17 @@
+
+
+body > main.main  {
+  margin:auto !important; 
+  width: 500px !important;
+  background-color: solid black !important;
+  border: yellow;
+}
+
+/*.container-form {
+
+}
+*/
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -6,3 +20,4 @@
   line-height: 60px; /* Vertically center the text there */
   background-color: #ffffff;
 }
+
