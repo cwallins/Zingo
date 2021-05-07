@@ -9,30 +9,56 @@
 {% block content %}
  <!--Join game-->
 
- <h2>Invite players</h2>
- <form action="#" method="#">
-    <div class="form-group mb-3">
-        <label for="Invite_player_url">Game URL</label>
-        <input name="Invite_player_url" type="Invite_player_url" class="form-control" id="Invite_player_url"> <!--Generera en URL till spelet-->
-        <button type="submit" onclick= "myFunction()" class="btn btn-warning">Copy URL</button>
-    </div>
-<!--Ovan kod kan endast ses av värden-->
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-          <label for="temporary_username" class="sr-only">Enter Username</label> <br>
-          <input type="username" class="form-control" id="temporary_username" placeholder="username">
+
+
+{% if admin == True and guest == False %}
+    <h2>Invite players</h2>
+    <form>
+        <div class="form-group mb-3">
+            <label for="Invite_player_url">Game URL</label>
+            <input name="Invite_player_url" type="text" class="form-control" id="Invite_player_url" value="{{ url }}" readonly> <!--Generera en URL till spelet-->
+            <button onclick = "myFunction()" class="btn btn-warning">Copy URL</button>
         </div>
-        <button type="submit" class="btn btn-primary mb-2" a href="#">Join</button>
+    <!--Ovan kod kan endast ses av värden-->
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Player 1</li>
+            <li class="list-group-item">Player 2</li>
+            <li class="list-group-item">Player 3</li>
+            <li class="list-group-item">Player 4</li>
+            <li class="list-group-item">Player 5</li>
+        </ul>
+        <!--nedan kod kan endast ses av värden-->
+        <button type="submit" class="btn btn-warning" a href="#">Start Game</button>
     </form>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Player 1</li>
-        <li class="list-group-item">Player 2</li>
-        <li class="list-group-item">Player 3</li>
-        <li class="list-group-item">Player 4</li>
-        <li class="list-group-item">Player 5</li>
-    </ul>
-    <!--nedan kod kan endast ses av värden-->
-    <button type="submit" class="btn btn-warning">Start Game</button>
-</form>
- 
+{% endif %} 
+
+{% if admin == False and guest == False %}
+    <h2>Welcome {{ username }}</h2>
+    <p>Please wait for host to start.</p>
+    <form>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Player 1</li>
+            <li class="list-group-item">Player 2</li>
+            <li class="list-group-item">Player 3</li>
+            <li class="list-group-item">Player 4</li>
+            <li class="list-group-item">Player 5</li>
+        </ul>
+        <!--nedan kod kan endast ses av värden-->
+        
+    </form>
+{% endif %}
+
+{% if admin == False and guest == True %}
+    <h2>Welcome to Zingo</h2>
+    <p>Please choose a nickname</p>
+    <form action="{{ url_for('receive_temporal_user', url=url) }}" class="form-inline" method='POST'>
+        <div class="form-group mx-sm-3 mb-2">
+        <label for="temporary_username" class="sr-only">Enter Username</label> <br>
+        <input name="temporary_username" type="username" class="form-control" id="temporary_username" placeholder="username">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Join</button>
+    </form>
+{% endif %}
+
 {% endblock %}

@@ -1,7 +1,9 @@
-from flask import Flask, redirect, url_for, render_template, request, session
 import pyodbc
-from random import shuffle
 import time
+from flask import Flask, redirect, url_for, render_template, request, session
+from random import shuffle
+from uuid import uuid4
+
 
 app = Flask(__name__)
 app.secret_key = 'zingo'
@@ -69,10 +71,10 @@ def sign_in():
 
 @app.route('/my_profile')
 def my_profile():
-    try:
+    if 'loggedin' in session:
         qp_list = list_of_games()
         return render_template("my_profile.html", username=session['username'], games = qp_list)
-    except(KeyError):
+    else:
         return redirect(url_for('sign_in'))
 
 @app.route('/profile_settings')
@@ -104,8 +106,6 @@ def create_question():
 
     cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
     questions = cursor.fetchall()
-    print(questions)
-    
     list_of_questions = []
     qna = []
     for i in questions:    
@@ -118,7 +118,6 @@ def edit_qp(qp_name):
     session['qp_name'] = qp_name
     cursor.execute(f"exec sp_get_questions '{qp_name}'")
     questions = cursor.fetchall()
-    print(questions)
     
     qna = []
 
@@ -133,7 +132,6 @@ def edit_qp(qp_name):
 def edit_q(qp_name, question):
     cursor.execute(f"exec sp_get_questions '{qp_name}'")
     questions = cursor.fetchall()
-    print(questions)
     
     list_of_questions = []
     
@@ -145,27 +143,58 @@ def edit_q(qp_name, question):
         if question in i:
             for x in i:
                 question_and_answers.append(x)
-    print(question_and_answers)
 
     session['question'] = question_and_answers[0]
 
     return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = question_and_answers)
 
-@app.route('/invite_player')
-def invite_player():
-    return render_template("invite_player.html")
+@app.route('/invite_player/<qp_name>/<admin>')
+def invite_player(qp_name, admin):
+    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
+    if 'loggedin' in session or 'temp_login' in session:
+        username = session['username']
+        if username == admin:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
+        else:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
+    else:
+        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")
 
-@app.route('/join_game')
-def join_game():
-    return render_template("join_game.html")
+@app.route('/receive_temporal_user', methods = ['GET', 'POST'])
+def receive_temporal_user():
+    string = request.args.get("url")
+    temp_user = request.form['temporary_username']
+    session['temp_login'] = True
+    session['username'] = temp_user
+    return redirect(string)
 
 @app.route('/view_all_question_package')
 def view_all_question_package():
-    return render_template("view_all_question_package.html")
+    cursor.execute("select qp_name, qp_description, created_by from question_package")
+    res = cursor.fetchall()
+    #cursor.execute("select nickname from [user] where [user_id] = X")
 
-@app.route('/view_one_question_package')
-def view_one_question_package():
-    return render_template("view_one_question_package.html")
+    list_of_qp = []
+
+    for x in res:
+        for qp in x:
+            list_of_qp.append(qp)
+
+    #!----FIX: created_by should be nickname form dbo.user,
+    #!----change so that list 
+
+    return render_template("view_all_question_package.html", qp_list = res)
+
+@app.route('/view_one_question_package/<qp_name>')
+def view_one_question_package(qp_name):
+    cursor.execute(f"select qp_description, created_by from question_package where qp_name = '{qp_name}'")
+    qp_info = cursor.fetchone()
+    qp_desc = qp_info[0]
+    qp_creator = qp_info[1]
+    cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
+    qp_nick = cursor.fetchone()
+    print(qp_desc)
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc)
 
 @app.route('/in_game_final_result')
 def in_game_final_result():
@@ -175,8 +204,11 @@ def in_game_final_result():
 def in_game_result():
     return render_template("in_game_result.html")
 
-@app.route('/in_game_show_question')
-def in_game_show_question():
+@app.route('/playing/<chosen_qp>')
+def in_game_show_question(chosen_qp):
+    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
+    shuffle(question_list)
+    ask_questions(question_list)
     return render_template("in_game_show_question.html")
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
@@ -260,9 +292,6 @@ def user_logout():
     session.pop('username', None)
     return redirect(url_for('sign_in'))
 
-
-    print()
-
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
     res = cursor.fetchall()
@@ -274,119 +303,6 @@ def list_of_games():
     print(qp_list)
     return qp_list
     #sorterings algroitmer för name asc/desc, rating asc/desc, most played, asc/desc
-'''
-def view_question_package(selected_qp):
-    #qp: name, description, creator
-    #items
-    qp_name = db_zingo.read_from_db("question_package", "qp_name", f"where qp_name = '{selected_qp}'")
-    print(qp_name)
-    qp_description = db_zingo.read_from_db("question_package", "qp_description", f"where qp_name = '{selected_qp}'")
-    print(qp_description)
-    qp_creator = db_zingo.read_from_db("vw_qp_with_nick", "nickname", f"where qp_name = '{selected_qp}'")
-    print(qp_creator)
-    
-    #listor
-    qp_tags = db_zingo.read_from_db("vw_question_package_with_tag", "tag", f"where question_package = '{selected_qp}'")
-    print(qp_tags)
-    #qp_rating = db_zingo.read_from_db("vw_qp_rating", "rating", f"where question_package = '{selected_qp}'")
-    #print(qp_rating)
-    qp_questions = db_zingo.execute_procedure(f"sp_get_questions '{selected_qp}'") #fixa en view för enbart frågor.
-    print(qp_questions)
-    #1. hämta data från db
-    #2. spara lista med data från db
-    #3. sortera lista i python
-    #4. skicka lista till html
-
-#create_game()
-'''
-
-''' CREATE QUESTION PACKAGE '''
-'''
-def control_question_package():
-    # Review question packages content before saving to database.
-        # banned words
-    # create qp, add questions -> then control and save/inform user of banned words.
-
-def create_question_package():
-    # insert function here:
-    # name qp, description of qp.
-    qp_name = request.form['qp_name'] #ska vara unikt
-    qp_description = request.form['qp_description']
-
-def add_question_to_qp():
-    # add question, with 4 answers which of one correct alternative.
-    question = request.form['question']
-    answer_1 = request.form['answer_1']
-    answer_2 = request.form['answer_2']
-    answer_3 = request.form['answer_3']
-    answer_4 = request.form['answer_4']
-
-    # answer_1 is the correct answer!
-
-def edit_questions_of_qp():
-
-def add_tags_to_qp():'''
-
-
-
-
-'''
-chosen_qp = "Blandade sportfrågor"
-
-def play_question_game(chosen_qp):
-    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    shuffle(question_list)
-    
-    ask_questions(question_list)
-
-def ask_questions(question_list):
-    #seperate question from answers, seperate answers from right answer
-    #i[0] = question, i[1] = correct_answer
-    question = []
-    correct_answer = []
-    all_answers = []
-
-    #show question, put correct_answer in 1-4, put wrong_answers in 1-4 if not allready taken.
-
-    for i in question_list:
-        question.append(i[0])
-        correct_answer.append(i[1])
-        all_answers.append(i[1])
-        all_answers.append(i[2])
-        all_answers.append(i[3])
-        all_answers.append(i[4])
-        print(question[0])
-        time.sleep(1)
-        shuffle(all_answers)
-        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
-        print(f"Rätt svar: {correct_answer[0]}")
-        time.sleep(1)
-        #ask question
-        #display all answers (randomly)
-        #show_result, question + correct_answer and score
-        question.clear()
-        correct_answer.clear()
-        all_answers.clear()
-    
-    # visa en fråga i turordning 1-n1
-    # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
-    # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
-
-def display_awnsers(question_list):
-
-def show_result():
-    #show question and correct answer
-    for i in question_list:
-        print(i[0], i[1])
-
-    # resultat sparas "lokalt" efter varje fråga och sammanställs. resultatet förs vidare till nästa besvarde fråga och adderas, summeras och skickas vidare... ->
-
-    
-    # när inga fler frågor finns, visa slutresultat
-
-def save_result():
-    # spara slutresultat i databas
-'''
 
 def apply_tags_to_qp(tag_list):
     cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
@@ -394,11 +310,7 @@ def apply_tags_to_qp(tag_list):
     qp_id = res[0]
     tags = []
     tags.append(tag_list)
-    print(qp_id)
-    print(tag_list)
-    print(tags)
     for i in tags:
-        print(i)
         cursor.execute(f"select tag_id from tag where tag_description = '{i}'")
         row = cursor.fetchone()
         tag_id = row[0]
@@ -466,3 +378,76 @@ def check_words_aginst_db(all_words):
     if len(l) > 0:
         return l
 
+@app.route('/search_form', methods = ['GET', 'POST'])
+def search_form():
+    search_input = request.form['search_input']
+    print(search_input)
+    cursor.execute(f"select qp_name from question_package")
+    res = cursor.fetchall()
+
+    list_of_qp = []
+
+    for x in res:
+        for qp in x:
+            list_of_qp.append(qp)
+
+    print(list_of_qp)
+
+    for qp in list_of_qp:
+        if qp == search_input:
+            return redirect(url_for('view_one_question_package', qp_name = search_input))
+
+    return redirect(url_for('view_all_question_package'))
+
+''' CREATE QUESTION PACKAGE '''
+
+
+'''
+def ask_questions(question_list):
+    #seperate question from answers, seperate answers from right answer
+    #i[0] = question, i[1] = correct_answer
+    question = []
+    correct_answer = []
+    all_answers = []
+
+    #show question, put correct_answer in 1-4, put wrong_answers in 1-4 if not allready taken.
+
+    for i in question_list:
+        question.append(i[0])
+        correct_answer.append(i[1])
+        all_answers.append(i[1])
+        all_answers.append(i[2])
+        all_answers.append(i[3])
+        all_answers.append(i[4])
+        print(question[0])
+        time.sleep(1)
+        shuffle(all_answers)
+        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
+        print(f"Rätt svar: {correct_answer[0]}")
+        time.sleep(1)
+        #ask question
+        #display all answers (randomly)
+        #show_result, question + correct_answer and score
+        question.clear()
+        correct_answer.clear()
+        all_answers.clear()
+    
+    # visa en fråga i turordning 1-n1
+    # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
+    # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
+
+def display_awnsers(question_list):
+
+def show_result():
+    #show question and correct answer
+    for i in question_list:
+        print(i[0], i[1])
+
+    # resultat sparas "lokalt" efter varje fråga och sammanställs. resultatet förs vidare till nästa besvarde fråga och adderas, summeras och skickas vidare... ->
+
+    
+    # när inga fler frågor finns, visa slutresultat
+
+def save_result():
+    # spara slutresultat i databas
+'''

@@ -7,8 +7,8 @@ function myFunction() {
     copyText.setSelectionRange(0, 99999); /* For mobile devices */
   
     /* Copy the text inside the text field */
-    document.execCommand("Copy URL");
+    document.execCommand("copy");
   
     /* Alert the copied text */
-    alert("Copied URL: " + copyText.value);
+    alert("Copied URL: " + copyText.value); 
   }
