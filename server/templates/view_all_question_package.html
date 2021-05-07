@@ -33,7 +33,7 @@
           <h5 class="card-title"> {{ question_package[0] }}</h5>
           <h6 class="card-subtitle mb-2 text-muted"> {{ question_package[2] }}</h6>
           <p class="card-text"> {{ question_package[1] }}</p>
-          <button type="button" class="btn btn-success"><a href="{{ url_for('view_one_question_package', qp_name = question_package[0]) }}">View game</a></button>
+          <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = question_package[0]) }}">View game</a></button>
         </div>
       </div>
       {% endfor %}
