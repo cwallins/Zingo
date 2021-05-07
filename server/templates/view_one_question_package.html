@@ -7,27 +7,41 @@
 
 <!--Content block-->
 {% block content %} 
-  <!--View one game-->
 
-  <!--Namn på frågepaket-->
-  <div class="row">
-        <h2>{{ qp_name }}</h2>
-  </div>
-  <!--Beskrivning av frågepaket-->
-  <div class="row">
-    <p>Summary: {{ qp_desc }}</p>
-  </div>
-  <!--Frågor i frågepaket-->
-  <div class="row">
-    <p>Loopad lista med frågorna</p>
-  </div>
+<div class="container view_one_game">
 
-  <!--Gå tillbaka-knapp (vart?)-->
-  <p>Här ska en knapp finnas</p>
-  
-  <!--Starta ett spel-knapp-->
-  <button type="button" class="btn btn-success" href="#">Play game</button>
-  
+    <!--Namn på frågepaket-->
+    <div class="row">
+      <div class="col-12">  
+          <h2>{{ qp_name }}</h2>
+        </div>
+    </div>
+    <!--Beskrivning av frågepaket-->
+    <div class="row">
+      <div class="col-12">
+        <p>Summary: {{ qp_desc }}</p>
+      </div>
+    </div>
+    <!--Frågor i frågepaket-->
+    <div class="row">
+      <div class="col-12">
+        <p>Loopad lista med frågorna</p>
+      </div>
+    </div>
 
+    <!--Gå tillbaka-knapp (vart?)-->
+    <div class="row">
+      <div class="col-12">
+        <p>Här ska en knapp finnas tillbaka till view_all_games</p>
+      </div>
+    </div> 
+    <!--Starta ett spel-knapp-->
+    <div class="row">
+      <div class="col-12">
+        <button type="button" class="btn btn-lg btn-warning" href="#">Play game</button>
+      </div>
+    </div>
+    
+</div>
 
 {% endblock %}

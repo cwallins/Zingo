@@ -15,28 +15,28 @@
         <form action="" method="POST">
             <div class="form-gruop">
                 <label for="question">Question</label>
-                <input type="text" name="question" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}'>
+                <input type="text" name="question" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' required>
             </div>
             <div class="form-gruop">
                 <label for="answer_1">Correct answer</label>
-                <input type="text" name="answer_1" id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}'>
+                <input type="text" name="answer_1" id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}' required>
             </div>
             <div class="form-gruop">
                 <label for="answer_2">Example answer 1</label>
-                <input type="text" name="answer_2" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}'>
+                <input type="text" name="answer_2" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}' required>
             </div>
             <div class="form-gruop">
                 <label for="answer_3">Example answer 2</label>
-                <input type="text" name="answer_3" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}'>
+                <input type="text" name="answer_3" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}' required>
             </div>
             <div class="form-gruop">
                 <label for="answer_4">Example answer 3</label>
-                <input type="text" name="answer_4" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}'>
+                <input type="text" name="answer_4" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' required>
             </div>
             
-            <button type="submit" formaction = "/control_questions_answers">Add question</button> 
+            <button type="submit" class="btn btn-lg btn-warning" formaction = "/control_questions_answers">Add question</button> 
             <br>
-            <button type="submit" formaction = "{{ url_for('edit_question') }}">Edit</button>
+            <button type="submit" class="btn btn-lg btn-warning" formaction = "{{ url_for('edit_question') }}">Save changes</button>
         </form>
     </div>
     <div class="col-md-6">
