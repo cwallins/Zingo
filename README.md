@@ -17,3 +17,5 @@ We're five students from Malmö University in Sweden who are developing a quiz-w
 1. För att köra python filerna krävs att följande ramverk är installderade:
     Flask (pip install Flask)
     Pyodbc (pip install Pyodbc), om det inte redan är förinstallerat.     
+
+2. Kör main.py för att starta programmet
