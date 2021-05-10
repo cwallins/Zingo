@@ -1,12 +1,20 @@
 
-/*Popover for 'Rules--> DENNA FUNKAR INTE ÄN'
+/*Popover for 'Rules' which only works when in base.html for some reason 
 
-var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
-  trigger: 'focus'
-})
-END OF POPOVER-CODE
+<script>
+    $( function( )
+    {
+      $( "[data-toggle= 'popover'" ).popover( );
+    } );
 
+    $( ".popover-dismiss" ).popover( 
+    {
+        trigger: "focus"
+    } );
+
+</script>
 */
+
 
 /*Time-progress
 
