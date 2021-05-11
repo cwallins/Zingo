@@ -193,6 +193,7 @@ def view_one_question_package(qp_name):
     qp_creator = qp_info[1]
     cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
     qp_nick = cursor.fetchone()
+   
     print(qp_desc)
     return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
 
