@@ -170,15 +170,14 @@ def receive_temporal_user():
 
 @app.route('/view_all_question_package')
 def view_all_question_package():
-    cursor.execute("select qp_name, qp_description, created_by from question_package")
+    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
     res = cursor.fetchall()
     #cursor.execute("select nickname from [user] where [user_id] = X")
 
     list_of_qp = []
 
     for x in res:
-        for qp in x:
-            list_of_qp.append(qp)
+        print(x[0])
 
     #!----FIX: created_by should be nickname form dbo.user,
     #!----change so that list 
@@ -379,11 +378,11 @@ def check_words_aginst_db(all_words):
     if len(l) > 0:
         return l
 
-@app.route('/search_form', methods = ['GET', 'POST'])
+@app.route('/search', methods = ['GET', 'POST'])
 def search_form():
     search_input = request.form['search_input']
     print(search_input)
-    cursor.execute(f"select qp_name from question_package")
+    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
     res = cursor.fetchall()
 
     list_of_qp = []
@@ -393,12 +392,15 @@ def search_form():
             list_of_qp.append(qp)
 
     print(list_of_qp)
-
+    '''
     for qp in list_of_qp:
         if qp == search_input:
             return redirect(url_for('view_one_question_package', qp_name = search_input))
-
-    return redirect(url_for('view_all_question_package'))
+    '''
+    if res:
+        return render_template("view_all_question_package.html", qp_list = res)
+    else:
+        return redirect(url_for('view_all_question_package'))
 
 ''' CREATE QUESTION PACKAGE '''
 
