@@ -1,10 +1,22 @@
+
 body {
   background: url(http://bdbackgrounds.com/images/product-images/backdrops/background-paper/light-yellow/1-lightyellow-paper.jpg);
   background-size: cover;
+  font-family: 'Graduate', cursive;
+  padding-bottom:58px;
 }
 
 body a {
   color:black
+}
+
+#logout{
+  float:right; /*fungerar inte*/ 
+}
+
+.logohomepage {
+  height: 203px;
+  width: 241px;
 }
 
 body a:hover {
@@ -13,6 +25,10 @@ body a:hover {
 .homepage  {
   margin:auto !important; 
 }
+.create_game_picture {
+  width: 800px;
+  height: 300px;
+}
 
 .form {
   margin: auto;
@@ -20,15 +36,26 @@ body a:hover {
 }
 
 .my_profile {
-  
+  text-align:center;
 }
 
-.create_game {
-
+#profile_picture {
+  height: 75px;
+  width: 75px;
 }
+
+#play{
+  text-align:center;
+}
+
+#contact-us{
+  text-decoration: none;
+}
+
 
 .footer {
-  position: absolute;
+  text-align:center;
+  position:fixed;
   bottom: 0;
   width: 100%;
   height: 60px; /* Set the fixed height of the footer here */

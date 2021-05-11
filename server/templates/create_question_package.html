@@ -12,6 +12,7 @@
     <h3>Create your game </h3>
             
     <div class="col-sm-12">
+        <!-- RULES-KNAPPEN: <a tabindex="0" class="btn btn-lg btn-warning" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Dismissible popover" data-bs-content="Be lawfully good">Dismissible popover</a> -->
         <hr>
         <form class="create_game" action="/control_qp_name_desc" method="POST">
             <div class="form-group">
@@ -32,8 +33,12 @@
                 <p>Hold down Control (Windows) or Command (Mac) button to select multiple options (5 at most).</p>
             </div> 
             <div class="form-group mt-3"> 
-                <button type="submit" class="btn btn-warning">Next</button>
+                <button type="submit" class="btn btn-lg btn-warning">Next</button>
             </div>
+            <div>
+                <a tabindex="0" class="btn btn-warning mt-3" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Follow this rules to have a spendid good time!" data-bs-content="Be a cool dude!">Rules</a>
+            </div>
+
         </form>
     </div>
 </div>  
