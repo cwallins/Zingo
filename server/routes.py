@@ -172,15 +172,6 @@ def receive_temporal_user():
 def view_all_question_package():
     cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
     res = cursor.fetchall()
-    #cursor.execute("select nickname from [user] where [user_id] = X")
-
-    list_of_qp = []
-
-    for x in res:
-        print(x[0])
-
-    #!----FIX: created_by should be nickname form dbo.user,
-    #!----change so that list 
 
     return render_template("view_all_question_package.html", qp_list = res)
 
