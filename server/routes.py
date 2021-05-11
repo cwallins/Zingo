@@ -194,7 +194,7 @@ def view_one_question_package(qp_name):
     cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
     qp_nick = cursor.fetchone()
     print(qp_desc)
-    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc)
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
 
 @app.route('/in_game_final_result')
 def in_game_final_result():
