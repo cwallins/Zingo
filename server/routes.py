@@ -3,10 +3,12 @@ import time
 from flask import Flask, redirect, url_for, render_template, request, session
 from random import shuffle
 from uuid import uuid4
+from flask_socketio import SocketIO, join_room
 
 
 app = Flask(__name__)
 app.secret_key = 'zingo'
+socketio = SocketIO(app)
 
 ''' 
 database connection:
@@ -151,6 +153,7 @@ def edit_q(qp_name, question):
 @app.route('/invite_player/<qp_name>/<admin>')
 def invite_player(qp_name, admin):
     string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
+
     if 'loggedin' in session or 'temp_login' in session:
         username = session['username']
         if username == admin:
@@ -159,6 +162,14 @@ def invite_player(qp_name, admin):
             return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
     else:
         return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")
+
+#How to solve issues regarding playing the game?
+@socketio.on('join')
+def on_join(data):
+    username = session['username']
+    room = data['room']
+    join_room(room)
+    send(username + ' has entered the room.', room=room)
 
 @app.route('/receive_temporal_user', methods = ['GET', 'POST'])
 def receive_temporal_user():

@@ -1,7 +1,5 @@
 from flask import Flask
-from routes import app
-
-#app = Flask(__name__)
+from routes import app, socketio
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
