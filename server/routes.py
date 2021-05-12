@@ -292,6 +292,10 @@ def user_logout():
     session.pop('username', None)
     return redirect(url_for('sign_in'))
 
+@app.route('/terms_conditions')
+def terms_conditions():
+    return render_template("terms_conditions.html")
+
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
     res = cursor.fetchall()
