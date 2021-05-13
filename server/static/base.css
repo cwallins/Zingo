@@ -6,12 +6,19 @@ body {
   padding-bottom:65px;
 }
 
+
 body a {
   color:black
 }
 
-#logout{
+#logout a{
   float:right; /*fungerar inte*/ 
+  color:#ffc107;
+  text-decoration: none;
+}
+
+#logout a:hover{
+  color:black;
 }
 
 .logohomepage {
