@@ -32,6 +32,7 @@
             <div class="form-gruop">
                 <label for="answer_4">Example answer 3</label>
                 <input type="text" name="answer_4" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' required>
+                <p><b>{{ msg }}</b></p>
             </div>
             
             <button type="submit" class="btn btn-lg btn-warning" formaction = "/control_questions_answers">Add question</button> 

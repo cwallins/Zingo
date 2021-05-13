@@ -59,6 +59,7 @@ def read_from_db(table_name, select_query, arguments):
 
 @app.route('/')
 def home():
+    session['message'] = ""
     return render_template("home_page.html")
 
 @app.route('/register') 
@@ -71,6 +72,7 @@ def sign_in():
 
 @app.route('/my_profile')
 def my_profile():
+    session['message'] = ""
     if 'loggedin' in session:
         qp_list = list_of_games()
         return render_template("my_profile.html", username=session['username'], games = qp_list)
@@ -111,7 +113,7 @@ def create_question():
     for i in questions:    
         list_of_questions.append(i[0])
     
-    return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions, qna = qna)
+    return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions, qna = qna, msg = session['message'])
 
 @app.route('/edit_qp/<qp_name>')
 def edit_qp(qp_name):
@@ -126,7 +128,7 @@ def edit_qp(qp_name):
     for i in questions:    
         list_of_questions.append(i[0])
 
-    return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = qna)
+    return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = qna, msg = session['message'])
 
 @app.route('/edit_qp/<qp_name>/<question>')
 def edit_q(qp_name, question):
@@ -170,18 +172,8 @@ def receive_temporal_user():
 
 @app.route('/view_all_question_package')
 def view_all_question_package():
-    cursor.execute("select qp_name, qp_description, created_by from question_package")
+    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
     res = cursor.fetchall()
-    #cursor.execute("select nickname from [user] where [user_id] = X")
-
-    list_of_qp = []
-
-    for x in res:
-        for qp in x:
-            list_of_qp.append(qp)
-
-    #!----FIX: created_by should be nickname form dbo.user,
-    #!----change so that list 
 
     return render_template("view_all_question_package.html", qp_list = res)
 
@@ -193,8 +185,8 @@ def view_one_question_package(qp_name):
     qp_creator = qp_info[1]
     cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
     qp_nick = cursor.fetchone()
-    print(qp_desc)
-    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc)
+   
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
 
 @app.route('/in_game_final_result')
 def in_game_final_result():
@@ -226,7 +218,24 @@ def control_questions_answers():
     answer_2 = request.form['answer_2']
     answer_3 = request.form['answer_3']
     answer_4 = request.form['answer_4']
-    get_question(question, answer_1, answer_2, answer_3, answer_4)
+    
+    cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
+    questions = cursor.fetchall()
+
+    for i in questions:
+        if question == i[0] and answer_1 == i[1] and answer_2 == i[2] and answer_3 == i[3] and answer_4 == i[4]:
+            msg = 'The question does already exist in the question package.'
+            session['message'] = msg
+            return redirect(url_for('create_question'))
+
+    if get_question(question, answer_1, answer_2, answer_3, answer_4) == True:
+        msg = 'Question added!'
+    else:
+        msg = 'The question contained a word which we do not allow.'
+    
+    session['message'] = msg
+    
+    
     return redirect(url_for('create_question'))
 
 @app.route('/edit_questions_and_answers', methods = ['GET', 'POST'],)
@@ -241,10 +250,24 @@ def edit_question():
     res = cursor.fetchone()
     question_id = res[0]
 
-    cursor.execute(f"delete from question where q_id = {question_id}")
-    cursor.commit()
+    '''
+    cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
+    questions = cursor.fetchall()
 
-    get_question(question, answer_1, answer_2, answer_3, answer_4)
+    for i in questions:
+        if question == i[0] and answer_1 == i[1] and answer_2 == i[2] and answer_3 == i[3] and answer_4 == i[4]:
+            msg = 'The question does already exist in the question package.'
+            session['message'] = msg
+            return redirect(url_for('edit_qp', qp_name=session['qp_name']))
+    '''
+    if get_question(question, answer_1, answer_2, answer_3, answer_4) == True:
+        cursor.execute(f"delete from question where q_id = {question_id}")
+        cursor.commit()
+        msg = 'Changes confirmed!'
+    else:
+        msg = 'The question contained a word which we do not allow.'
+    
+    session['message'] = msg
 
     return redirect(url_for('edit_qp', qp_name=session['qp_name']))
 
@@ -299,12 +322,10 @@ def terms_conditions():
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
     res = cursor.fetchall()
-    print(res)
     qp_list = []
     for i in res:
         qp_list.append(i[0])
            
-    print(qp_list)
     return qp_list
     #sorterings algroitmer för name asc/desc, rating asc/desc, most played, asc/desc
 
@@ -360,7 +381,7 @@ def get_question(question, answer_1, answer_2, answer_3, answer_4):
             alnum_list.append(t)
 
     if check_words_aginst_db(alnum_list):
-        word = check_words_aginst_db(alnum_list)
+        return False
     else:
         #-- before running: !Control that a session with qp_name is created during creation of new qp!
         qp_name = session['qp_name']
@@ -370,6 +391,7 @@ def get_question(question, answer_1, answer_2, answer_3, answer_4):
         current_qp_id = res[0]
         cursor.execute(f"insert into question (question, answer_1_correct, answer_2, answer_3, answer_4, qp_id) values ('{question}', '{answer_1}', '{answer_2}', '{answer_3}', '{answer_4}', {current_qp_id})")
         cursor.commit()
+        return True
 
 def check_words_aginst_db(all_words):
     l = []
@@ -382,11 +404,10 @@ def check_words_aginst_db(all_words):
     if len(l) > 0:
         return l
 
-@app.route('/search_form', methods = ['GET', 'POST'])
+@app.route('/search', methods = ['GET', 'POST'])
 def search_form():
     search_input = request.form['search_input']
-    print(search_input)
-    cursor.execute(f"select qp_name from question_package")
+    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
     res = cursor.fetchall()
 
     list_of_qp = []
@@ -395,13 +416,15 @@ def search_form():
         for qp in x:
             list_of_qp.append(qp)
 
-    print(list_of_qp)
-
+    '''
     for qp in list_of_qp:
         if qp == search_input:
             return redirect(url_for('view_one_question_package', qp_name = search_input))
-
-    return redirect(url_for('view_all_question_package'))
+    '''
+    if res:
+        return render_template("view_all_question_package.html", qp_list = res)
+    else:
+        return redirect(url_for('view_all_question_package'))
 
 ''' CREATE QUESTION PACKAGE '''
 
