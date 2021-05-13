@@ -80,3 +80,17 @@ body a:hover {
   color: #ffffff;
 }
 
+.test{
+  
+}
+
+.flexcontainer{
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.card{
+  width: 33.333%
+}
+
