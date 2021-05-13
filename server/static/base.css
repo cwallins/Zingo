@@ -51,6 +51,12 @@ body a:hover {
   width: 700px;
 }
 
+.button_cards {
+  position:absolute;
+  bottom: 1;
+  right:1;
+}
+
 .my_profile {
   text-align:center;
 }
