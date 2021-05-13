@@ -80,3 +80,6 @@ body a:hover {
   color: #ffffff;
 }
 
+.divbox{
+  box-sizing: border-box;
+}
