@@ -28,27 +28,27 @@
     <!--Favoritspel-->
 
   <div class="row mt-4">
-      <h2>Här ska favoritspel visas</h2>
-      {% for i in games %}
-          <li>{{ i }} <a href="{{ url_for('edit_qp', qp_name = i) }}">Edit</a> <a href="{{ url_for('invite_player', qp_name = i, admin = username) }}">Play</a></li> 
-      {% endfor %}
-  </div>
-
-    <!--Se skapade frågepaket, tänk på att det ska visas spel från unik användare-->
-    <div class="row mt-4">
+      <h2>Here are your created question packages</h2>
+      <div class="row mt-4">
         <div class="col-md-12">
-          {% for question_package in question_packages %}
-          <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title"> {{ qp_name }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted"> {{ created_by }}</h6>
-              <p class="card-text"> {{ qp_description }}</p>
-              <button type="button" class="btn btn-warning" href="view_one_game">View game</button>
+          {% for i in games %}
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title"> {{ i[0] }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted"> {{ i[1] }}</h6>
+                <p class="card-text"> {{ i[2] }}</p>
+                <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = i[0]) }}">View</a></button>
+                <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}">Edit</a></button>
+                <button type="button" class="btn btn-warning"><a href="#">Delete</a></button>
+              </div>
             </div>
-          </div>
           {% endfor %}
         </div>
       </div>
+  </div>
+
+    <!--Se skapade frågepaket, tänk på att det ska visas spel från unik användare-->
+    
 
     <!--Länk till profilinställningar-->
     <div class="row">
