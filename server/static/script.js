@@ -1,16 +1,18 @@
 
+
 /*Popover for 'Rules' --> Works when executed in base.html */
 
-var show_rules
-  /*Popover for 'Rules' --> Works when executed in base.html */
-  $(document).ready(function(){
-      $( "[data-toggle='popover'" ).popover( );
-    });
 
-    $( ".popover_dismiss" ).popover( 
-    {
-        trigger: "focus"
-    });
+  /*Popover for 'Rules' --> Works when executed in base.html */
+var show_rules
+$(document).ready(function(){
+  $( "[data-toggle='popover'" ).popover( );
+});
+
+$( "#popover_dismiss" ).popover( 
+{
+    trigger: "focus"
+});
 
 
 /*Prov-kod till show_and_hide --> First variable is proven to work when executed in base.html but crash immediately after. The rest in untested.*/
@@ -22,7 +24,7 @@ $(document).ready(function() {
 
 var show_hide_when_signed_in
 $(document).ready(function() {
-  if "'loggedin' in session:" /* quote-python-kod (checks if the user is a registered user)--> How rewrite this to work here? */
+  if 'loggedin' in session: /* quote-python-kod (checks if the user is a registered user)--> How rewrite this to work here? */
     $('#sign_in_button').on('click', function() {
       $('#logout, .nav-link-signed-in').show();
       $('.nav-link-guest').hide();
