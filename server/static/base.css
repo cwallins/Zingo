@@ -37,6 +37,15 @@ body a:hover {
   height: 300px;
 }
 
+#list_of_question {
+  width: 80%;
+}
+ 
+#list_of_question a {
+  text-decoration: none;
+  width: 80%;
+}
+
 .form {
   margin: auto;
   width: 700px;

@@ -13,47 +13,49 @@
     
     <div class="col-md-6">
         <form method="POST">
-            <div class="form-gruop">
+            <div class="form-group mb-3 form">
                 <label for="question">Question</label>
-                <input type="text" name="question" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' required>
+                <input type="text" name="question" class="form-control" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' placeholder="Type question..." required>
             </div>
-            <div class="form-gruop">
+            <div class="form-group mb-3 form">
                 <label for="answer_1">Correct answer</label>
-                <input type="text" name="answer_1" id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}' required>
+                <input type="text" name="answer_1" class="form-control list-group-item list-group-item-success"  id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}' placeholder="Type correct answer..." required>
             </div>
-            <div class="form-gruop">
+            <div class="form-group mb-3 form">
                 <label for="answer_2">Example answer 1</label>
-                <input type="text" name="answer_2" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}' required>
+                <input type="text" name="answer_2" class="form-control list-group-item list-group-item-danger" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}' placeholder="Type wrong answer..." required>
             </div>
-            <div class="form-gruop">
+            <div class="form-group mb-3 form">
                 <label for="answer_3">Example answer 2</label>
-                <input type="text" name="answer_3" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}' required>
+                <input type="text" name="answer_3" class="form-control list-group-item list-group-item-danger" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}' placeholder="Type wrong answer..." required>
             </div>
-            <div class="form-gruop">
+            <div class="form-group mb-3 form">
                 <label for="answer_4">Example answer 3</label>
-                <input type="text" name="answer_4" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' required>
+                <input type="text" name="answer_4" class="form-control list-group-item list-group-item-danger" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' placeholder="Type wrong answer..." required>
                 <p><b>{{ msg }}</b></p>
             </div>
-            
-            <button type="submit" class="btn btn-lg btn-warning" formaction = "/control_questions_answers">Add question</button> 
-            <br>
-            <button type="submit" class="btn btn-lg btn-warning" formaction = "{{ url_for('edit_question') }}">Save changes</button>
+            <div class="form-group mb-3 form">
+                <button type="submit" class="btn btn-lg btn-warning" formaction = "/control_questions_answers">Add question</button> 
+            </div>
+            <div class="form-group mb-3 form">
+                <button type="submit" class="btn btn-lg btn-warning" formaction = "{{ url_for('edit_question') }}">Save changes</button>
+            </div>
         </form>
     </div>
     <div class="col-md-6">
         <article>
-            <h2>Question summary: {{ qp_name }}</h2>
+            <h2 class="mb-4">Question summary of: {{ qp_name }}</h2>
             <ul>
                 {% for question in questions %}
-                    <li>
-                        <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }}</a>
+                    <li class="list-group-item list-group-item-light" id="list_of_question">
+                        <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }} [EDIT]</a>
                     </li>
                 {% endfor %}
             </ul>
         </article>
         <form action="{{ url_for('my_profile') }}">
             <!--save question package-->
-            <button type="submit" value="save_qp">Save game</button>
+            <button type="submit" class="btn btn-lg btn-warning mt-4" value="save_qp">DONE</button>
         </form>
     </div>
 </div>
