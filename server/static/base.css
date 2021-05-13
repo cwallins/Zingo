@@ -29,6 +29,7 @@ body a {
 body a:hover {
   color:rgb(78, 78, 78)
 }
+/*
 .homepage  {
   margin:auto !important; 
 }
@@ -36,7 +37,7 @@ body a:hover {
   width: 800px;
   height: 300px;
 }
-
+*/
 #list_of_question {
   width: 80%;
 }
@@ -51,11 +52,6 @@ body a:hover {
   width: 700px;
 }
 
-.button_cards {
-  position:absolute;
-  bottom: 1;
-  right:1;
-}
 
 .my_profile {
   text-align:center;
@@ -74,7 +70,6 @@ body a:hover {
   text-decoration: none;
 }
 
-
 .footer {
   text-align:center;
   position:fixed;
@@ -87,5 +82,10 @@ body a:hover {
 }
 
 .divbox{
+  box-sizing: border-box;
+}
+
+.card {
+  margin: 2%;
   box-sizing: border-box;
 }
