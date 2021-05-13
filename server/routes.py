@@ -75,7 +75,7 @@ def my_profile():
     session['message'] = ""
     if 'loggedin' in session:
         qp_list = list_of_games()
-        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id] where u.nickname = '{session['username']}' ")
+        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id] where u.nickname = '{session['username']}'")
         res = cursor.fetchall()
         return render_template("my_profile.html", username=session['username'], games = res)
     else:
