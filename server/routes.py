@@ -60,7 +60,7 @@ def read_from_db(table_name, select_query, arguments):
 @app.route('/')
 def home():
     session['message'] = ""
-    return render_template("home_page.html")
+    return render_template("home_page.html", session = session)
 
 @app.route('/register') 
 def register():
