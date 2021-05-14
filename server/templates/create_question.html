@@ -34,11 +34,9 @@
                 <input type="text" name="answer_4" class="form-control list-group-item list-group-item-danger" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' placeholder="Type wrong answer..." required>
                 <p><b>{{ msg }}</b></p>
             </div>
-            <div class="form-group mb-3 form">
-                <button type="submit" class="btn btn-lg btn-warning" formaction = "/control_questions_answers">Add question</button> 
-            </div>
-            <div class="form-group mb-3 form">
-                <button type="submit" class="btn btn-lg btn-warning" formaction = "{{ url_for('edit_question') }}">Save changes</button>
+            <div class="button-box col-lg-12">
+                <button class="btn btn-lg btn-warning" type="submit" id="add_question" formaction = "/control_questions_answers">Add Question</button>
+                <button class="btn btn-lg btn-warning" type="submit" id="save_changes" formaction = "{{ url_for('edit_question') }}">Save Changes</button>
             </div>
         </form>
     </div>
@@ -55,7 +53,7 @@
         </article>
         <form action="{{ url_for('my_profile') }}">
             <!--save question package-->
-            <button type="submit" class="btn btn-lg btn-warning mt-4" value="save_qp">DONE</button>
+            <button type="submit" class="btn btn-lg btn-warning mt-4" id="done" value="save_qp">DONE</button>
         </form>
     </div>
 </div>

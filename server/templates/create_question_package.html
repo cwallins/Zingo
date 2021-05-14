@@ -10,9 +10,10 @@
   <!--Lägg till maincontent här-->
 <div class="container form">
     <h3>Create your game </h3>
-            
+    <div class="form-group mb-3 form">
+        <button type="button" id="popover_dismiss" class="btn btn-warning mt-3" data-toggle="popover" data-bs-trigger="focus" title="Follow these rules to have a spendid good time!" data-bs-content="Don't be an arsehole">Rules</button>      
+    </div>        
     <div class="col-sm-12">
-        <!-- RULES-KNAPPEN: <a tabindex="0" class="btn btn-lg btn-warning" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Dismissible popover" data-bs-content="Be lawfully good">Dismissible popover</a> -->
         <hr>
         <form class="create_game" action="/control_qp_name_desc" method="POST">
             <div class="form-group">
@@ -36,7 +37,7 @@
                 <button type="submit" class="btn btn-lg btn-warning">Next</button>
             </div>
             <div>
-                <button type="button" id="popover_dismiss" class="btn btn-warning mt-3" data-toggle="popover" data-bs-trigger="focus" title="Follow these rules to have a spendid good time!" data-bs-content="Don't be an arsehole">Rules</button> 
+                
             </div>
 
         </form>
