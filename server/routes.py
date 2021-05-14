@@ -321,6 +321,10 @@ def user_logout():
 def terms_conditions():
     return render_template("terms_conditions.html")
 
+@app.route('/contact_us')
+def contact_us():
+    return render_template("contact_us.html")
+
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
     res = cursor.fetchall()
