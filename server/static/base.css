@@ -12,6 +12,9 @@ body a {
   color:black
 }
 
+.main {
+  z-index: 99; /* Make sure it does not overlap */
+}
 #logout a{ 
   color:#ffc107;
   text-decoration: none;
@@ -143,6 +146,17 @@ body a:hover {
 
 .contact-form button:focus{
   box-shadow:none;
+}
+
+#myBtn {
+  z-index: 99; /* Make sure it does not overlap */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 15px; /* Some padding */
+  font-size: 18px; /* Increase font size */
+}
+
+#myBtn:hover {
+  background-color: #555; /* Add a dark-grey background on hover */
 }
 
 /* End of CSS-code for Contact_us-form  */
