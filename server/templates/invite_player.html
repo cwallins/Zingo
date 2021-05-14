@@ -27,7 +27,7 @@
             <li class="list-group-item">Player 5</li>
         </ul>
         <!--nedan kod kan endast ses av värden-->
-        <button type="submit" class="btn btn-warning" a href="#">Start Game</button>
+        <button type="submit" class="btn btn-warning"><a href="{{ url_for('in_game_show_question', chosen_qp = qp_name ) }}">Start Game</a></button>
     </form>
 {% endif %} 
 

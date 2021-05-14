@@ -197,10 +197,15 @@ def in_game_result():
 
 @app.route('/playing/<chosen_qp>')
 def in_game_show_question(chosen_qp):
-    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    shuffle(question_list)
+    cursor.execute(f"exec sp_get_questions '{chosen_qp}'")
+    question_list = cursor.fetchall()
+
     ask_questions(question_list)
-    return render_template("in_game_show_question.html")
+    shuffle(question_list)
+
+    print(question_list)
+
+    return render_template("in_game_show_question.html", question_package = question_list)
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -286,12 +291,10 @@ def user_logout():
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
     res = cursor.fetchall()
-    print(res)
     qp_list = []
     for i in res:
         qp_list.append(i[0])
-           
-    print(qp_list)
+
     return qp_list
     #sorterings algroitmer för name asc/desc, rating asc/desc, most played, asc/desc
 
@@ -396,7 +399,7 @@ def search_form():
 ''' CREATE QUESTION PACKAGE '''
 
 
-'''
+
 def ask_questions(question_list):
     #seperate question from answers, seperate answers from right answer
     #i[0] = question, i[1] = correct_answer
@@ -413,10 +416,9 @@ def ask_questions(question_list):
         all_answers.append(i[2])
         all_answers.append(i[3])
         all_answers.append(i[4])
-        print(question[0])
         time.sleep(1)
         shuffle(all_answers)
-        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
+        print(", ".join(all_answers))
         print(f"Rätt svar: {correct_answer[0]}")
         time.sleep(1)
         #ask question
@@ -429,7 +431,7 @@ def ask_questions(question_list):
     # visa en fråga i turordning 1-n1
     # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
     # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
-
+'''
 def display_awnsers(question_list):
 
 def show_result():
