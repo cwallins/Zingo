@@ -35,14 +35,14 @@
                   <a class="nav-link" href="{{ url_for('view_all_question_package') }}">Question packages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('my_profile') }}">My Profile</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('create_question_package') }}">Create Game</a>
-                  </li>
-                  <li class="nav-item">
-                    <button type="button" id="logout" class="btn btn-outline-warning float-end"><a href="{{ url_for('user_logout') }}">Log Out</a></button>
-                  </li>
+                  <a class="nav-link" href="{{ url_for('create_question_package') }}">Create Game</a>
+                </li> 
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('my_profile') }}">My Profile</a>
+                </li>
+                <li class="nav-item">
+                  <button type="button" id="logout" class="btn btn-outline-warning float-end"><a href="{{ url_for('user_logout') }}">Log Out</a></button>
+                </li>
               </ul>
               <form action = "{{ url_for('search_form') }}" class="d-flex" method = "POST">
                 <input class="form-control me-2" name="search_input" type="search" placeholder="Search" aria-label="Search">
@@ -113,13 +113,6 @@
         </div>
       </div>
     </footer>
-
-
-
-
-
-
-
 
 
     
