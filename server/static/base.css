@@ -95,6 +95,22 @@ body a:hover {
   text-decoration: none;
 }
 
+.button-box {
+  margin-top:20px;
+}
+
+#add_question{
+  text-align: left;
+}
+
+#save_changes{
+  text-align: right;
+}
+
+#done{
+  text-align: right;
+}
+
 /* CSS for the Contact_us-form*/
 
 .contact{
