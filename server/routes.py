@@ -323,7 +323,7 @@ def terms_conditions():
 
 @app.route('/contact_us')
 def contact_us():
-    return render_template("contact_us.html")
+    return render_template('contact_us.html')
 
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
