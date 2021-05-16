@@ -1,11 +1,10 @@
 
-
 /*Popover for 'Rules' --> Works when executed in base.html */
 
 
   /*Popover for 'Rules' --> Works when executed in base.html */
   $(document).ready(function(){
-    $( "[data-toggle='popover'" ).popover( );
+    $( "data-toggle='popover'" ).popover( );
   });
 
   $( ".popover_dismiss" ).popover(

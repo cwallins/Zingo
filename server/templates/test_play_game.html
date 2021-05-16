@@ -2,9 +2,12 @@
 
 <!--Title block-->
 {% block title %}
-    Home page
+  TEST PAGE
 {% endblock %}
-
+{% block javascript %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script></script>
+{% endblock %}
 <!--Content block-->
 {% block content %} 
 <!--The overview-->
@@ -40,5 +43,5 @@
       </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename = 'game_script.js') }}"></script>
 {% endblock %}
+
