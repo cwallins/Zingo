@@ -7,9 +7,8 @@
 
 <!--Content block-->
 {% block content %} 
-
-<div class="container view_one_game">
-
+<!--The overview-->
+<div class="container view_one_game" id="overview">
     <!--Namn på frågepaket-->
     <div class="row">
       <div class="col-12">  
@@ -28,7 +27,6 @@
         <p>Loopad lista med frågorna</p>
       </div>
     </div>
-
     <!--Gå tillbaka-knapp (vart?)-->
     <div class="row">
       <div class="col-12">
@@ -38,10 +36,9 @@
     <!--Starta ett spel-knapp-->
     <div class="row">
       <div class="col-12">
-        <button type="button" class="btn btn-lg btn-warning"><a href="{{ url_for('invite_player', qp_name = qp_name, admin = username) }}">Play game</a></button>
+        <button type="button" class="btn btn-lg btn-warning" id="play">Play game</button>
       </div>
     </div>
-    
 </div>
-
+<script src="{{ url_for('static', filename = 'game_script.js') }}"></script>
 {% endblock %}

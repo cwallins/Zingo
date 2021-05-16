@@ -190,6 +190,17 @@ def view_one_question_package(qp_name):
    
     return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
 
+@app.route('/play_a_game/<qp_name>')
+def play_a_game(qp_name):
+    cursor.execute(f"select qp_description, created_by from question_package where qp_name = '{qp_name}'")
+    qp_info = cursor.fetchone()
+    qp_desc = qp_info[0]
+    qp_creator = qp_info[1]
+    cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
+    qp_nick = cursor.fetchone()
+   
+    return render_template("test_play_game.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
+
 @app.route('/in_game_final_result')
 def in_game_final_result():
     return render_template("in_game_final_result.html")
