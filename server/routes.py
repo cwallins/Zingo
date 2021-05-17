@@ -427,15 +427,17 @@ def search_form():
 
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
-    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    shuffle(question_list)
-    li = ask_questions(question_list)
+    #question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
+    #shuffle(question_list)
+    li = ask_questions(chosen_qp)
     questions = li[0]
     correct_answer = li[1]
     all_answers = li[2]
     return render_template("in_game_show_question.html",  ql = questions, ca = correct_answer, aa = all_answers, admin = True, guest = False)
 
 def ask_questions(question_list):
+    question_list = execute_procedure(f"sp_get_questions '{question_list}'")
+    shuffle(question_list)
 
     question = []
     correct_answer = []

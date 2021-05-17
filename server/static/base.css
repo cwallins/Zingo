@@ -160,3 +160,14 @@ body a:hover {
 }
 
 /* End of CSS-code for Contact_us-form  */
+
+#qa p {
+  opacity: 0;
+  font-size: 0%;
+  margin: 0;
+}
+
+p#active {
+  opacity: 1;
+  font-size: 1em;
+}
