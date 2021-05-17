@@ -2,6 +2,7 @@
 /* Playing a game */
 $("#qa").hide();
 $("#show-ca").hide();
+
 $("#start-game").on("click", function() {
   $("#game-lobby").hide();
   $("#qa").show();
