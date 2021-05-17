@@ -198,13 +198,6 @@ def in_game_final_result():
 def in_game_result():
     return render_template("in_game_result.html")
 
-@app.route('/playing/<chosen_qp>')
-def in_game_show_question(chosen_qp):
-    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    shuffle(question_list)
-    ask_questions(question_list)
-    return render_template("in_game_show_question.html")
-
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
     qp_name = request.form['qp_name']
@@ -432,18 +425,21 @@ def search_form():
     else:
         return redirect(url_for('view_all_question_package'))
 
-''' CREATE QUESTION PACKAGE '''
+@app.route('/playing/<chosen_qp>/<admin>')
+def in_game_show_question(chosen_qp, admin):
+    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
+    shuffle(question_list)
+    li = ask_questions(question_list)
+    questions = li[0]
+    correct_answer = li[1]
+    all_answers = li[2]
+    return render_template("in_game_show_question.html",  ql = questions, ca = correct_answer, aa = all_answers, admin = True, guest = False)
 
-
-'''
 def ask_questions(question_list):
-    #seperate question from answers, seperate answers from right answer
-    #i[0] = question, i[1] = correct_answer
+
     question = []
     correct_answer = []
     all_answers = []
-
-    #show question, put correct_answer in 1-4, put wrong_answers in 1-4 if not allready taken.
 
     for i in question_list:
         question.append(i[0])
@@ -452,24 +448,21 @@ def ask_questions(question_list):
         all_answers.append(i[2])
         all_answers.append(i[3])
         all_answers.append(i[4])
-        print(question[0])
-        time.sleep(1)
-        shuffle(all_answers)
-        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
-        print(f"Rätt svar: {correct_answer[0]}")
-        time.sleep(1)
-        #ask question
-        #display all answers (randomly)
-        #show_result, question + correct_answer and score
-        question.clear()
-        correct_answer.clear()
-        all_answers.clear()
+    
+    return question, correct_answer, all_answers
+
+def clear_list(question_list):
+    question.clear()
+    correct_answer.clear()
+    all_answers.clear()
     
     # visa en fråga i turordning 1-n1
     # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
     # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
 
-def display_awnsers(question_list):
+'''
+def control_answer(question_list):
+
 
 def show_result():
     #show question and correct answer
