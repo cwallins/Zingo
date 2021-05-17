@@ -1,8 +1,5 @@
 
-
-
-
-  //Popover for 'Rules'-button 
+//Popover for 'Rules'-button 
   $(document).ready(function(){
     $( "[data-toggle='popover'" ).popover( );
   });
