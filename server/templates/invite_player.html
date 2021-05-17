@@ -19,12 +19,7 @@
             <input name="Invite_player_url" type="text" class="form-control" id="Invite_player_url" value="{{ url }}" readonly> <!--Generera en URL till spelet-->
         </div>
     <!--Ovan kod kan endast ses av värden-->
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Player 1</li>
-            <li class="list-group-item">Player 2</li>
-            <li class="list-group-item">Player 3</li>
-            <li class="list-group-item">Player 4</li>
-            <li class="list-group-item">Player 5</li>
+        <ul id="usernames" class="list-group list-group-flush">
         </ul>
         <!--nedan kod kan endast ses av värden-->
         <button type="submit" class="btn btn-warning" a href="#">Start Game</button>
@@ -35,16 +30,9 @@
     <h2>Welcome {{ username }}</h2>
     <p>Please wait for host to start.</p>
     <form>
-
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Player 1</li>
-            <li class="list-group-item">Player 2</li>
-            <li class="list-group-item">Player 3</li>
-            <li class="list-group-item">Player 4</li>
-            <li class="list-group-item">Player 5</li>
+        <ul id="usernames" class="list-group list-group-flush">
         </ul>
         <!--nedan kod kan endast ses av värden-->
-        
     </form>
 {% endif %}
 
@@ -56,8 +44,16 @@
         <label for="temporary_username" class="sr-only">Enter Username</label> <br>
         <input name="temporary_username" type="username" class="form-control" id="temporary_username" placeholder="username">
         </div>
-        <button type="submit" class="btn btn-primary mb-2">Join</button>
+        <button type="submit" id="join-btn" class="btn btn-primary mb-2">Join</button>
     </form>
 {% endif %}
 
 {% endblock %}
+
+
+
+
+ <!--Input & knapp för joina game-->
+ 
+
+<ul id="usernames"></ul>

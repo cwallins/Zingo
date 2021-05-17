@@ -1,9 +1,8 @@
 
 
-/*Popover for 'Rules' --> Works when executed in base.html */
 
 
-  /*Popover for 'Rules' --> Works when executed in base.html */
+  //Popover for 'Rules'-button 
   $(document).ready(function(){
     $( "[data-toggle='popover'" ).popover( );
   });
@@ -11,8 +10,7 @@
   $( ".popover_dismiss" ).popover(
       {
         trigger: "focus"
-      } 
-    ); 
+  }); 
 
 
 //Get the button:
@@ -34,6 +32,23 @@ function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
+
+//Add usernames to list of players
+$("#join-btn").on("click", function (){
+  const item = $("#temporary_username").val();
+
+  $("#usernames").append(`<li>
+      ${item}
+  </li>`);
+});
+
+//Remove usernames when clicked on--> Should only work for host. Purpose= the ability to remove inappropriate usernames
+$("ul").on("click", "li", function(){
+  $(this).remove();
+});
+
+
+
 /*Time-progress --> Not tested!!
 
 This part may be superfluous
