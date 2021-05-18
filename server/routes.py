@@ -29,7 +29,7 @@ except:
     print("Could't find database")
 
 def execute_procedure(string): 
-    # string behöver procedure namn + parametrar
+    # string needs procedure name + parameters
     try:
         sql = f"exec [{database_name}].[dbo].{string};"
         cursor.execute(sql)
@@ -151,18 +151,6 @@ def edit_q(qp_name, question):
 
     return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = question_and_answers)
 
-@app.route('/invite_player/<qp_name>/<admin>')
-def invite_player(qp_name, admin):
-    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
-    if 'loggedin' in session or 'temp_login' in session:
-        username = session['username']
-        if username == admin:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
-        else:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
-    else:
-        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")
-
 @app.route('/receive_temporal_user', methods = ['GET', 'POST'])
 def receive_temporal_user():
     string = request.args.get("url")
@@ -188,14 +176,6 @@ def view_one_question_package(qp_name):
     qp_nick = cursor.fetchone()
    
     return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
-
-@app.route('/in_game_final_result')
-def in_game_final_result():
-    return render_template("in_game_final_result.html")
-
-@app.route('/in_game_result')
-def in_game_result():
-    return render_template("in_game_result.html")
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -424,6 +404,18 @@ def search_form():
     else:
         return redirect(url_for('view_all_question_package'))
 
+@app.route('/invite_player/<qp_name>/<admin>')
+def invite_player(qp_name, admin):
+    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
+    if 'loggedin' in session or 'temp_login' in session:
+        username = session['username']
+        if username == admin:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
+        else:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
+    else:
+        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")
+        
 #create game_id, pass through route to db for saving results
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
