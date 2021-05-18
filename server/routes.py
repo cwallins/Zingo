@@ -465,11 +465,11 @@ def ask_questions(question_list):
     
     return questions
 
-def clear_list(question_list):
+'''def clear_list(question_list):
     question.clear()
     correct_answer.clear()
     all_answers.clear()
-
+'''
 @app.route('/save_results_to_db')
 def save_results_to_db(qp_id, player, result):
     try:

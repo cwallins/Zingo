@@ -12,12 +12,21 @@ Home page
 
 <div id="question-game-questions">
 
-    <div class="row">
-        <button class="btn btn-success" id="start-game">Start game!</button>
+    <div class="row start-game-menu">
+       <!-- <form action="#">
+            <div class="form-group mb-3 form">
+                <label for="username">Enter a username</label>
+                <input type="text" name="username" class="form-control list-group-item" id="in-game-username" placeholder="Type username..." required>
+            </div>
+            <div class="form-group mb-3 form">
+                
+            </div>          
+        </form>-->
+        <button class="btn btn-lg btn-warning" type="submit" id="start-game">Start game!</button>
     </div>
 
     {% for question in questions %}
-    <div class="row question" data-correct-answer="{{ question['correct'] }}">
+    <div class="row show-question" data-correct-answer="{{ question['correct'] }}">
         <p class="col-12">{{ question.question }}</p>
         {% for answer in question['answers'] %}
         <button class="btn btn-primary col-6">{{ answer }}</button>
