@@ -441,7 +441,7 @@ def in_game_show_question(chosen_qp, admin):
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
-
+    
     questions = []
     for question in question_list:
         questions.append({
