@@ -1,5 +1,6 @@
 import pyodbc
 import time
+import re
 from flask import Flask, redirect, url_for, render_template, request, session
 from random import shuffle
 from uuid import uuid4
@@ -37,8 +38,7 @@ def execute_procedure(string):
             rows = cursor.fetchall()
             if rows:
                 return rows
-        except:
-            print("Nothing to report back!")
+        except:            print("Nothing to report back!")
 
         conn.commit()
 
@@ -429,11 +429,12 @@ def search_form():
 def in_game_show_question(chosen_qp, admin):
     #question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
     #shuffle(question_list)
+    url = f'localhost:5000/playing/{chosen_qp}/{admin}'
     li = ask_questions(chosen_qp)
     questions = li[0]
     correct_answer = li[1]
     all_answers = li[2]
-    return render_template("in_game_show_question.html",  ql = questions, ca = correct_answer, aa = all_answers, admin = True, guest = False)
+    return render_template("in_game_show_question.html",  ql = questions, ca = correct_answer, aa = all_answers, admin = True, guest = False, url = url)
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")

@@ -17,6 +17,7 @@
             <div class="form-group mb-3">
                 <label for="Invite_player_url">Game URL</label>
                 <input name="Invite_player_url" type="text" class="form-control" id="Invite_player_url" value="{{ url }}" readonly> <!--Generera en URL till spelet-->
+                <button class="btn btn-warning" id="copy-url">Copy url</button> <!-- WIP -->
             </div>
         <!--Ovan kod kan endast ses av värden-->
             <ul class="list-group list-group-flush">
@@ -97,7 +98,7 @@
 <!--Show results-->
 
 <div class="container" id="show-ca">
-    <h1>{{ ca[0] }}</h1>
+    <h1 id="correct_answer">{{ ca[0] }}</h1>
     <ul>
         <li><p>Player1</p></li>
         <li><p>Player2</p></li>
