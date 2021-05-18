@@ -2,7 +2,7 @@
 
 <!--Title block-->
 {% block title %}
-    Home page
+Home page
 {% endblock %}
 
 <!--Content block-->
@@ -10,105 +10,25 @@
 
 <!--Join game-->
 
-<div id="game-lobby">
-    {% if admin == True and guest == False %}
-        <h2>Invite players</h2>
-        <form>
-            <div class="form-group mb-3">
-                <label for="Invite_player_url">Game URL</label>
-                <input name="Invite_player_url" type="text" class="form-control" id="Invite_player_url" value="{{ url }}" readonly> <!--Generera en URL till spelet-->
-                <button class="btn btn-warning" id="copy-url">Copy url</button> <!-- WIP -->
-            </div>
-        <!--Ovan kod kan endast ses av värden-->
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Player 1</li>
-                <li class="list-group-item">Player 2</li>
-                <li class="list-group-item">Player 3</li>
-                <li class="list-group-item">Player 4</li>
-                <li class="list-group-item">Player 5</li>
-            </ul>
-            <!--nedan kod kan endast ses av värden-->
-        </form>
-        <button class="btn btn-warning" id="start-game">Start Game</button>
-    {% endif %} 
+<div id="question-game-questions">
 
-    {% if admin == False and guest == False %}
-        <h2>Welcome {{ username }}</h2>
-        <p>Please wait for host to start.</p>
-        <form>
-
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Player 1</li>
-                <li class="list-group-item">Player 2</li>
-                <li class="list-group-item">Player 3</li>
-                <li class="list-group-item">Player 4</li>
-                <li class="list-group-item">Player 5</li>
-            </ul>
-            <!--nedan kod kan endast ses av värden-->
-            
-        </form>
-    {% endif %}
-
-    {% if admin == False and guest == True %}
-        <h2>Welcome to Zingo</h2>
-        <p>Please choose a nickname</p>
-        <form action="{{ url_for('receive_temporal_user', url=url) }}" class="form-inline" method='POST'>
-            <div class="form-group mx-sm-3 mb-2">
-            <label for="temporary_username" class="sr-only">Enter Username</label> <br>
-            <input name="temporary_username" type="username" class="form-control" id="temporary_username" placeholder="username">
-            </div>
-            <button type="submit" class="btn btn-primary mb-2">Join</button>
-        </form>
-    {% endif %}
-</div>
-
-<!--Show questions-->
-<!--{% set count = namespace(value=1) %}
-            {% for i in ql[1:] %}
-                <p id="question{{ count.value }}">{{ i }}</p>
-                {% set count.value = count.value + 1 %}
-            {% endfor %}-->
-<div class="container" id="qa">
     <div class="row">
-        <div class="col-md-9">
-            <p id="active">{{ ql[0] }}</p>
-            {% for i in ql[1:] %}
-                <p>{{ i }}</p>
-            {% endfor %}
-        </div>
+        <button class="btn btn-success" id="start-game">Start game!</button>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-warning" id="ansq1">{{ aa[0] }}</button>
-        </div>
-        <div class="col-md-6">
-            <button class="btn btn-warning" id="ansq2">{{ aa[1] }}</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-warning" id="ansq3">{{ aa[2] }}</button>
-        </div>
-        <div class="col-md-6">
-            <button class="btn btn-warning" id="ansq4">{{ aa[3] }}</button>
-        </div>
-    </div>
-</div>
 
-<!--Show results-->
+    {% for question in questions %}
+    <div class="row question" data-correct-answer="{{ question['correct'] }}">
+        <p class="col-12">{{ question.question }}</p>
+        {% for answer in question['answers'] %}
+        <button class="btn btn-primary col-6">{{ answer }}</button>
+        {% endfor %}
+    </div>
+    {% endfor %}
 
-<div class="container" id="show-ca">
-    <h1 id="correct_answer">{{ ca[0] }}</h1>
-    <ul>
-        <li><p>Player1</p></li>
-        <li><p>Player2</p></li>
-        <li><p>Player3</p></li>
-        <li><p>Player4</p></li>
-        <li><p>Player5</p></li>
-    </ul>
-    
-    <button class="btn btn-warning" id="next-q">Next question</button>
-    <button class="btn btn-warning" id="end-game">Show results</button>
+    <form action="#" method="POST">
+        <input type="hidden" name="score" value="0" id="score">
+    </form>
+
 </div>
 
 {% endblock %}

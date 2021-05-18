@@ -425,43 +425,60 @@ def search_form():
     else:
         return redirect(url_for('view_all_question_package'))
 
+#create game_id, pass through route to db for saving results
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
-    #question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    #shuffle(question_list)
     url = f'localhost:5000/playing/{chosen_qp}/{admin}'
-    li = ask_questions(chosen_qp)
-    questions = li[0]
-    correct_answer = li[1]
-    all_answers = li[2]
-    return render_template("in_game_show_question.html",  ql = questions, ca = correct_answer, aa = all_answers, admin = True, guest = False, url = url)
+
+    '''
+    [
+        {
+            "question": "I vilken stad bor Anton?",
+            "answers": [
+                "Lund",
+                "Malmö", 
+                "Staffanstorp", 
+                "Eslöv"
+            ],
+            "correct": "Lund"
+        }
+    ]
+    '''
+    questions = ask_questions(chosen_qp)
+
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, url = url)
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
-    shuffle(question_list)
 
-    question = []
-    correct_answer = []
-    all_answers = []
-
-    for i in question_list:
-        question.append(i[0])
-        correct_answer.append(i[1])
-        all_answers.append(i[1])
-        all_answers.append(i[2])
-        all_answers.append(i[3])
-        all_answers.append(i[4])
+    questions = []
+    for question in question_list:
+        questions.append({
+            "question": question[0],
+            "answers": [
+                question[1],
+                question[2],
+                question[3],
+                question[4]
+            ],
+            "correct": question[1]
+        })
     
-    return question, correct_answer, all_answers
+    return questions
 
 def clear_list(question_list):
     question.clear()
     correct_answer.clear()
     all_answers.clear()
-    
-    # visa en fråga i turordning 1-n1
-    # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
-    # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
+
+@app.route('/save_results_to_db')
+def save_results_to_db(qp_id, player, result):
+    try:
+        cursor.execute(f"exec sp_game_details '{qp_id}', '{player}', '{result}'")
+        cursor.commit()
+    except:
+        cursor.execute(f"exec sp_update_results")
+
 
 '''
 def control_answer(question_list):
