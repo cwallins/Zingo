@@ -6,6 +6,10 @@ $("#question-game-questions .question button").on("click", function() {
   if (answer === correctAnswer) {
     console.log("Rätt!");
     $("#score").val(score + 1);
+  } else {
+    console.log("FEL!");
+  }
+});
 
 //Popover for 'Rules'-button 
   $(document).ready(function(){
@@ -28,9 +32,8 @@ function scrollFunction() {
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     mybutton.style.display = "block";
   } else {
-    console.log("FEL!");
+    mybutton.style.display = "none";
   }
-});
 }
 
 // When the user clicks on the button, scroll to the top of the document
@@ -38,53 +41,3 @@ function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-
-//Add usernames to list of players
-$("#join-btn").on("click", function (){
-  const item = $("#temporary_username").val();
-
-  $("#usernames").append(`<li>
-      ${item}
-  </li>`);
-});
-
-//Remove usernames when clicked on--> Should only work for host. Purpose= the ability to remove inappropriate usernames
-$("ul").on("click", "li", function(){
-  $(this).remove();
-});
-
-
-
-/*Time-progress --> Not tested!!
-
-This part may be superfluous
-var bar = document.getElementById('progress'),
-    time = 0, max = 5,
-    int = setInterval(function() {
-        bar.style.width = Math.floor(100 * time++ / max) + '%';
-        time - 1 == max && clearInterval(int);
-    }, 1000);
-*/
-/*End of superflouous part
-
-THE REAL CODE
-function countdown(callback) {
-  var bar = document.getElementById('progress'),
-  time = 0, max = 5,
-  int = setInterval(function() {
-      bar.style.width = Math.floor(100 * time++ / max) + '%';
-      if (time - 1 == max) {
-          clearInterval(int);
-          // 600ms - width animation time
-          callback && setTimeout(callback, 600);
-      }
-  }, 1000);
-}
-
-countdown(function() {
-  alert('Redirect');
-});
-
-END OF REAL CODE
-
-*/
