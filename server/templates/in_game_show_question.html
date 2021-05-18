@@ -9,7 +9,6 @@ Home page
 {% block content %}
 
 <!--Join game-->
-
 <div id="question-game-questions">
 
     <div class="row start-game-menu">
@@ -26,16 +25,23 @@ Home page
     </div>
 
     {% for question in questions %}
-    <div class="row show-question" data-correct-answer="{{ question['correct'] }}">
+    <div class="row show-question" id="{{loop.index}}" style="display: none;" data-correct-answer="{{ question['correct'] }}">
         <p class="col-12">{{ question.question }}</p>
         {% for answer in question['answers'] %}
         <button class="btn btn-primary col-6">{{ answer }}</button>
         {% endfor %}
     </div>
     {% endfor %}
-
-    <form action="#" method="POST">
+    <div class="scoretest" name="scoretest">
+    </div>
+    <div class="timer" id="timer">
+        
+    </div>
+    <form action="{{ url_for('save_results_to_db') }}" method="POST">
         <input type="hidden" name="score" value="0" id="score">
+        <input type="hidden" name="qp_id" value="{{qp_id}}" id="qp_id">
+        <input type="hidden" name="username" value="{{username}}" id="username">
+        <input type='submit' name="test_sub" value="testPOST">
     </form>
 
 </div>

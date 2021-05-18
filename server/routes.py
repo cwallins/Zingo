@@ -1,3 +1,4 @@
+import pdb
 import pyodbc
 import time
 import re
@@ -444,8 +445,11 @@ def in_game_show_question(chosen_qp, admin):
     ]
     '''
     questions = ask_questions(chosen_qp)
+    cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
+    qp_id = cursor.fetchone()[0]
 
-    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, url = url)
+    #Här måste ni skicka med qp_id och username för att kunna använda det i save_results_to_db(). Result kommer från score i in_game_show_question.html
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, url = url, qp_id=qp_id, username=admin)
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
@@ -470,10 +474,13 @@ def ask_questions(question_list):
     correct_answer.clear()
     all_answers.clear()
 '''
-@app.route('/save_results_to_db')
-def save_results_to_db(qp_id, player, result):
+@app.route('/save_results_to_db', methods=["POST"])
+def save_results_to_db():
+    qp_id = request.form['qp_id']
+    player = request.form['username'] #Ska egentligen vara player_id enligt dbo.game_detail
+    score = request.form['score']
     try:
-        cursor.execute(f"exec sp_game_details '{qp_id}', '{player}', '{result}'")
+        cursor.execute(f"exec sp_game_details '{qp_id}', '{player}', '{score}'")
         cursor.commit()
     except:
         cursor.execute(f"exec sp_update_results")
