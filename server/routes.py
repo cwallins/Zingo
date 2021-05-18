@@ -5,7 +5,6 @@ from flask import Flask, redirect, url_for, render_template, request, session
 from random import shuffle
 from uuid import uuid4
 
-
 app = Flask(__name__)
 app.secret_key = 'zingo'
 
