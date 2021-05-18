@@ -25,8 +25,10 @@ Home page
     </div>
     {% endfor %}
 
-    <form action="#" method="POST">
+    <form action="{{ url_for('save_results_to_db') }}" method="POST">
         <input type="hidden" name="score" value="0" id="score">
+        <input type="hidden" name="qp_name" value="{{ qp_name }}" id="qp_name">
+        <input type="hidden" name="username" value="{{ username }}" id="username">
     </form>
 
 </div>
