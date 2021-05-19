@@ -24,6 +24,10 @@ body a {
   color:black;
 }
 
+#nav-icon {
+  width: 111px;
+  height: 41px;
+}
 .logohomepage {
   height: 203px;
   width: 241px;
@@ -43,6 +47,7 @@ body a:hover {
 */
 #list_of_question {
   width: 80%;
+  box-sizing: border-box;
 }
  
 #list_of_question a {
@@ -53,6 +58,7 @@ body a:hover {
 .form {
   margin: auto;
   width: 700px;
+  box-sizing: border-box;
 }
 
 
@@ -146,6 +152,11 @@ body a:hover {
 
 .contact-form button:focus{
   box-shadow:none;
+}
+
+.edit {
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 #myBtn {

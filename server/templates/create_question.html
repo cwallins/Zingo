@@ -11,8 +11,9 @@
 
 <div class="row">
     
-    <div class="col-md-6">
+    <div class="col-md-6 edit">
         <form method="POST">
+            <h2 class="mb-4 form">{{ qp_name }} </h2>
             <div class="form-group mb-3 form">
                 <label for="question">Question</label>
                 <input type="text" name="question" class="form-control" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' placeholder="Type question..." required>
@@ -22,39 +23,43 @@
                 <input type="text" name="answer_1" class="form-control list-group-item list-group-item-success"  id="answer_1" value='{% if qna != "" %}{{ qna[1] }}{% endif %}' placeholder="Type correct answer..." required>
             </div>
             <div class="form-group mb-3 form">
-                <label for="answer_2">Example answer 1</label>
+                <label for="answer_2">Wrong answer 1</label>
                 <input type="text" name="answer_2" class="form-control list-group-item list-group-item-danger" id="answer_2" value='{% if qna != "" %}{{ qna[2] }}{% endif %}' placeholder="Type wrong answer..." required>
             </div>
             <div class="form-group mb-3 form">
-                <label for="answer_3">Example answer 2</label>
+                <label for="answer_3">Wrong answer 2</label>
                 <input type="text" name="answer_3" class="form-control list-group-item list-group-item-danger" id="answer_3" value='{% if qna != "" %}{{ qna[3] }}{% endif %}' placeholder="Type wrong answer..." required>
             </div>
             <div class="form-group mb-3 form">
-                <label for="answer_4">Example answer 3</label>
+                <label for="answer_4">Wrong answer 3</label>
                 <input type="text" name="answer_4" class="form-control list-group-item list-group-item-danger" id="answer_4" value='{% if qna != "" %}{{ qna[4] }}{% endif %}' placeholder="Type wrong answer..." required>
                 <p><b>{{ msg }}</b></p>
             </div>
-            <div class="button-box col-lg-12">
+            <div class="button-box mb-3 form">
                 <button class="btn btn-lg btn-warning" type="submit" id="add_question" formaction = "/control_questions_answers">Add Question</button>
                 <button class="btn btn-lg btn-warning" type="submit" id="save_changes" formaction = "{{ url_for('edit_question') }}">Save Changes</button>
             </div>
         </form>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 edit">
         <article>
-            <h2 class="mb-4">Question summary of: {{ qp_name }}</h2>
+            <h2 class="mb-3">Your Questions</h2>
             <ul>
                 {% for question in questions %}
-                    <li class="list-group-item list-group-item-light" id="list_of_question">
-                        <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }} [EDIT]</a>
-                    </li>
+                <li class="list-group-item list-group-item-light" id="list_of_question">
+                    <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }} [EDIT]</a>
+                </li>
                 {% endfor %}
             </ul>
         </article>
-        <form action="{{ url_for('my_profile') }}">
-            <!--save question package-->
-            <button type="submit" class="btn btn-lg btn-warning mt-4" id="done" value="save_qp">DONE</button>
-        </form>
+        <div class="button-box mb-3 form">
+            <form action="{{ url_for('my_profile') }}">
+                <!--save question package-->
+                <div>
+                    <button type="submit" class="btn btn-lg btn-warning mt-4" id="done" value="save_qp">DONE</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
