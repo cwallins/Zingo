@@ -1,3 +1,5 @@
+$("#yougonegoofed").hide()
+
 $("#question-game-questions .show-question button").on("click", function() {
   const answer = $(this).text();
   const correctAnswer = $(this).parent().attr("data-correct-answer");
@@ -40,14 +42,20 @@ var init_time;
 var time; //tiden som timer stannade på
 //startar en tidtagning från 29sek
 function timer(){
-  time = 29;
+  time = 2;
   var timerDiv = document.getElementById('timer');
-  timerDiv.innerHTML = "30 seconds remaining";
+  timerDiv.innerHTML = time + " seconds remaining";
+
 
   init_time = setInterval(count, 1000);
   function count(){
-    timerDiv.innerHTML = time + " seconds remaining";
-    time--;
+    while (time >= 0){
+      timerDiv.innerHTML = time + " seconds remaining";
+      time--;
+      if (time == 0){
+        $("#yougonegoofed").show()
+      }
+    }
   }
 }
 //stoppar tidtagning och nollställer
