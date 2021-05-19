@@ -30,7 +30,7 @@ except:
     print("Could't find database")
 
 def execute_procedure(string): 
-    # string behöver procedure namn + parametrar
+    # string needs procedure name + parameters
     try:
         sql = f"exec [{database_name}].[dbo].{string};"
         cursor.execute(sql)
@@ -152,18 +152,6 @@ def edit_q(qp_name, question):
 
     return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = question_and_answers)
 
-@app.route('/invite_player/<qp_name>/<admin>')
-def invite_player(qp_name, admin):
-    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
-    if 'loggedin' in session or 'temp_login' in session:
-        username = session['username']
-        if username == admin:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
-        else:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
-    else:
-        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")
-
 @app.route('/receive_temporal_user', methods = ['GET', 'POST'])
 def receive_temporal_user():
     string = request.args.get("url")
@@ -187,16 +175,9 @@ def view_one_question_package(qp_name):
     qp_creator = qp_info[1]
     cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
     qp_nick = cursor.fetchone()
-   
-    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'])
-
-@app.route('/in_game_final_result')
-def in_game_final_result():
-    return render_template("in_game_final_result.html")
-
-@app.route('/in_game_result')
-def in_game_result():
-    return render_template("in_game_result.html")
+    lb = leaderboard(qp_name)
+    
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'], leaderboard=lb)
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -326,7 +307,6 @@ def list_of_games():
         qp_list.append(i[0])
            
     return qp_list
-    #sorterings algroitmer för name asc/desc, rating asc/desc, most played, asc/desc
 
 def apply_tags_to_qp(tag_list):
     cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
@@ -345,7 +325,6 @@ def save_qp_to_db(qp_name, qp_desc, qp_tags):
     cursor.execute(f"select [user_id] from [user] where e_mail = '{session['email']}'")
     res = cursor.fetchone()
     user_id = res[0]
-    #!add session id for user to relate 'created_by' in db, also add it into insert!
     qp_ndu = []
     nl = []
     qp_ndu.append(qp_name.split(" "))
@@ -425,35 +404,31 @@ def search_form():
     else:
         return redirect(url_for('view_all_question_package'))
 
-#create game_id, pass through route to db for saving results
+'''@app.route('/invite_player/<qp_name>/<admin>')
+def invite_player(qp_name, admin):
+    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
+    if 'loggedin' in session or 'temp_login' in session:
+        username = session['username']
+        if username == admin:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
+        else:
+            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
+    else:
+        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")'''
+
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
-    url = f'localhost:5000/playing/{chosen_qp}/{admin}'
+    # url = f'localhost:5000/playing/{chosen_qp}/{admin}' 
 
-    '''
-    [
-        {
-            "question": "I vilken stad bor Anton?",
-            "answers": [
-                "Lund",
-                "Malmö", 
-                "Staffanstorp", 
-                "Eslöv"
-            ],
-            "correct": "Lund"
-        }
-    ]
-    '''
     questions = ask_questions(chosen_qp)
     cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
     qp_id = cursor.fetchone()[0]
 
-    #Här måste ni skicka med qp_id och username för att kunna använda det i save_results_to_db(). Result kommer från score i in_game_show_question.html
-    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, url = url, qp_id=qp_id, username=admin)
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id=qp_id, username=admin)
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
-
+    
     questions = []
     for question in question_list:
         questions.append({
@@ -469,37 +444,48 @@ def ask_questions(question_list):
     
     return questions
 
-'''def clear_list(question_list):
-    question.clear()
-    correct_answer.clear()
-    all_answers.clear()
-'''
-@app.route('/save_results_to_db', methods=["POST"])
+@app.route('/save_results_to_db', methods = ['POST'])
 def save_results_to_db():
     qp_id = request.form['qp_id']
-    player = request.form['username'] #Ska egentligen vara player_id enligt dbo.game_detail
-    score = request.form['score']
+    result = request.form['score']
+    cursor.execute(f"select qp_name from question_package where qp_id = {qp_id}")
+    qp_name = cursor.fetchone()[0]
+    cursor.execute(f"select [user_id] from [user] where nickname = '{session['username']}'")
+    player = cursor.fetchone()[0]
+
     try:
-        cursor.execute(f"exec sp_game_details '{qp_id}', '{player}', '{score}'")
+        cursor.execute(f"exec sp_game_details {qp_id}, {player}, {result}")
         cursor.commit()
     except:
-        cursor.execute(f"exec sp_update_results")
+        cursor.execute(f"exec sp_update_result {qp_id}, {player}, {result}")
+        cursor.commit()
 
+    session['qp_name'] = qp_name
+    session['result'] = result
 
-'''
-def control_answer(question_list):
+    return redirect(url_for('show_leaderboard', qp_name=qp_name))
 
+@app.route('/leaderboard/<qp_name>')
+def show_leaderboard(qp_name):
+    result=session['result']
+    player=session['username']
+    lb = leaderboard(qp_name)
+    print(lb)
 
-def show_result():
-    #show question and correct answer
-    for i in question_list:
-        print(i[0], i[1])
+    return render_template("leaderboard.html", leaderboard=lb, qp_name=qp_name, result=result, player=player)
 
-    # resultat sparas "lokalt" efter varje fråga och sammanställs. resultatet förs vidare till nästa besvarde fråga och adderas, summeras och skickas vidare... ->
+def leaderboard(qp_name):
+    cursor.execute(f"select nickname, score from vw_leaderboard where qp_name = '{qp_name}' order by score desc")
+    leaderboard = cursor.fetchall()
+    print(leaderboard)
+    print(qp_name)
 
-    
-    # när inga fler frågor finns, visa slutresultat
+    lb = []
 
-def save_result():
-    # spara slutresultat i databas
-'''
+    for score in leaderboard:
+        lb.append({
+            "player": score[0],
+            "score": score[1],
+        })
+
+    return lb

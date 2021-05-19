@@ -32,6 +32,7 @@ Home page
         {% endfor %}
     </div>
     {% endfor %}
+
     <div class="scoretest" name="scoretest">
     </div>
     <div class="timer" id="timer">
@@ -39,10 +40,11 @@ Home page
     </div>
     <form action="{{ url_for('save_results_to_db') }}" method="POST">
         <input type="hidden" name="score" value="0" id="score">
-        <input type="hidden" name="qp_id" value="{{qp_id}}" id="qp_id">
-        <input type="hidden" name="username" value="{{username}}" id="username">
+        <input type="hidden" name="qp_id" value="{{ qp_id }}" id="qp_id">
+        <input type="hidden" name="username" value="{{ username }}" id="username">
         <input type='submit' name="test_sub" value="testPOST">
     </form>
+    <p id="yougonegoofed">Tiden är slut, kasst!</p>
 
 </div>
 

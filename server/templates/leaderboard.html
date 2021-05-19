@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Leaderboard
+{% endblock %}
+
+{% block content %}
+    <h1>You just completed {{ qp_name }}!</h1>
+    <h2>Your score is: {{ result }}</h2>
+    {% for leader in leaderboard %}
+        <p class="col-12">{{ leader.player }}: {{ leader.score }}</p>
+    {% endfor %}
+{% endblock %}
