@@ -1,9 +1,10 @@
+import pdb
 import pyodbc
 import time
+import re
 from flask import Flask, redirect, url_for, render_template, request, session
 from random import shuffle
 from uuid import uuid4
-
 
 app = Flask(__name__)
 app.secret_key = 'zingo'
@@ -37,8 +38,7 @@ def execute_procedure(string):
             rows = cursor.fetchall()
             if rows:
                 return rows
-        except:
-            print("Nothing to report back!")
+        except:            print("Nothing to report back!")
 
         conn.commit()
 
@@ -197,13 +197,6 @@ def in_game_final_result():
 @app.route('/in_game_result')
 def in_game_result():
     return render_template("in_game_result.html")
-
-@app.route('/playing/<chosen_qp>')
-def in_game_show_question(chosen_qp):
-    question_list = execute_procedure(f"sp_get_questions '{chosen_qp}'")
-    shuffle(question_list)
-    ask_questions(question_list)
-    return render_template("in_game_show_question.html")
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -432,44 +425,70 @@ def search_form():
     else:
         return redirect(url_for('view_all_question_package'))
 
-''' CREATE QUESTION PACKAGE '''
+#create game_id, pass through route to db for saving results
+@app.route('/playing/<chosen_qp>/<admin>')
+def in_game_show_question(chosen_qp, admin):
+    url = f'localhost:5000/playing/{chosen_qp}/{admin}'
+
+    '''
+    [
+        {
+            "question": "I vilken stad bor Anton?",
+            "answers": [
+                "Lund",
+                "Malmö", 
+                "Staffanstorp", 
+                "Eslöv"
+            ],
+            "correct": "Lund"
+        }
+    ]
+    '''
+    questions = ask_questions(chosen_qp)
+    cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
+    qp_id = cursor.fetchone()[0]
+
+    #Här måste ni skicka med qp_id och username för att kunna använda det i save_results_to_db(). Result kommer från score i in_game_show_question.html
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, url = url, qp_id=qp_id, username=admin)
+
+def ask_questions(question_list):
+    question_list = execute_procedure(f"sp_get_questions '{question_list}'")
+
+    questions = []
+    for question in question_list:
+        questions.append({
+            "question": question[0],
+            "answers": [
+                question[1],
+                question[2],
+                question[3],
+                question[4]
+            ],
+            "correct": question[1]
+        })
+    
+    return questions
+
+'''def clear_list(question_list):
+    question.clear()
+    correct_answer.clear()
+    all_answers.clear()
+'''
+@app.route('/save_results_to_db', methods=["POST"])
+def save_results_to_db():
+    qp_id = request.form['qp_id']
+    player = request.form['username'] #Ska egentligen vara player_id enligt dbo.game_detail
+    score = request.form['score']
+    try:
+        cursor.execute(f"exec sp_game_details '{qp_id}', '{player}', '{score}'")
+        cursor.commit()
+    except:
+        cursor.execute(f"exec sp_update_results")
 
 
 '''
-def ask_questions(question_list):
-    #seperate question from answers, seperate answers from right answer
-    #i[0] = question, i[1] = correct_answer
-    question = []
-    correct_answer = []
-    all_answers = []
+def control_answer(question_list):
 
-    #show question, put correct_answer in 1-4, put wrong_answers in 1-4 if not allready taken.
-
-    for i in question_list:
-        question.append(i[0])
-        correct_answer.append(i[1])
-        all_answers.append(i[1])
-        all_answers.append(i[2])
-        all_answers.append(i[3])
-        all_answers.append(i[4])
-        print(question[0])
-        time.sleep(1)
-        shuffle(all_answers)
-        print(", ".join(all_answers)) #alt. (all_awnsers[0],all_awnsers[1],all_awnsers[2],all_awnsers[3])
-        print(f"Rätt svar: {correct_answer[0]}")
-        time.sleep(1)
-        #ask question
-        #display all answers (randomly)
-        #show_result, question + correct_answer and score
-        question.clear()
-        correct_answer.clear()
-        all_answers.clear()
-    
-    # visa en fråga i turordning 1-n1
-    # loop med svar(?) (visa fråga, 30 sek, visa svar, 30 sek, om fråga finns, go again)
-    # hämta svar och slumpmässigt ordna svar mellan 1-4. (rätt svar ska vara på "olika" platser varje fråga.)
-
-def display_awnsers(question_list):
 
 def show_result():
     #show question and correct answer
