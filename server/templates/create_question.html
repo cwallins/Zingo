@@ -9,14 +9,14 @@
 {% block content %}
 <!--Frågeformulär-->
 
-<div class="row">
+<div class="row justify-content-center">
     
-    <div class="col-md-6 edit">
+    <div class="col-md-5 edit">
         <form method="POST">
             <h2 class="mb-4 form">{{ qp_name }} </h2>
             <div class="form-group mb-3 form">
                 <label for="question">Question</label>
-                <input type="text" name="question" class="form-control" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' placeholder="Type question..." required>
+                <input type="textarea" rows="2" name="question" class="form-control" id="question" value='{% if qna != "" %}{{ qna[0] }}{% endif %}' placeholder="Type question..." required>
             </div>
             <div class="form-group mb-3 form">
                 <label for="answer_1">Correct answer</label>
@@ -41,18 +41,18 @@
             </div>
         </form>
     </div>
-    <div class="col-md-6 edit">
+    <div class="col-md-5 edit">
         <article>
             <h2 class="mb-3">Your Questions</h2>
-            <ul>
+            <ul class="margin-0">
                 {% for question in questions %}
                 <li class="list-group-item list-group-item-light" id="list_of_question">
-                    <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }} [EDIT]</a>
+                    <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}"></a>{{ question }} [EDIT]</a>
                 </li>
                 {% endfor %}
             </ul>
         </article>
-        <div class="button-box mb-3 form">
+        <div class="button-box mb-3">
             <form action="{{ url_for('my_profile') }}">
                 <!--save question package-->
                 <div>

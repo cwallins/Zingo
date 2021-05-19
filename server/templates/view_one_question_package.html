@@ -19,37 +19,39 @@
     <!--Beskrivning av frågepaket-->
     <div class="row justify-content-center">
       <div class="col-12 text-center">
-        <p>Summary: {{ qp_desc }}</p>
-      </div>
-    </div>
-    <!--Frågor i frågepaket-->
-    <div class="row justify-content-center">
-      <div class="col-12 text-center">
-        <p>Loopad lista med frågorna</p>
+        <p>Game Description: {{ qp_desc }}</p>
       </div>
     </div>
 
-    <!--Gå tillbaka-knapp (vart?)-->
-    <div class="row justify-content-center">
-      <div class="col-12 text-center">
-        <p>Här ska en knapp finnas tillbaka till view_all_games</p>
-      </div>
-    </div> 
     <!--Starta ett spel-knapp-->
-    <div class="row justify-content-center">
+    <div class="button-box mb-3">
       <div class="col-12 text-center">
-        <button type="button" id="play-game" class="btn btn-lg btn-warning" ><a href="{{ url_for('in_game_show_question', chosen_qp = qp_name, admin = username) }}">Play game</a></button>
-      </div>
-      <div class="col-12 text-center">
-        <button type="button" id="back" class="btn btn-lg btn-warning" ><a href="{{ url_for('view_all_question_package') }}">Back to games</a></button>
+        <button type="button"  class="btn btn-lg btn-warning" ><a href="{{ url_for('view_all_question_package') }}" id="package-button">Go Back</a></button>
+        <button type="button"  class="btn btn-lg btn-warning" ><a href="{{ url_for('in_game_show_question', chosen_qp = qp_name, admin = username) }}" id="package-button">Play game</a></button>
       </div>
     </div>
     
 </div>
-<div class="container score-board">
-  {% for leader in leaderboard %}
-        <p class="col-12">{{ leader.player }}: {{ leader.score }}</p>
-    {% endfor %}
+
+<div class="leaderboard">
+  <table class="table table-leaderboard">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">USERNAME</th>
+        <th scope="col">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for leader in leaderboard %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ leader.player }}</td>
+        <td>{{ leader.score }} points</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}

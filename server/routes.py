@@ -1,3 +1,4 @@
+
 import pdb
 import pyodbc
 import time
@@ -450,8 +451,10 @@ def save_results_to_db():
     result = request.form['score']
     cursor.execute(f"select qp_name from question_package where qp_id = {qp_id}")
     qp_name = cursor.fetchone()[0]
+    print(session['username'])
     cursor.execute(f"select [user_id] from [user] where nickname = '{session['username']}'")
     player = cursor.fetchone()[0]
+    
 
     try:
         cursor.execute(f"exec sp_game_details {qp_id}, {player}, {result}")

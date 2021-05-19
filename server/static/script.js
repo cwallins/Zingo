@@ -40,7 +40,7 @@ var init_time;
 var time; //tiden som timer stannade på
 //startar en tidtagning från 29sek
 function timer(){
-  time = 29
+  time = 5
   var timerDiv = document.getElementById('timer');
   timerDiv.innerHTML = "30 seconds remaining";
 
@@ -63,6 +63,11 @@ $("#delete-btn").on("click", function(){
   $(this).closest('.created_question_packages').hide()
 });
 
+$(".read_more-link").on("click", function(){
+  alert("This is where our terms and conditions are. How fun!")
+});
+
+
 //Popover for 'Rules'-button 
 /*$(document).ready(function(){
   $( "[data-toggle='popover'" ).popover( );
@@ -73,7 +78,7 @@ $( ".popover_dismiss" ).popover(
     trigger: "focus"
 }); */
 
-/*
+
 //Get the button:
 mybutton = document.getElementById("myBtn");
 
@@ -93,4 +98,4 @@ function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-*/
+
