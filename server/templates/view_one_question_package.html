@@ -43,5 +43,10 @@
     </div>
     
 </div>
+<div class="container score-board">
+  {% for leader in leaderboard %}
+        <p class="col-12">{{ leader.player }}: {{ leader.score }}</p>
+    {% endfor %}
+</div>
 
 {% endblock %}
