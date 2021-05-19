@@ -40,7 +40,7 @@ var init_time;
 var time; //tiden som timer stannade på
 //startar en tidtagning från 29sek
 function timer(){
-  time = 5
+  time = 29
   var timerDiv = document.getElementById('timer');
   timerDiv.innerHTML = "30 seconds remaining";
 
