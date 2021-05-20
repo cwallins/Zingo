@@ -42,7 +42,7 @@ var time; //tiden som timer stannade på
 function timer(){
   time = 29
   var timerDiv = document.getElementById('timer');
-  timerDiv.innerHTML = "30 seconds remaining";
+  timerDiv.innerHTML = time + " seconds remaining";
 
   init_time = setInterval(count, 1000);
   function count(){
