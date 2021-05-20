@@ -444,6 +444,9 @@ def invite_player(qp_name, admin):
 def in_game_show_question(chosen_qp, admin):
     # url = f'localhost:5000/playing/{chosen_qp}/{admin}' 
     questions = ask_questions(chosen_qp)
+    shuffle(questions)
+    for question in questions:
+        shuffle(question['answers'])
     cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
     qp_id = cursor.fetchone()[0]
     if admin == 'User':
