@@ -77,7 +77,7 @@ body a:hover {
 }
 
 #create_game-link:hover, #choose_game-link:hover, #sign_in-link:hover{
-  color: white;
+  color: rgb(77, 77, 77);
 }
 
 /* Någon annan sida? */
