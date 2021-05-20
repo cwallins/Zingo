@@ -176,8 +176,13 @@ def view_one_question_package(qp_name):
     cursor.execute(f"select nickname from [user] where user_id = '{qp_creator}'")
     qp_nick = cursor.fetchone()
     lb = leaderboard(qp_name)
+    if 'username' in session:
+        username = session['username']
+    else:
+        session['username'] = 'User'
+        username = session['username']
     
-    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = session['username'], leaderboard=lb)
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = username, leaderboard=lb)
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -446,20 +451,24 @@ def ask_questions(question_list):
 
 @app.route('/save_results_to_db', methods = ['POST'])
 def save_results_to_db():
+    
     qp_id = request.form['qp_id']
     result = request.form['score']
     cursor.execute(f"select qp_name from question_package where qp_id = {qp_id}")
     qp_name = cursor.fetchone()[0]
-    cursor.execute(f"select [user_id] from [user] where nickname = '{session['username']}'")
-    player = cursor.fetchone()[0]
     
-    try:
-        cursor.execute(f"exec sp_game_details {qp_id}, {player}, {result}")
-        cursor.commit()
-    except:
-        cursor.execute(f"exec sp_update_result {qp_id}, {player}, {result}")
-        cursor.commit()
-
+    
+    if session['username'] != 'User':
+        cursor.execute(f"select [user_id] from [user] where nickname = '{session['username']}'")
+        player = cursor.fetchone()[0]
+        try:
+            cursor.execute(f"exec sp_game_details {qp_id}, {player}, {result}")
+            cursor.commit()
+        except:
+            cursor.execute(f"exec sp_update_result {qp_id}, {player}, {result}")
+            cursor.commit()
+    else:
+        pass
     session['qp_name'] = qp_name
     session['result'] = result
 
