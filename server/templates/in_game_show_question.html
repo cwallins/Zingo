@@ -9,13 +9,13 @@ Home page
 {% block content %}
 
 <div id="question-game-questions">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center start-game-menu">
         <h1 class="text-center">Get ready... Set... </h1>
     </div>
     <hr>
 
     {% if username == 'User' %}
-    <div class="row justify-content-center">
+    <div class="row justify-content-center start-game-menu">
         <div class="col-12 text-center">
         <p class="text-center">{{ msg }}</p>
         <a class="btn btn-secondary btn-sm" href="{{ url_for('register') }}">Create account</a>
