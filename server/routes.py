@@ -100,7 +100,7 @@ def create_question_package():
         
         list_of_tags.sort()
 
-        return render_template("create_question_package.html", tags=list_of_tags)
+        return render_template("create_question_package.html", tags=list_of_tags, msg=session['message'])
 
     else:
         return redirect(url_for('sign_in'))
@@ -189,8 +189,11 @@ def control_qp_name_desc():
     qp_name = request.form['qp_name']
     qp_desc = request.form['qp_description']
     qp_tags = request.form['qp_tag']
-    save_qp_to_db(qp_name, qp_desc, qp_tags)
-    return redirect(url_for('create_question'))
+    if save_qp_to_db(qp_name, qp_desc, qp_tags) == True:
+        return redirect(url_for('create_question'))
+    else:
+        session['message'] = 'Could not continue. The title or description contains a word we do not allow.'
+        return redirect(url_for('create_question_package'))
 
 @app.route('/control_questions_answers', methods = ['GET', 'POST'])
 def control_questions_answers():
@@ -269,7 +272,11 @@ def add_new_user():
         session['loggedin'] = True
         session['email'] = email
         session['username'] = username
-    return redirect(url_for("my_profile"))
+    
+    if 'was_playing' in session:
+        return redirect(url_for('in_game_show_question', chosen_qp=session['was_playing'], admin=session['username']))
+    else:
+        return redirect(url_for("my_profile"))
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
@@ -341,13 +348,14 @@ def save_qp_to_db(qp_name, qp_desc, qp_tags):
             nl.append(t)
 
     if check_words_aginst_db(nl):
-        word = check_words_aginst_db(nl)
+        return False
 
     else:
         session['qp_name'] = qp_name
         cursor.execute(f"insert into question_package (qp_description, created_by, qp_name) values ('{qp_desc}', {user_id}, '{qp_name}')")
         cursor.commit()
         apply_tags_to_qp(qp_tags)
+        return True
 
 def get_question(question, answer_1, answer_2, answer_3, answer_4):
     question_list = []
@@ -424,12 +432,15 @@ def invite_player(qp_name, admin):
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
     # url = f'localhost:5000/playing/{chosen_qp}/{admin}' 
-
     questions = ask_questions(chosen_qp)
     cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
     qp_id = cursor.fetchone()[0]
-
-    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id=qp_id, username=admin)
+    if admin == 'User':
+        session['message'] = "You are currently not logged in. Your score will not be saved. Do you wish to create an account?"
+        session['was_playing'] = chosen_qp
+    else:
+        session['message'] = ""
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id=qp_id, username=admin, msg=session['message'])
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")

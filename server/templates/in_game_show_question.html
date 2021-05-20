@@ -10,7 +10,12 @@ Home page
 
 <!--Join game-->
 <div id="question-game-questions">
-
+    {% if username == 'User' %}
+    <div id="user_logged_out">
+        <p>{{ msg }}</p>
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('register') }}">Create account</a>
+    </div>
+    {% endif %}
     <div class="row start-game-menu">
        <!-- <form action="#">
             <div class="form-group mb-3 form">
