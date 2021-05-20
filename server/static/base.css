@@ -119,7 +119,7 @@ body a:hover {
 
 #timer {
   color: rgb(82, 25, 25);
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .scoretest {
@@ -266,7 +266,6 @@ text-decoration: none;
 
 
 #myBtn {
-  z-index: 99; /* Make sure it does not overlap */
   cursor: pointer; /* Add a mouse pointer on hover */
   padding: 15px; /* Some padding */
   font-size: 18px; /* Increase font size */
