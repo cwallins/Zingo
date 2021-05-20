@@ -164,8 +164,19 @@ def receive_temporal_user():
 def view_all_question_package():
     cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
     res = cursor.fetchall()
+    cursor.execute("select tag_description from tag")
+    tags = cursor.fetchall()
 
-    return render_template("view_all_question_package.html", qp_list = res)
+    list_of_tags = []
+
+    for tag in tags:
+        letter = filter(str.isalnum, tag)
+        word = "".join(letter)
+        list_of_tags.append(word)
+
+    list_of_tags.sort()
+
+    return render_template("view_all_question_package.html", qp_list = res, tags = list_of_tags)
 
 @app.route('/view_one_question_package/<qp_name>')
 def view_one_question_package(qp_name):

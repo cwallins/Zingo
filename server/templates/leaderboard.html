@@ -1,34 +1,37 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Leaderboard
+Leaderboard
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-4">
-    <h1 class="text-center">You just completed {{ qp_name }}!</h1>
+  <h1 class="text-center">You just completed {{ qp_name }}!</h1>
 </div>
 <div class="row justify-content-center mt-4">
-    <h2 class="text-center">Your score is: {{ result }}</h2>
+  <h2 class="text-center">Your score is: {{ result }}</h2>
 </div>
-    <div class="leaderboard">
-        <table class="table table-leaderboard">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">USERNAME</th>
-              <th scope="col">SCORE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for leader in leaderboard %}
-            <tr>
-              <th scope="row">{{loop.index}}</th>
-              <td>{{ leader.player }}</td>
-              <td>{{ leader.score }} points</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+<div class="leaderboard">
+  <table class="table table-leaderboard">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">USERNAME</th>
+        <th scope="col">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for leader in leaderboard %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ leader.player }}</td>
+        <td>{{ leader.score }} points</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="row justify-content-center">
+  <button type="button" class="btn btn-lg btn-warning back-btn-leaderboard"><a href="{{ url_for('view_all_question_package') }}">Back to Question packages</a></button>
+</div>
 {% endblock %}

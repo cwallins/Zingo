@@ -10,19 +10,24 @@
   <!--Lägg till maincontent här-->
 <div class="container form">
     <h3>Create your game </h3>
-    <div class="form-group mb-3 form">
-        <button type="button" id="popover_dismiss" class="btn btn-warning mt-3" data-toggle="popover" data-bs-trigger="focus" title="Follow these rules to have a spendid good time!" data-bs-content="Don't be an arsehole">Rules</button>      
+    <div class="form-group mt-4">
+        <div class="card">
+            <h5 class="card-header">Rules</h5>
+            <div class="card-body">
+              <p class="card-text">Don't be a jerk. No use of swearwords are allowed. And have fun!</p>
+            </div>
+          </div>      
     </div>        
     <div class="col-sm-12">
         <hr>
         <form class="create_game" action="/control_qp_name_desc" method="POST">
             <div class="form-group mt-4">
-                <label for="qp_name">Enter the name of your game</label>
-                <input name="qp_name" type="text" class="form-control" id="qp_name" placeholder="Type something..." required>
+                <label for="qp_name">Name:</label>
+                <input name="qp_name" type="text" class="form-control" id="qp_name" placeholder="Enter the name of your game" required>
             </div>
-            <div class="form-group mt-4">
-                <label for="qp_description">Describe your question package</label>
-                <input name="qp_description" type="text" class="form-control" id="qp_description" placeholder="Type something...">
+            <div class="form-group mt-3">
+                <label for="qp_description">Description:</label>
+                <input name="qp_description" type="text" class="form-control" id="qp_description" placeholder="Describe your question package">
             </div>
             <div class="form-group mt-4">
                 <p>Genre of your package:</p>
@@ -36,10 +41,6 @@
             <div class="form-group mt-3"> 
                 <button type="submit" class="btn btn-lg btn-warning">Next</button>
             </div>
-            <div>
-                
-            </div>
-
         </form>
     </div>
 </div>  
