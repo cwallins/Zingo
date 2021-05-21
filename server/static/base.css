@@ -71,7 +71,7 @@ body a:hover {
   font-size: 130%;
   border: 0.5rem;
   border-radius: 1rem;
-  padding-top: 1rem;
+  padding: 5px;
 
 
 }
@@ -326,6 +326,14 @@ text-decoration: none;
 p#active {
   opacity: 1;
   font-size: 1em;
+}
+
+
+
+.navbar ul li a.active {
+  color: white;
+
+ 
 }
 
 
