@@ -8,10 +8,22 @@ Home page
 <!--Content block-->
 {% block content %}
 
-<!--Join game-->
 <div id="question-game-questions">
+    <div class="row justify-content-center start-game-menu">
+        <h1 class="text-center">Get ready... Set... </h1>
+    </div>
+    <hr>
 
-    <div class="row start-game-menu">
+    {% if username == 'User' %}
+    <div class="row justify-content-center start-game-menu">
+        <div class="col-12 text-center">
+        <p class="text-center">{{ msg }}</p>
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('register') }}">Create account</a>
+    </div>
+    </div>
+    {% endif %}
+    
+    <div class="row justify-content-center start-game-menu">
        <!-- <form action="#">
             <div class="form-group mb-3 form">
                 <label for="username">Enter a username</label>
@@ -25,26 +37,29 @@ Home page
     </div>
 
     {% for question in questions %}
-    <div class="row show-question" id="{{loop.index}}" style="display: none;" data-correct-answer="{{ question['correct'] }}">
-        <p class="col-12">{{ question.question }}</p>
+    <div class="row justify-content-center show-question" id="{{loop.index}}" style="display: none;"
+        data-correct-answer="{{ question['correct'] }}">
+        <h1 class="col-12 text-center">{{ question.question }}</h1>
+
         {% for answer in question['answers'] %}
-        <button class="btn btn-primary col-6">{{ answer }}</button>
+        <button class="btn btn-lg btn-warning question_answers">{{ answer }}</button>
         {% endfor %}
+
     </div>
     {% endfor %}
 
-    <div class="scoretest" name="scoretest">
+    <div class="scoretest text-center" name="scoretest">
     </div>
-    <div class="timer" id="timer">
-        
+    <div class="timer text-center" id="timer">
+
     </div>
-    <form action="{{ url_for('save_results_to_db') }}" method="POST">
+    <form action="{{ url_for('save_results_to_db') }}" method="POST" class="text-center mt-4">
         <input type="hidden" name="score" value="0" id="score">
         <input type="hidden" name="qp_id" value="{{ qp_id }}" id="qp_id">
         <input type="hidden" name="username" value="{{ username }}" id="username">
-        <input type='submit' name="test_sub" value="testPOST">
+        <input type='submit' name="test_sub" value="End Game" class="end-game">
     </form>
-    <p id="yougonegoofed">Tiden är slut, kasst!</p>
+    
 
 </div>
 

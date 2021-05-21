@@ -9,7 +9,7 @@ $("#question-game-questions .show-question button").on("click", function() {
 
   if (answer === correctAnswer) {
     console.log("Rätt!");
-    $("#score").val(score + time); //Så mycket tid som är kvar får du i poäng
+    $("#score").val(score + time ); //Så mycket tid som är kvar får du i poäng
   } else {
     console.log("FEL!");
   }
@@ -25,6 +25,7 @@ $("#question-game-questions .show-question button").on("click", function() {
 /* Playing a game, göm frågorna i frågepaketet */
 $(document).ready(function(){
   $(".show-question").hide();
+  $(".end-game").hide();
   });
   
   /* When clicking "Start game" in lobby, när du klickar på starta spel göms div-elementet med knappen starta spel och första frågan i frågepaketet visas */
@@ -32,6 +33,7 @@ $(document).ready(function(){
     $(".start-game-menu").hide();
     //$(".show-question").show();
     $(".show-question"+"#1").show()
+    $(".end-game").show();
     timer() //starta timer
 });
 
@@ -40,14 +42,20 @@ var init_time;
 var time; //tiden som timer stannade på
 //startar en tidtagning från 29sek
 function timer(){
-  time = 29
+  time = 19;
   var timerDiv = document.getElementById('timer');
-  timerDiv.innerHTML = "30 seconds remaining";
+  timerDiv.innerHTML = " 20 seconds remaining";
 
   init_time = setInterval(count, 1000);
   function count(){
-    timerDiv.innerHTML = time + " seconds remaining";
-    time--;
+    if (time >= 0){
+      timerDiv.innerHTML = time + " seconds remaining";
+      time--;
+      if (time === -1) {
+        console.log("#yougonegoofed");
+        time = 0;
+      }     
+    }   
   }
 }
 //stoppar tidtagning och nollställer
@@ -99,3 +107,24 @@ function topFunction() {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+$(document).ready(function(){
+  $("#feedback-popup").hide();
+});
+
+$("#feedback-send").on("click", function(){
+  $("#feedback-popup").show();
+  $("#feedback-comment").val("");
+})
+
+$(document).ready(function () {
+  const currentLocation = location.href;
+  const menuItem = document.querySelectorAll('a');
+  const menuLength = menuItem.length
+  for (let i = 0; i<menuLength; i++){
+    if(menuItem[i].href === currentLocation){
+      menuItem[i].className += " " + "active"
+    }
+  }
+});
+
+//Testar knappjävel

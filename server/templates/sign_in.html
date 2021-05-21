@@ -5,23 +5,23 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container form">
-        <div class="row">
+    <div class="container">
+        <div class="row justify-content-center">
             <!-- Sign in-->
-            <div class="col-sm-12">
+            <div class="col-lg-8">
                 <h1>Log in</h1>
                 <hr>
                 <form class="sign_in" action="{{ url_for('user_login') }}" method="POST">
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-3">                       
                         <label for="InputEmail1">Email address</label>
                         <input name="email" type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp" required
                             placeholder="Enter email">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
+                            else.</small>     
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-3">                      
                         <label for="exampleInputPassword1">Password</label>
-                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter password" required>                 
                     </div>
                     <div class="msg mb-2">
                         {{ msg }}

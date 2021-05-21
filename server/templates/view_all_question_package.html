@@ -9,8 +9,8 @@
 {% block content %} 
   <!--View all games-->
   <div class="row align-items-center mt-4">
-    <div class="col-12 text-center mt-4">
-      <h2>New Games!</h2>
+    <div class="col-12 text-center mt-4 new-games-title">
+      <h2 id="new-games-title">New Games!</h2>
     </div>
   </div>
   
@@ -20,21 +20,23 @@
   
   <!--Filter-->
   <div class="row justify-content-center">
-    <div class="form-group">
-
-      <select name="qp_tag" id="tag" class="form-select form-select-lg mt-3">
+    <div class="form-group filter_genre">
+      <select name="qp_tag" id="tag" class="form-control">
           <option selected>Filter by genre</option>
           {% for tag in tags %}
               <option value="{{ tag | safe }}">{{ tag | safe }}</option>
           {% endfor %}
       </select>
-  </div> 
+    </div> 
+    <div class="col-auto">
+      <button onclick="" id="filter_search-btn" class="btn btn-md btn-warning" title="filter">Search</button>
+    </div>
   </div>
   <!--All games-->
     <div class="row mt-4 divbox justify-content-center text-center">
         {% for question_package in qp_list %}
         <div class="card col-xxl-3 col-lg-5 col-sm-11" id="cards">
-          <div class="card-body">
+          <div class="card-body cards">
             <h5 class="card-title"> {{ question_package[0] }}</h5>
             <h6 class="card-subtitle mb-2 text-muted"> {{ question_package[2] }}</h6>
             <p class="card-text"> {{ question_package[1] }}</p>
