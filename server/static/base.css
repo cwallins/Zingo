@@ -97,11 +97,11 @@ body a:hover {
   text-align:center;
 }
 
-#profile_picture {
-  height: 75px;
-  width: 75px;
+/*#profile_picture {
+  height: 200px;
+  width: 190px;
 }
-
+*/
 #start-game {
   width: 20%;
   height: 20%;
@@ -149,7 +149,13 @@ text-decoration: none;
 
 #contact-us{
   text-decoration: none;
+  color:rgba(255,255,255,.55);
 }
+
+#contact-us a:hover{
+  color:rgba(255, 255, 255);
+}
+
 
 /* View_all_games */
 
@@ -189,6 +195,7 @@ text-decoration: none;
   color: #ffffff; 
 }
 
+
 .divbox{
   box-sizing: border-box;
 }
@@ -201,6 +208,7 @@ text-decoration: none;
 
 .rules{
   border-color: black;
+  
 }
 
 #rules-text{
@@ -209,6 +217,7 @@ text-decoration: none;
 
 .rules-undertext{
   background-color: white;
+  border-radius: 3px;
 }
 
 .link-warning{

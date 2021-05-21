@@ -68,12 +68,12 @@ def register():
 
 @app.route('/sign_in') 
 def sign_in():
-    return render_template("sign_in.html")
+    return render_template("sign_in.html", msg = session['message'])
 
 @app.route('/my_profile')
 def my_profile():
-    session['message'] = ""
     if 'loggedin' in session:
+        session['message'] = ""
         qp_list = list_of_games()
         cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id] where u.nickname = '{session['username']}'")
         res = cursor.fetchall()
@@ -304,7 +304,7 @@ def user_login():
             session['username'] = account[3]
             msg = 'Logged in'
         else:
-            msg = 'Incorrect username/password!'
+            session['message'] = 'Incorrect email och password.'
     return redirect(url_for('my_profile'))
 
 @app.route('/logout')
