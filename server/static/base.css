@@ -201,7 +201,8 @@ text-decoration: none;
 }
 
 
-/* Create package */
+/* Create package (behövs .rules #rules-text? */
+
 .rules{
   background-color: rgb(59, 13, 13);
 }
