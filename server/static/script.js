@@ -107,3 +107,15 @@ function topFunction() {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+$(document).ready(function(){
+  $("#feedback-popup").hide();
+});
+
+$("#feedback-send").on("click", function(){
+  $("#feedback-popup").show();
+  $("#feedback-comment").val("");
+})
+
+
+
+//Testar knappjävel

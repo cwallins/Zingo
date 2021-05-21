@@ -320,7 +320,17 @@ def terms_conditions():
 
 @app.route('/contact_us')
 def contact_us():
-    return render_template('contact_us.html')
+    first_name = ""
+    last_name = ""
+    email = ""
+    if 'loggedin' in session:
+        cursor.execute(f"select f_name, l_name, e_mail from [user] where nickname = '{session['username']}'")
+        data = cursor.fetchone()
+        first_name = data[0]
+        last_name = data[1]
+        email = data[2]
+
+    return render_template('contact_us.html', first_name=first_name, last_name=last_name, email=email)
 
 def list_of_games():
     cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")

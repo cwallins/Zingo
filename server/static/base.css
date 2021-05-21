@@ -80,15 +80,9 @@ body a:hover {
   color: rgb(77, 77, 77);
 }
 
-/* Någon annan sida? */
-.form {
-  width: 70%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
 #package-button {
   text-decoration: none;
+  color:black;
 }
 .leaderboard {
   display: flex;
@@ -159,6 +153,24 @@ text-decoration: none;
 
 /* View_all_games */
 
+#cards{
+  background-image: url(zingo.png);
+  background-color: rgb(250, 250, 165);
+  background-repeat: no-repeat;
+  background-size: 35%;
+}
+
+.card {
+  margin: 2%;
+  box-sizing: border-box;
+  border-color: black;
+  box-shadow: 2px 2px 4px rgb(59, 13, 13); 
+}
+
+#new-games-title{
+  margin-bottom: 3.5rem;
+}
+
 .filter_genre{
   width: 25%;
   box-sizing: border-box;
@@ -181,9 +193,22 @@ text-decoration: none;
   box-sizing: border-box;
 }
 
-.card {
-  margin: 2%;
-  box-sizing: border-box;
+
+/* Create package */
+.rules{
+  background-color: rgb(59, 13, 13);
+}
+
+.rules{
+  border-color: black;
+}
+
+#rules-text{
+  color: rgb(59, 13, 13);
+}
+
+.rules-undertext{
+  background-color: white;
 }
 
 .link-warning{
@@ -213,19 +238,28 @@ text-decoration: none;
   text-align: right;
 }
 
-#cards{
-  /*background: url("zingo.png");*/
-  background-image: url(zingo.png);
-  background-color: rgb(250, 250, 165);
-  background-repeat: no-repeat;
-  background-size: auto; 
-}
+
 #zingoimage{
   opacity: 50%;
 }
 
-/* CSS for the Contact_us-form*/
+.button_cards {
+  border: 5px;
+}
+/*
+.button_cards a{
+  color: #fff;
+}
+.button_cards:hover{
+  background-color: rgb(49, 49, 49);
+}
+.button_cards a:hover{
+  background-color: rgb(49, 49, 49);
+  color: #fff;
+}
+*/
 
+/* CSS for the Contact_us-form*/
 .contact{
   padding: 4%;
   height: 400px;
@@ -293,3 +327,16 @@ p#active {
   opacity: 1;
   font-size: 1em;
 }
+
+
+/*
+.navbar-nav > .active > .navlink{
+  opacity: 1;
+  font-size: 1em;
+  color: rgba(255,255,255, 1)
+}
+*/
+
+/* Testar nav -walle */ 
+
+
