@@ -34,20 +34,20 @@
     <div class="row mt-4 divbox justify-content-center">
         <h2>Here are your created question packages</h2>
             {% for i in games %}
-              <div class="card col-xxl-3 col-lg-5 col-sm-11">
-                <div class="card-body">
+              <div class="card col-xxl-3  col-lg-5 col-sm-11" id="cards">
+                <div class="card-body created_question_packages">
                   <h5 class="card-title"> {{ i[0] }}</h5>
                   <h6 class="card-subtitle mb-2 text-muted"> {{ i[1] }}</h6>
                   <p class="card-text"> {{ i[2] }}</p>
-                  <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = i[0]) }}">View</a></button>
-                  <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}">Edit</a></button>
-                  <button type="button" class="btn btn-warning"><a href="#">Delete</a></button>
+                  <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = i[0]) }}" id="package-button">View</a></button>
+                  <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}" id="package-button">Edit</a></button>
+                  <button type="button" id="package-button" class="btn btn-warning">Delete</button>
                 </div>
               </div>
             {% endfor %}
     </div>
     <div class="row justify-content-center">
-      <div class="col text-center">
+      <div class="d-flex justify-content-center">
         <button onclick="topFunction()" id="myBtn" class="btn btn-lg btn-warning mb-4" title="Go to top">Go back to Top</button>
       </div>  
     </div>

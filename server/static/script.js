@@ -9,7 +9,7 @@ $("#question-game-questions .show-question button").on("click", function() {
 
   if (answer === correctAnswer) {
     console.log("Rätt!");
-    $("#score").val(score + time); //Så mycket tid som är kvar får du i poäng
+    $("#score").val(score + time ); //Så mycket tid som är kvar får du i poäng
   } else {
     console.log("FEL!");
   }
@@ -25,6 +25,7 @@ $("#question-game-questions .show-question button").on("click", function() {
 /* Playing a game, göm frågorna i frågepaketet */
 $(document).ready(function(){
   $(".show-question").hide();
+  $(".end-game").hide();
   });
   
   /* When clicking "Start game" in lobby, när du klickar på starta spel göms div-elementet med knappen starta spel och första frågan i frågepaketet visas */
@@ -32,6 +33,7 @@ $(document).ready(function(){
     $(".start-game-menu").hide();
     //$(".show-question").show();
     $(".show-question"+"#1").show()
+    $(".end-game").show();
     timer() //starta timer
 });
 
@@ -40,14 +42,20 @@ var init_time;
 var time; //tiden som timer stannade på
 //startar en tidtagning från 29sek
 function timer(){
-  time = 29;
+  time = 19;
   var timerDiv = document.getElementById('timer');
-  timerDiv.innerHTML = "30 seconds remaining";
+  timerDiv.innerHTML = " 20 seconds remaining";
 
   init_time = setInterval(count, 1000);
   function count(){
-    timerDiv.innerHTML = time + " seconds remaining";
-    time--;
+    if (time >= 0){
+      timerDiv.innerHTML = time + " seconds remaining";
+      time--;
+      if (time === -1) {
+        console.log("#yougonegoofed");
+        time = 0;
+      }     
+    }   
   }
 }
 //stoppar tidtagning och nollställer
@@ -55,13 +63,18 @@ function resetTimer(timer){
   clearInterval(timer)
   console.log(time)
 }
-//When clicked on an answer next question get shown
-//.....$("#question-game-questions .show-question button").on("click", function() {
 
+$("#delete-btn").on("click", function(){
+  // console closest element with class=".created_question_packages"
+  console.log($(this).closest('.created_question_packages'))
+  // hide this selected element
+  $(this).closest('.created_question_packages').hide()
+});
 
+$(".read_more-link").on("click", function(){
+  alert("This is where our terms and conditions are. How fun!")
+});
 
-
-//$("show-question").first().fadeout(1000);
 
 //Popover for 'Rules'-button 
 /*$(document).ready(function(){
@@ -73,7 +86,7 @@ $( ".popover_dismiss" ).popover(
     trigger: "focus"
 }); */
 
-/*
+
 //Get the button:
 mybutton = document.getElementById("myBtn");
 
@@ -93,44 +106,25 @@ function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-*/
 
-/* Show one question at a time (??)*/
+$(document).ready(function(){
+  $("#feedback-popup").hide();
+});
 
+$("#feedback-send").on("click", function(){
+  $("#feedback-popup").show();
+  $("#feedback-comment").val("");
+})
 
+$(document).ready(function () {
+  const currentLocation = location.href;
+  const menuItem = document.querySelectorAll('a');
+  const menuLength = menuItem.length
+  for (let i = 0; i<menuLength; i++){
+    if(menuItem[i].href === currentLocation){
+      menuItem[i].className += " " + "active"
+    }
+  }
+});
 
-
-
-/*test
-  var q = 1,
-      qMax = 0;
-
-  $(function () {
-      qMax = $('.show-question').length;
-      $('.show-question').hide();
-      $('.show-question:nth-child(1)').show();
-      $('#start-game').on('click', function (event) {
-          event.preventDefault();
-          handleClick();
-      });
-  });
-
-  function handleClick() {
-      if (q < qMax) 
-        {
-          $('.show-question:nth-child(' + q + ')').hide();
-          $('.show-question:nth-child(' + (q + 1) + ')').show();
-          if (q == (qMax - 1)) 
-            {
-              $('#start-game').html('Submit Answers');
-            }
-            
-          q++;
-        } 
-
-      else 
-        {
-          alert('Submitting'); 
-        }
-  }});
-*/
+//Testar knappjävel
