@@ -64,7 +64,7 @@ def home():
 
 @app.route('/register') 
 def register():
-    return render_template("register.html")
+    return render_template("register.html", msg = session['message'])
 
 @app.route('/sign_in') 
 def sign_in():
@@ -276,7 +276,11 @@ def add_new_user():
     lastname = request.form["lastname"]
 
     if password_1 != password_2:
-        error_message = "The passwords must be the same"
+        session['message'] = "The passwords must be the same"
+        return redirect(url_for('register'))
+    elif len(password_2) < 8:
+        session['message'] = 'Could not proceed, the password did not meet the requirements.'
+        return redirect(url_for('register'))
     else:
         cursor.execute(f"exec sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
         cursor.commit()
@@ -312,6 +316,8 @@ def user_logout():
     session.pop('loggedin', None)
     session.pop('email', None)
     session.pop('username', None)
+    session.pop('was_playing', None)
+    session.pop('qp_name', None)
     return redirect(url_for('sign_in'))
 
 @app.route('/terms_conditions')
