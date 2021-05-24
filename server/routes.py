@@ -422,27 +422,41 @@ def check_words_aginst_db(all_words):
     if len(l) > 0:
         return l
 
+
 @app.route('/search', methods = ['GET', 'POST'])
 def search_form():
-    search_input = request.form['search_input']
-    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
-    res = cursor.fetchall()
+    if 'search_input' in request.form:
+        search_input = request.form['search_input']
+        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
+        res = cursor.fetchall()
+    elif 'qp_tag' in request.form:
+        qp_tag = request.form['qp_tag']
+        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id] join question_package_tag qt on q.qp_id = qt.qp_id join tag t on t.tag_id = qt.tag_id where t.tag_description = '{qp_tag}'")         
+        res = cursor.fetchall()
 
     list_of_qp = []
 
     for x in res:
         for qp in x:
             list_of_qp.append(qp)
+    
+    cursor.execute("select tag_description from tag")
+    tags = cursor.fetchall()
 
-    '''
-    for qp in list_of_qp:
-        if qp == search_input:
-            return redirect(url_for('view_one_question_package', qp_name = search_input))
-    '''
+    list_of_tags = []
+
+    for tag in tags:
+        letter = filter(str.isalnum, tag)
+        word = "".join(letter)
+        list_of_tags.append(word)
+        
+    list_of_tags.sort()
+
     if res:
-        return render_template("view_all_question_package.html", qp_list = res)
+        return render_template("view_all_question_package.html", qp_list = res, tags = list_of_tags)
     else:
-        return redirect(url_for('view_all_question_package'))
+        session['message'] = 'Could not find any question packages, please try again.'
+        return render_template('view_all_question_package.html', msg = session['message'], tags = list_of_tags)
 
 '''@app.route('/invite_player/<qp_name>/<admin>')
 def invite_player(qp_name, admin):
