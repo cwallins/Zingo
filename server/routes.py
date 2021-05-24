@@ -200,11 +200,18 @@ def control_qp_name_desc():
     qp_name = request.form['qp_name']
     qp_desc = request.form['qp_description']
     qp_tags = request.form['qp_tag']
-    if save_qp_to_db(qp_name, qp_desc, qp_tags) == True:
-        return redirect(url_for('create_question'))
-    else:
-        session['message'] = 'Could not continue. The title or description contains a word we do not allow.'
+
+    cursor.execute(f"select * from question_package where qp_name = '{qp_name}'")
+    res = cursor.fetchone()
+    if res:
+        session['message'] = 'Could not proceed, the name was unfortunately already taken.'
         return redirect(url_for('create_question_package'))
+    else:
+        if save_qp_to_db(qp_name, qp_desc, qp_tags) == True:
+            return redirect(url_for('create_question'))
+        else:
+            session['message'] = 'Could not continue. The title or description contains a word we do not allow.'
+            return redirect(url_for('create_question_package'))
 
 @app.route('/control_questions_answers', methods = ['GET', 'POST'])
 def control_questions_answers():
@@ -318,6 +325,7 @@ def user_logout():
     session.pop('username', None)
     session.pop('was_playing', None)
     session.pop('qp_name', None)
+    session['message'] = ""
     return redirect(url_for('sign_in'))
 
 @app.route('/terms_conditions')
@@ -383,6 +391,7 @@ def save_qp_to_db(qp_name, qp_desc, qp_tags):
         cursor.commit()
         apply_tags_to_qp(qp_tags)
         return True
+       
 
 def get_question(question, answer_1, answer_2, answer_3, answer_4):
     question_list = []
