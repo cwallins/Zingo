@@ -173,7 +173,7 @@ def view_all_question_package():
         letter = filter(str.isalnum, tag)
         word = "".join(letter)
         list_of_tags.append(word)
-
+        
     list_of_tags.sort()
 
     return render_template("view_all_question_package.html", qp_list = res, tags = list_of_tags)
