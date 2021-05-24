@@ -15,7 +15,7 @@ $("#question-game-questions .show-question button").on("click", function() {
   }
 //om det inte finns en ny fråga skriv ut poäng och göm timer annars starta tiden igen
   if (!$(this).parent().next().hasClass('show-question')){
-    $(".scoretest").text("Final score: " + $("#score").val())
+    $(".scoretest").text("Your final score: " + $("#score").val())
     $(".timer").empty()
   } else{
     timer()
@@ -64,12 +64,6 @@ function resetTimer(timer){
   console.log(time)
 }
 
-$("#delete-btn").on("click", function(){
-  // console closest element with class=".created_question_packages"
-  console.log($(this).closest('.created_question_packages'))
-  // hide this selected element
-  $(this).closest('.created_question_packages').hide()
-});
 
 $(".read_more-link").on("click", function(){
   alert("This is where our terms and conditions are. How fun!")

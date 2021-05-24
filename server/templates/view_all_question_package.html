@@ -10,7 +10,7 @@
   <!--View all games-->
   <div class="row align-items-center mt-4">
     <div class="col-12 text-center mt-4 new-games-title">
-      <h2 id="new-games-title">New Games!</h2>
+      <h1 id="new-games-title">New Games!</h1>
     </div>
   </div>
   
@@ -39,9 +39,9 @@
         {% for question_package in qp_list %}
         <div class="card col-xxl-3 col-lg-5 col-sm-11" id="cards">
           <div class="card-body cards">
-            <h5 class="card-title"> {{ question_package[0] }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted"> {{ question_package[2] }}</h6>
+            <h5 class="card-title"> {{ question_package[0] }}</h5> 
             <p class="card-text"> {{ question_package[1] }}</p>
+            <h6 class="card-subtitle mb-2 text-muted"> {{ question_package[2] }}</h6>
             <button type="button" class="btn btn-lg btn-warning button_cards"><a href="{{ url_for('view_one_question_package', qp_name = question_package[0]) }}" id="package-button">View game</a></button>
           </div>         
         </div>

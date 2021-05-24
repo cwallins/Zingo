@@ -11,7 +11,8 @@
   <div class="container my_profile">
     <div class="row mt-4">
         <div class="col-12 text-center mt-4">
-            <h2>My Profile</h2>
+            <h1>My Profile</h1>
+            <hr>
         </div> 
         <div class="col-12 mt-4">
             <img src="./static/user.png" class="img-fluid" id="profile_picture"> 
@@ -26,13 +27,15 @@
     </div>
     <!--Skapa ett frågepaket--> 
     <div class="row mt-4">
+      <div class="col-12 text-center">
         <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
+      </div>
     </div>
 
     <!--Favoritspel-->
 
     <div class="row mt-4 divbox justify-content-center">
-        <h2>Here are your created question packages</h2>
+        <h3>Here are your created question packages</h3>
             {% for i in games %}
               <div class="card col-xxl-3  col-lg-5 col-sm-11" id="cards">
                 <div class="card-body created_question_packages">
@@ -41,7 +44,6 @@
                   <p class="card-text"> {{ i[2] }}</p>
                   <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = i[0]) }}" id="package-button">View</a></button>
                   <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}" id="package-button">Edit</a></button>
-                  <button type="button" id="package-button" class="btn btn-warning">Delete</button>
                 </div>
               </div>
             {% endfor %}

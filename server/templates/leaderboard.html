@@ -9,7 +9,7 @@ Leaderboard
   <h1 class="text-center">You just completed {{ qp_name }}!</h1>
 </div>
 <div class="row justify-content-center mt-4">
-  <h2 class="text-center">Your score is: {{ result }}</h2>
+  <h2 class="text-center">Your final score is: {{ result }}</h2>
 </div>
 <div class="leaderboard">
   <table class="table table-leaderboard">
@@ -32,6 +32,8 @@ Leaderboard
   </table>
 </div>
 <div class="row justify-content-center">
-  <button type="button" class="btn btn-lg btn-warning back-btn-leaderboard"><a href="{{ url_for('view_all_question_package') }}">Back to Question packages</a></button>
+  <div class="col-12 text-center">
+  <button type="button" class="btn btn-lg btn-warning mt-4 back-btn-leaderboard"><a href="{{ url_for('view_all_question_package') }}"> Go Back to Question packages</a></button>
+</div>
 </div>
 {% endblock %}
