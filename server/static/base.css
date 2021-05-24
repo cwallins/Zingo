@@ -27,7 +27,7 @@ body a {
 }
 
 .main {
-  z-index: 99; /* Make sure it does not overlap */
+  z-index: 99; /*Make sure it does not overlap */
 }
 #logout a{ 
   color:#ffc107;
