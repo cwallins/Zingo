@@ -29,16 +29,12 @@ body a {
   color:black
 }
 
-.main {
-  /*z-index: 99; Make sure it does not overlap */
-}
-
 #logout a { 
   color:#ffc107;
   text-decoration: none;
 }
 
-#logout a:hover{
+#logout a:hover {
   color:black;
 }
 
@@ -64,7 +60,7 @@ body a:hover {
 
 }
 
-#create_game-link, #choose_game-link, #sign_in-link{
+#create_game-link, #choose_game-link, #sign_in-link {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.8);
   top: 50%;
@@ -78,7 +74,7 @@ body a:hover {
   padding: 5px;
 }
 
-#create_game-link:hover, #choose_game-link:hover, #sign_in-link:hover{
+#create_game-link:hover, #choose_game-link:hover, #sign_in-link:hover {
   color: rgb(77, 77, 77);
 }
 
@@ -135,22 +131,22 @@ body a:hover {
   margin-top: 1rem;
 }
 
-.back-btn-leaderboard a{
+.back-btn-leaderboard a {
 text-decoration: none;
 }
 
-#contact-us{
+#contact-us {
   text-decoration: none;
   color:rgba(255,255,255,.55);
 }
 
-#contact-us a:hover{
+#contact-us a:hover {
   color:rgba(255, 255, 255);
 }
 
 /* View_all_games */
 
-#cards{
+#cards {
   background-image: url(zingo.png);
   background-color: rgb(250, 250, 165);
   background-repeat: no-repeat;
@@ -164,11 +160,11 @@ text-decoration: none;
   box-shadow: 2px 2px 4px rgb(59, 13, 13); 
 }
 
-#new-games-title{
+#new-games-title {
   margin-bottom: 3.5rem;
 }
 
-.filter_genre{
+.filter_genre {
   width: 25%;
   box-sizing: border-box;
   overflow: hidden;
@@ -186,30 +182,30 @@ text-decoration: none;
   color: #ffffff; 
 }
 
-.divbox{
+.divbox {
   box-sizing: border-box;
 }
 /* Create package */
 
-.rules{
+.rules {
   background-color: rgb(59, 13, 13);
 }
 
-.rules{
+.rules {
   border-color: black;
   
 }
 
-#rules-text{
+#rules-text {
   color: rgb(59, 13, 13);
 }
 
-.rules-undertext{
+.rules-undertext {
   background-color: white;
   border-radius: 3px;
 }
 
-.link-warning{
+.link-warning {
   text-decoration: none;
 }
 
@@ -217,12 +213,12 @@ text-decoration: none;
   margin-top:20px;
 }
 
-#add_question{
+#add_question {
   text-align: left;
   margin: 0.25rem;
 }
 
-#save_changes{
+#save_changes {
   text-align: right;
   margin: 0.25rem;
 }
@@ -232,11 +228,11 @@ text-decoration: none;
   padding: 0;
 }
 
-#done{
+#done {
   float: right;
 }
 
-#zingoimage{
+#zingoimage {
   opacity: 50%;
 }
 
@@ -245,42 +241,42 @@ text-decoration: none;
 }
 
 /* CSS for the Contact_us-form*/
-.contact{
+.contact {
   padding: 4%;
   height: 400px;
 }
 
-.col-md-3{
+.col-md-3 {
   background: #ff9b00;
   padding: 4%;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
 }
 
-.contact-info{
+.contact-info {
   margin-top:10%;
 }
 
-.contact-info img{
+.contact-info img {
   margin-bottom: 15%;
 }
 
-.contact-info h2{
+.contact-info h2 {
   margin-bottom: 10%;
 }
 
-.col-md-9{
+.col-md-9 {
   background: #fff;
   padding: 3%;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
 }
 
-.contact-form label{
+.contact-form label {
   font-weight:600;
 }
 
-.contact-form button:focus{
+.contact-form button:focus {
   box-shadow:none;
 }
 
