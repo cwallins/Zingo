@@ -23,7 +23,6 @@ body {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  
 }
 
 body a {
@@ -34,7 +33,7 @@ body a {
   /*z-index: 99; Make sure it does not overlap */
 }
 
-#logout a{ 
+#logout a { 
   color:#ffc107;
   text-decoration: none;
 }
@@ -59,7 +58,7 @@ body a:hover {
 
 /* Homepage */
 
-.container_1, .container_2, .container_3{
+.container_1, .container_2, .container_3 {
   position: relative;
   text-align: center;
 
@@ -255,7 +254,7 @@ text-decoration: none;
   opacity: 50%;
 }
 
-.button-cards {
+.button_cards {
   border: 5px;
 }
 /*
