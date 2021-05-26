@@ -52,6 +52,7 @@ function timer(){
     }   
   }
 }
+
 //Stops the time and resets
 function resetTimer(timer){
   clearInterval(timer)
