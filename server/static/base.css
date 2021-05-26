@@ -57,7 +57,6 @@ body a:hover {
 .container_1, .container_2, .container_3 {
   position: relative;
   text-align: center;
-
 }
 
 #create_game-link, #choose_game-link, #sign_in-link {
@@ -103,7 +102,6 @@ body a:hover {
   padding: 1.5rem;
   text-align: center;
   margin-top: 4rem;
-
 }
 
 #timer {
@@ -132,7 +130,7 @@ body a:hover {
 }
 
 .back-btn-leaderboard a {
-text-decoration: none;
+  text-decoration: none;
 }
 
 #contact-us {
@@ -168,7 +166,6 @@ text-decoration: none;
   width: 25%;
   box-sizing: border-box;
   overflow: hidden;
-
 }
 
 .footer {
@@ -185,6 +182,7 @@ text-decoration: none;
 .divbox {
   box-sizing: border-box;
 }
+
 /* Create package */
 
 .rules {
@@ -193,7 +191,6 @@ text-decoration: none;
 
 .rules {
   border-color: black;
-  
 }
 
 #rules-text {
@@ -241,6 +238,7 @@ text-decoration: none;
 }
 
 /* CSS for the Contact_us-form*/
+
 .contact {
   padding: 4%;
   height: 400px;
