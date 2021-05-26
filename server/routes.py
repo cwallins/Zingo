@@ -74,10 +74,9 @@ def sign_in():
 def my_profile():
     if 'loggedin' in session:
         session['message'] = ""
-        qp_list = list_of_games()
         cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id] where u.nickname = '{session['username']}'")
-        res = cursor.fetchall()
-        return render_template("my_profile.html", username=session['username'], games = res)
+        game_info = cursor.fetchall()
+        return render_template("my_profile.html", username = session['username'], games = game_info)
     else:
         return redirect(url_for('sign_in'))
 
@@ -88,95 +87,37 @@ def profile_settings():
 @app.route('/create_question_package')
 def create_question_package():
     if 'loggedin' in session:
-        cursor.execute("select tag_description from tag")
-        tags = cursor.fetchall()
-
-        list_of_tags = []
-
-        for tag in tags:
-            letter = filter(str.isalnum, tag)
-            word = "".join(letter)
-            list_of_tags.append(word)
-        
-        list_of_tags.sort()
-
-        return render_template("create_question_package.html", tags=list_of_tags, msg=session['message'])
-
+        list_of_tags = get_tags()
+        return render_template("create_question_package.html", tags = list_of_tags, msg = session['message'])
     else:
         return redirect(url_for('sign_in'))
 
 @app.route('/create_question')
 def create_question():
-
-    cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
-    questions = cursor.fetchall()
-    list_of_questions = []
+    list_of_questions = sp_get_questions(session['qp_name'])
     qna = []
-    for i in questions:    
-        list_of_questions.append(i[0])
-    
     return render_template("create_question.html", qp_name = session['qp_name'], questions = list_of_questions, qna = qna, msg = session['message'])
 
 @app.route('/edit_qp/<qp_name>')
 def edit_qp(qp_name):
     session['qp_name'] = qp_name
-    cursor.execute(f"exec sp_get_questions '{qp_name}'")
-    questions = cursor.fetchall()
-    
+    list_of_questions = sp_get_questions(session['qp_name'])
     qna = []
-
-    list_of_questions = []
-    
-    for i in questions:    
-        list_of_questions.append(i[0])
-
     return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = qna, msg = session['message'])
 
 @app.route('/edit_qp/<qp_name>/<question>')
 def edit_q(qp_name, question):
-    cursor.execute(f"exec sp_get_questions '{qp_name}'")
-    questions = cursor.fetchall()
-    
-    list_of_questions = []
-    
-    for i in questions:    
-        list_of_questions.append(i[0])
-
-    question_and_answers = []
-    for i in questions:
-        if question in i:
-            for x in i:
-                question_and_answers.append(x)
-
+    list_of_questions = sp_get_questions(qp_name)
+    question_and_answers = get_questions_and_answers(qp_name, question)
     session['question'] = question_and_answers[0]
-
     return render_template("create_question.html", qp_name = qp_name, questions = list_of_questions, qna = question_and_answers)
-
-@app.route('/receive_temporal_user', methods = ['GET', 'POST'])
-def receive_temporal_user():
-    string = request.args.get("url")
-    temp_user = request.form['temporary_username']
-    session['temp_login'] = True
-    session['username'] = temp_user
-    return redirect(string)
 
 @app.route('/view_all_question_package')
 def view_all_question_package():
     cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
-    res = cursor.fetchall()
-    cursor.execute("select tag_description from tag")
-    tags = cursor.fetchall()
-
-    list_of_tags = []
-
-    for tag in tags:
-        letter = filter(str.isalnum, tag)
-        word = "".join(letter)
-        list_of_tags.append(word)
-        
-    list_of_tags.sort()
-
-    return render_template("view_all_question_package.html", qp_list = res, tags = list_of_tags)
+    qp_list = cursor.fetchall()
+    list_of_tags = get_tags()
+    return render_template("view_all_question_package.html", qp_list = qp_list, tags = list_of_tags)
 
 @app.route('/view_one_question_package/<qp_name>')
 def view_one_question_package(qp_name):
@@ -193,7 +134,7 @@ def view_one_question_package(qp_name):
         session['username'] = 'User'
         username = session['username']
     
-    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = username, leaderboard=lb)
+    return render_template("view_one_question_package.html", qp_name = qp_name, qp_desc = qp_desc, username = username, leaderboard = lb)
 
 @app.route('/control_qp_name_desc', methods = ['GET', 'POST'])
 def control_qp_name_desc():
@@ -202,8 +143,9 @@ def control_qp_name_desc():
     qp_tags = request.form['qp_tag']
 
     cursor.execute(f"select * from question_package where qp_name = '{qp_name}'")
-    res = cursor.fetchone()
-    if res:
+    qp_info = cursor.fetchone()
+    
+    if qp_info:
         session['message'] = 'Could not proceed, the name was unfortunately already taken.'
         return redirect(url_for('create_question_package'))
     else:
@@ -224,8 +166,8 @@ def control_questions_answers():
     cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
     questions = cursor.fetchall()
 
-    for i in questions:
-        if question == i[0] and answer_1 == i[1] and answer_2 == i[2] and answer_3 == i[3] and answer_4 == i[4]:
+    for question in questions:
+        if question == question[0] and answer_1 == question[1] and answer_2 == question[2] and answer_3 == question[3] and answer_4 == question[4]:
             msg = 'The question does already exist in the question package.'
             session['message'] = msg
             return redirect(url_for('create_question'))
@@ -236,7 +178,6 @@ def control_questions_answers():
         msg = 'The question contained a word which we do not allow.'
     
     session['message'] = msg
-    
     
     return redirect(url_for('create_question'))
 
@@ -249,19 +190,8 @@ def edit_question():
     answer_4 = request.form['answer_4']
 
     cursor.execute(f"select q_id from question where question = '{session['question']}'")
-    res = cursor.fetchone()
-    question_id = res[0]
+    question_id = cursor.fetchone()[0]
 
-    '''
-    cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
-    questions = cursor.fetchall()
-
-    for i in questions:
-        if question == i[0] and answer_1 == i[1] and answer_2 == i[2] and answer_3 == i[3] and answer_4 == i[4]:
-            msg = 'The question does already exist in the question package.'
-            session['message'] = msg
-            return redirect(url_for('edit_qp', qp_name=session['qp_name']))
-    '''
     if get_question(question, answer_1, answer_2, answer_3, answer_4) == True:
         cursor.execute(f"delete from question where q_id = {question_id}")
         cursor.commit()
@@ -271,7 +201,7 @@ def edit_question():
     
     session['message'] = msg
 
-    return redirect(url_for('edit_qp', qp_name=session['qp_name']))
+    return redirect(url_for('edit_qp', qp_name = session['qp_name']))
 
 @app.route('/add_new_user', methods = ["GET", "POST"])
 def add_new_user():
@@ -279,8 +209,8 @@ def add_new_user():
     password_1 = request.form["password1"]
     password_2 = request.form["password2"]
     email = request.form["email"]
-    firstname = request.form["firstname"]
-    lastname = request.form["lastname"]
+    first_name = request.form["firstname"]
+    last_name = request.form["lastname"]
 
     if password_1 != password_2:
         session['message'] = "The passwords must be the same"
@@ -289,14 +219,14 @@ def add_new_user():
         session['message'] = 'Could not proceed, the password did not meet the requirements.'
         return redirect(url_for('register'))
     else:
-        cursor.execute(f"exec sp_add_user '{email}', '{password_2}', '{username}', '{firstname}', '{lastname}'")
+        cursor.execute(f"exec sp_add_user '{email}', '{password_2}', '{username}', '{first_name}', '{last_name}'")
         cursor.commit()
         session['loggedin'] = True
         session['email'] = email
         session['username'] = username
     
     if 'was_playing' in session:
-        return redirect(url_for('in_game_show_question', chosen_qp=session['was_playing'], admin=session['username']))
+        return redirect(url_for('in_game_show_question', chosen_qp = session['was_playing'], admin = session['username']))
     else:
         return redirect(url_for("my_profile"))
 
@@ -344,38 +274,29 @@ def contact_us():
         last_name = data[1]
         email = data[2]
 
-    return render_template('contact_us.html', first_name=first_name, last_name=last_name, email=email)
-
-def list_of_games():
-    cursor.execute(f"select qp_name from vw_qp_with_nick where nickname = '{session['username']}'")
-    res = cursor.fetchall()
-    qp_list = []
-    for i in res:
-        qp_list.append(i[0])
-           
-    return qp_list
+    return render_template('contact_us.html', first_name = first_name, last_name = last_name, email = email)
 
 def apply_tags_to_qp(tag_list):
     cursor.execute(f"select qp_id from question_package where qp_name = '{session['qp_name']}'")
-    res = cursor.fetchone()
-    qp_id = res[0]
+    qp_id = cursor.fetchone()[0]
     tags = []
     tags.append(tag_list)
-    for i in tags:
-        cursor.execute(f"select tag_id from tag where tag_description = '{i}'")
-        row = cursor.fetchone()
-        tag_id = row[0]
+    for tag in tags:
+        cursor.execute(f"select tag_id from tag where tag_description = '{tag}'")
+        tag_id = cursor.fetchone()[0]
         cursor.execute(f"insert into question_package_tag (qp_id, tag_id) values ({qp_id}, {tag_id})")
         cursor.commit()
 
 def save_qp_to_db(qp_name, qp_desc, qp_tags):
     cursor.execute(f"select [user_id] from [user] where e_mail = '{session['email']}'")
-    res = cursor.fetchone()
-    user_id = res[0]
+    user_id = cursor.fetchone()[0]
+
     qp_ndu = []
     nl = []
+
     qp_ndu.append(qp_name.split(" "))
     qp_ndu.append(qp_desc.split(" "))
+
     for i in qp_ndu:
         for x in i:
             y = filter(str.isalnum, x)
@@ -384,7 +305,6 @@ def save_qp_to_db(qp_name, qp_desc, qp_tags):
 
     if check_words_aginst_db(nl):
         return False
-
     else:
         session['qp_name'] = qp_name
         cursor.execute(f"insert into question_package (qp_description, created_by, qp_name) values ('{qp_desc}', {user_id}, '{qp_name}')")
@@ -392,15 +312,16 @@ def save_qp_to_db(qp_name, qp_desc, qp_tags):
         apply_tags_to_qp(qp_tags)
         return True
        
-
 def get_question(question, answer_1, answer_2, answer_3, answer_4):
     question_list = []
     alnum_list = []
+
     question_list.append(question.split(" "))
     question_list.append(answer_1.split(" "))
     question_list.append(answer_2.split(" "))
     question_list.append(answer_3.split(" "))
     question_list.append(answer_4.split(" "))
+
     for i in question_list:
         for x in i:
             y = filter(str.isalnum, x)
@@ -410,56 +331,40 @@ def get_question(question, answer_1, answer_2, answer_3, answer_4):
     if check_words_aginst_db(alnum_list):
         return False
     else:
-        #-- before running: !Control that a session with qp_name is created during creation of new qp!
         qp_name = session['qp_name']
 
         cursor.execute(f"select qp_id from question_package where qp_name = '{qp_name}'")
-        res = cursor.fetchone()
-        current_qp_id = res[0]
+        current_qp_id = cursor.fetchone()[0]
+
         cursor.execute(f"insert into question (question, answer_1_correct, answer_2, answer_3, answer_4, qp_id) values ('{question}', '{answer_1}', '{answer_2}', '{answer_3}', '{answer_4}', {current_qp_id})")
         cursor.commit()
         return True
 
 def check_words_aginst_db(all_words):
-    l = []
+    new_list = []
 
     for word in all_words:
         profanity = read_from_db("ugly_words", "*", f"where profanity = '{word}'")
         if profanity:
-            l.append(word)
+            new_list.append(word)
 
-    if len(l) > 0:
-        return l
-
+    if len(new_list) > 0:
+        return new_list
 
 @app.route('/search', methods = ['GET', 'POST'])
 def search_form():
     if 'search_input' in request.form:
         search_input = request.form['search_input']
+
         cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
         res = cursor.fetchall()
     elif 'qp_tag' in request.form:
         qp_tag = request.form['qp_tag']
+
         cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id] join question_package_tag qt on q.qp_id = qt.qp_id join tag t on t.tag_id = qt.tag_id where t.tag_description = '{qp_tag}'")         
         res = cursor.fetchall()
-
-    list_of_qp = []
-
-    for x in res:
-        for qp in x:
-            list_of_qp.append(qp)
     
-    cursor.execute("select tag_description from tag")
-    tags = cursor.fetchall()
-
-    list_of_tags = []
-
-    for tag in tags:
-        letter = filter(str.isalnum, tag)
-        word = "".join(letter)
-        list_of_tags.append(word)
-        
-    list_of_tags.sort()
+    list_of_tags = get_tags()
 
     if res:
         return render_template("view_all_question_package.html", qp_list = res, tags = list_of_tags)
@@ -467,33 +372,24 @@ def search_form():
         session['message'] = 'Could not find any question packages, please try again.'
         return render_template('view_all_question_package.html', msg = session['message'], tags = list_of_tags)
 
-'''@app.route('/invite_player/<qp_name>/<admin>')
-def invite_player(qp_name, admin):
-    string = f"http://127.0.0.1:5000/invite_player/{qp_name}/{admin}"
-    if 'loggedin' in session or 'temp_login' in session:
-        username = session['username']
-        if username == admin:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = True, guest = False, username = username)
-        else:
-            return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = False, username = username)
-    else:
-        return render_template("invite_player.html", qp_name = qp_name, url = string, admin = False, guest = True, username = "")'''
-
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
-    # url = f'localhost:5000/playing/{chosen_qp}/{admin}' 
     questions = ask_questions(chosen_qp)
     shuffle(questions)
+
     for question in questions:
         shuffle(question['answers'])
+
     cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
     qp_id = cursor.fetchone()[0]
+
     if admin == 'User':
         session['message'] = "You are currently not logged in. Your score will not be saved. Do you wish to create an account?"
         session['was_playing'] = chosen_qp
     else:
         session['message'] = ""
-    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id=qp_id, username=admin, msg=session['message'])
+
+    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id = qp_id, username = admin, msg = session['message'])
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
@@ -536,22 +432,19 @@ def save_results_to_db():
     session['qp_name'] = qp_name
     session['result'] = result
 
-    return redirect(url_for('show_leaderboard', qp_name=qp_name))
+    return redirect(url_for('show_leaderboard', qp_name = qp_name))
 
 @app.route('/leaderboard/<qp_name>')
 def show_leaderboard(qp_name):
-    result=session['result']
-    player=session['username']
+    result = session['result']
+    player = session['username']
     lb = leaderboard(qp_name)
-    print(lb)
 
-    return render_template("leaderboard.html", leaderboard=lb, qp_name=qp_name, result=result, player=player)
+    return render_template("leaderboard.html", leaderboard = lb, qp_name = qp_name, result = result, player = player)
 
 def leaderboard(qp_name):
     cursor.execute(f"select nickname, score from vw_leaderboard where qp_name = '{qp_name}' order by score desc")
     leaderboard = cursor.fetchall()
-    print(leaderboard)
-    print(qp_name)
 
     lb = []
 
@@ -562,3 +455,42 @@ def leaderboard(qp_name):
         })
 
     return lb
+
+def sp_get_questions(qp_name):
+    cursor.execute(f"exec sp_get_questions '{qp_name}'")
+    questions = cursor.fetchall()
+
+    list_of_questions = []
+
+    for question in questions:    
+        list_of_questions.append(question[0])
+
+    return list_of_questions
+
+def get_questions_and_answers(qp_name, question):
+    cursor.execute(f"exec sp_get_questions '{qp_name}'")
+    questions = cursor.fetchall()
+
+    question_and_answers = []
+    for i in questions:
+        if question in i:
+            for x in i:
+                question_and_answers.append(x)
+    return question_and_answers
+
+def get_tags():
+    cursor.execute("select tag_description from tag")
+    tags = cursor.fetchall()
+
+    list_of_tags = []
+
+    for tag in tags:
+        # Removes any character that isn't a letter or number
+        letter = filter(str.isalnum, tag)
+        # Combines every letter and/or number into one string
+        word = "".join(letter)
+        # Adds the string(word) to list_of_tags
+        list_of_tags.append(word)
+        
+    list_of_tags.sort()
+    return list_of_tags
