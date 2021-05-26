@@ -138,12 +138,12 @@ body a:hover {
 text-decoration: none;
 }
 
-.contact-us{
+#contact-us{
   text-decoration: none;
   color:rgba(255,255,255,.55);
 }
 
-.contact-us a:hover{
+#contact-us a:hover{
   color:rgba(255, 255, 255);
 }
 
