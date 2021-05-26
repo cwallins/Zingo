@@ -1,16 +1,11 @@
 {% extends "base.html" %}
-
 <!--Title block-->
 {% block title %}
 Home page
 {% endblock %}
-
 <!--Content block-->
 {% block content %}
-<!--Frågeformulär-->
-
 <div class="row justify-content-center">
-
     <div class="col-lg-6 edit">
         <div class="row justify-content-center">
             <div class="col-lg-11">
@@ -59,29 +54,29 @@ Home page
     </div>
     <div class="col-lg-6 edit">
         <div class="row justify-content-center">
-        <div class="col-lg-11">
-            <article>
-                <h2 class="mb-3">Your Questions</h2>
-                <hr>
-                <ul class="margin-0">
-                    {% for question in questions %}
-                    <li class="list-group-item list-group-item-light" id="list_of_question">
-                        <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }}
-                            [EDIT]</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </article>
-            <div class="button-box mb-3">
-                <form action="{{ url_for('my_profile') }}">
-                    <!--save question package-->
-                    <div>
-                        <button type="submit" class="btn btn-lg btn-warning mt-4" id="done" value="save_qp">DONE</button>
-                    </div>
-                </form>
+            <div class="col-lg-11">
+                <article>
+                    <h2 class="mb-3">Your Questions</h2>
+                    <hr>
+                    <ul class="margin-0">
+                        {% for question in questions %}
+                        <li class="list-group-item list-group-item-light" id="list_of_question">
+                            <a href="{{ url_for('edit_q', qp_name = qp_name, question = question) }}">{{ question }}
+                                [EDIT]</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+                <div class="button-box mb-3">
+                    <form action="{{ url_for('my_profile') }}">
+                        <div>
+                            <button type="submit" class="btn btn-lg btn-warning mt-4" id="done"
+                                value="save_qp">DONE</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 {% endblock %}

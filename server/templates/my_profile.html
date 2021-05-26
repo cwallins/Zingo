@@ -1,61 +1,52 @@
 {% extends "base.html" %}
-
 <!--Title block-->
 {% block title %}
-    Home page
+Home page
 {% endblock %}
-
 <!--Content block-->
 {% block content %}
- <!--Välkomen och profil-->
-  <div class="container my_profile">
-    <div class="row mt-4">
-        <div class="col-12 text-center mt-4">
-            <h1>My Profile</h1>
-            <hr>
-        </div> 
-        <div class="col-12 mt-4">
-            <img src="./static/user.png" class="img-fluid" id="profile_picture"> 
-        </div>
-        <div class="col-12 text-center mt-4">
-            <h3>{{ username }}</h3> 
-        </div>
-        <!--Länk till profilinställningar-->
-        <div class="col-12 text-center mt-3">
-          <a href="{{ url_for('profile_settings') }}">Profile Settings</a>
-        </div>
+<div class="container my_profile">
+  <div class="row mt-4">
+    <div class="col-12 text-center mt-4">
+      <h1>My Profile</h1>
+      <hr>
     </div>
-    <!--Skapa ett frågepaket--> 
-    <div class="row mt-4">
-      <div class="col-12 text-center">
-        <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
+    <div class="col-12 mt-4">
+      <img src="./static/user.png" class="img-fluid">
+    </div>
+    <div class="col-12 text-center mt-4">
+      <h3>{{ username }}</h3>
+    </div>
+    <div class="col-12 text-center mt-3">
+      <a href="{{ url_for('profile_settings') }}">Profile Settings</a>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12 text-center">
+      <a href="{{ url_for('create_question_package') }}">Create Question Package</a>
+    </div>
+  </div>
+  <div class="row mt-4 divbox justify-content-center">
+    <h3>Here are your created question packages</h3>
+    {% for i in games %}
+    <div class="card col-xxl-3  col-lg-5 col-sm-11" id="cards">
+      <div class="card-body created_question_packages">
+        <h5 class="card-title"> {{ i[0] }}</h5>
+        <h6 class="card-text"> {{ i[1] }}</h6>
+        <p class="card-subtitle mb-2 text-muted"> {{ i[2] }}</p>
+        <button type="button" class="btn btn-warning"><a
+            href="{{ url_for('view_one_question_package', qp_name = i[0]) }}" id="package-button">View</a></button>
+        <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}"
+            id="package-button">Edit</a></button>
       </div>
     </div>
-
-    <!--Favoritspel-->
-
-    <div class="row mt-4 divbox justify-content-center">
-        <h3>Here are your created question packages</h3>
-            {% for i in games %}
-              <div class="card col-xxl-3  col-lg-5 col-sm-11" id="cards">
-                <div class="card-body created_question_packages">
-                  <h5 class="card-title"> {{ i[0] }}</h5>
-                  <h6 class="card-text"> {{ i[1] }}</h6>
-                  <p class="card-subtitle mb-2 text-muted"> {{ i[2] }}</p>
-                  <button type="button" class="btn btn-warning"><a href="{{ url_for('view_one_question_package', qp_name = i[0]) }}" id="package-button">View</a></button>
-                  <button type="button" class="btn btn-warning"><a href="{{ url_for('edit_qp', qp_name = i[0]) }}" id="package-button">Edit</a></button>
-                </div>
-              </div>
-            {% endfor %}
+    {% endfor %}
+  </div>
+  <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
+      <button onclick="topFunction()" id="myBtn" class="btn btn-lg btn-warning mb-4" title="Go to top">Go back to
+        Top</button>
     </div>
-    <div class="row justify-content-center">
-      <div class="d-flex justify-content-center">
-        <button onclick="topFunction()" id="myBtn" class="btn btn-lg btn-warning mb-4" title="Go to top">Go back to Top</button>
-      </div>  
-    </div>
-
-    <!--Se skapade frågepaket, tänk på att det ska visas spel från unik användare-->
-
-  </div> 
+  </div>
+</div>
 {% endblock %}
-

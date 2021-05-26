@@ -7,32 +7,33 @@ Register/Sign In
 {% block content %}
 
 <div class="container contact">
-	<div class="row justify-content-center"> 
+    <div class="row justify-content-center">
         <div class="col-12 text-center">
             <h1>Contact Us</h1>
             <hr>
             <h4>We would love to hear from you!</h4>
-            
         </div>
         <form class="contact_us_form" onsubmit="return false;">
-           
             <div class="contact-form mt-3">
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="fname">First Name:</label>
-                    <div class="col-sm-10">          
-                        <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname" value="{{ first_name }}">
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname"
+                            value="{{ first_name }}">
                     </div>
                 </div>
                 <div class="form-group mt-3">
                     <label class="control-label col-sm-2" for="lname">Last Name:</label>
-                    <div class="col-sm-10">          
-                        <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="lname" value="{{ last_name }}">
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="lname"
+                            value="{{ last_name }}">
                     </div>
                 </div>
                 <div class="form-group mt-3">
                     <label class="control-label col-sm-2" for="email">Email:</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="{{ email }}">
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"
+                            value="{{ email }}">
                     </div>
                 </div>
                 <div class="form-group mt-3">
@@ -44,14 +45,14 @@ Register/Sign In
                 <div class="form-group" id="feedback-popup">
                     <p col-sm-2>Thank you for your feedback!</p>
                 </div>
-                <div class="form-group">        
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button class="btn btn-lg btn-warning" id="feedback-send" type="submit" value="send_message">Send</button>
+                        <button class="btn btn-lg btn-warning" id="feedback-send" type="submit"
+                            value="send_message">Send</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
 {% endblock %}

@@ -1,38 +1,29 @@
 {% extends "base.html" %}
-
-<!--Title block-->
 {% block title %}
-    Home page
+Home page
 {% endblock %}
-
-<!--Content block-->
-{% block content %} 
-
+{% block content %}
 <div class="container justify-content-center">
-
-    <!--Namn på frågepaket-->
-    <div class="row justify-content-center">
-      <div class="col-12 text-center">  
-          <h2>{{ qp_name }}</h2>
-        </div>
+  <div class="row justify-content-center">
+    <div class="col-12 text-center">
+      <h2>{{ qp_name }}</h2>
     </div>
-    <!--Beskrivning av frågepaket-->
-    <div class="row justify-content-center">
-      <div class="col-12 text-center">
-        <p>Game Description: {{ qp_desc }}</p>
-      </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12 text-center">
+      <p>Game Description: {{ qp_desc }}</p>
     </div>
-
-    <!--Starta ett spel-knapp-->
-    <div class="button-box mb-3">
-      <div class="col-12 text-center">
-        <button type="button"  class="btn btn-lg btn-warning" ><a href="{{ url_for('view_all_question_package') }}" id="package-button">Go Back</a></button>
-        <button type="button"  class="btn btn-lg btn-warning" ><a href="{{ url_for('in_game_show_question', chosen_qp = qp_name, admin = username) }}" id="package-button">Play game</a></button>
-      </div>
+  </div>
+  <div class="button-box mb-3">
+    <div class="col-12 text-center">
+      <button type="button" class="btn btn-lg btn-warning"><a href="{{ url_for('view_all_question_package') }}"
+          id="package-button">Go Back</a></button>
+      <button type="button" class="btn btn-lg btn-warning"><a
+          href="{{ url_for('in_game_show_question', chosen_qp = qp_name, admin = username) }}" id="package-button">Play
+          game</a></button>
     </div>
-    
+  </div>
 </div>
-
 <div class="leaderboard">
   <table class="table table-leaderboard">
     <thead>
@@ -53,5 +44,4 @@
     </tbody>
   </table>
 </div>
-
 {% endblock %}

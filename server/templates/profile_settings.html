@@ -1,47 +1,43 @@
 {% extends "base.html" %}
-
 {% block title %}
 Register/Sign In
 {% endblock %}
-
 {% block content %}
 <div class="container form">
   <div class="row">
-    <!-- ladda upp användares uppgifter i formuläret för att kunna redigera/ändra-->
     <div class="col-sm-12">
       <h1>Profile Settings</h1>
       <hr>
       <form class="register" action="/add_new_user" method="POST">
         <div class="form-group mb-3">
           <p>Below you can change your current profile details</p>
-          <label for="exampleInputPassword1">First Name</label>
-          <input name="firstname" type="Firstname" class="form-control" id="exampleInputPassword1"
+          <label for="firstname">First Name</label>
+          <input name="firstname" type="Firstname" class="form-control" id="firstname"
             placeholder="Firstname">
         </div>
         <div class="form-group mb-3">
-          <label for="exampleInputPassword1">Last Name</label>
-          <input name="lastname" type="Lastname" class="form-control" id="exampleInputPassword1" placeholder="Lastname">
+          <label for="lastname">Last Name</label>
+          <input name="lastname" type="Lastname" class="form-control" id="lastname" placeholder="Lastname">
         </div>
         <div class="form-group mb-3">
-          <label for="exampleInputPassword1">Username</label>
-          <input name="username" type="username" class="form-control" id="exampleInputPassword1" placeholder="Username">
+          <label for="username">Username</label>
+          <input name="username" type="username" class="form-control" id="username" placeholder="Username">
         </div>
         <div class="form-group mb-3">
-          <label for="exampleInputEmail1">Email address</label>
-          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          <label for="email">Email address</label>
+          <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp"
             placeholder="Enter email">
         </div>
         <div class="form-group mb-3">
-          <label for="exampleInputPassword1">Password</label>
-          <input name="password1" type="password" class="form-control" id="exampleInputPassword1"
+          <label for="password">Password</label>
+          <input name="password1" type="password" class="form-control" id="password"
             placeholder="Password">
         </div>
         <div class="form-group mb-3">
-          <label for="exampleInputPassword1">Confirm Password</label>
-          <input name="password2" type="password" class="form-control" id="exampleInputPassword1"
+          <label for="confirmpassword">Confirm Password</label>
+          <input name="password2" type="password" class="form-control" id="confirmpassword"
             placeholder="Password">
         </div>
-
         <button class="btn btn-warning" type="submit">Save changes</button>
       </form>
     </div>

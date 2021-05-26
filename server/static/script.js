@@ -3,17 +3,15 @@ $("#question-game-questions .show-question button").on("click", function() {
   const correctAnswer = $(this).parent().attr("data-correct-answer");
   const score = parseInt($("#score").val());
   console.log($(this).parent().next().hasClass('show-question'))
-  $(this).parent().hide() //gömmer nuvarande parent
-  $(this).parent().next().show() //visar nästa parent
-  resetTimer(init_time) //Reset av timer
+  $(this).parent().hide() //Hides current parent 
+  $(this).parent().next().show() //Shows the next parent
+  resetTimer(init_time) //Resets the timer
 
   if (answer === correctAnswer) {
-    console.log("Rätt!");
-    $("#score").val(score + time ); //Så mycket tid som är kvar får du i poäng
-  } else {
-    console.log("FEL!");
-  }
-//om det inte finns en ny fråga skriv ut poäng och göm timer annars starta tiden igen
+    $("#score").val(score + time ); //Amount of time left genereates your points
+  } 
+
+//If there are no more questions, print the points and hide the timer, otherwise start the time again
   if (!$(this).parent().next().hasClass('show-question')){
     $(".scoretest").text("Your final score: " + $("#score").val())
     $(".timer").empty()
@@ -22,25 +20,22 @@ $("#question-game-questions .show-question button").on("click", function() {
   }
 });
 
-/* Playing a game, göm frågorna i frågepaketet */
+// Playing a game, hide the questions wihtin the question package 
 $(document).ready(function(){
   $(".show-question").hide();
   $(".end-game").hide();
   });
   
-  /* When clicking "Start game" in lobby, när du klickar på starta spel göms div-elementet med knappen starta spel och första frågan i frågepaketet visas */
+  //When you click on start game in lobby
   $("#start-game").on("click", function() {
     $(".start-game-menu").hide();
-    //$(".show-question").show();
     $(".show-question"+"#1").show()
     $(".end-game").show();
-    timer() //starta timer
+    timer() //Start timer
 });
 
-
 var init_time; 
-var time; //tiden som timer stannade på
-//startar en tidtagning från 29sek
+var time; 
 function timer(){
   time = 19;
   var timerDiv = document.getElementById('timer');
@@ -52,36 +47,20 @@ function timer(){
       timerDiv.innerHTML = time + " seconds remaining";
       time--;
       if (time === -1) {
-        console.log("#yougonegoofed");
         time = 0;
       }     
     }   
   }
 }
-//stoppar tidtagning och nollställer
+//Stops the time and resets
 function resetTimer(timer){
   clearInterval(timer)
-  console.log(time)
 }
 
-
 $(".read_more-link").on("click", function(){
-  alert("This is where our terms and conditions are. How fun!")
+  alert("It's your lucky day, we don't have any terms and conditions, they are for loosers! Have fun!")
 });
 
-
-//Popover for 'Rules'-button 
-/*$(document).ready(function(){
-  $( "[data-toggle='popover'" ).popover( );
-});
-
-$( ".popover_dismiss" ).popover(
-  {
-    trigger: "focus"
-}); */
-
-
-//Get the button:
 mybutton = document.getElementById("myBtn");
 
 // When the user scrolls down 20px from the top of the document, show the button
@@ -120,5 +99,3 @@ $(document).ready(function () {
     }
   }
 });
-
-//Testar knappjävel
