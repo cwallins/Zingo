@@ -166,8 +166,8 @@ def control_questions_answers():
     cursor.execute(f"exec sp_get_questions '{session['qp_name']}'")
     questions = cursor.fetchall()
 
-    for question in questions:
-        if question == question[0] and answer_1 == question[1] and answer_2 == question[2] and answer_3 == question[3] and answer_4 == question[4]:
+    for q in questions:
+        if question == q[0] and answer_1 == q[1] and answer_2 == q[2] and answer_3 == q[3] and answer_4 == q[4]:
             msg = 'The question does already exist in the question package.'
             session['message'] = msg
             return redirect(url_for('create_question'))
@@ -374,22 +374,25 @@ def search_form():
 
 @app.route('/playing/<chosen_qp>/<admin>')
 def in_game_show_question(chosen_qp, admin):
-    questions = ask_questions(chosen_qp)
-    shuffle(questions)
+    try:
+        questions = ask_questions(chosen_qp)
+        shuffle(questions)
 
-    for question in questions:
-        shuffle(question['answers'])
+        for question in questions:
+            shuffle(question['answers'])
 
-    cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
-    qp_id = cursor.fetchone()[0]
+        cursor.execute(f"select qp_id from question_package where qp_name = '{chosen_qp}'")
+        qp_id = cursor.fetchone()[0]
 
-    if admin == 'User':
-        session['message'] = "You are currently not logged in. Your score will not be saved. Do you wish to create an account?"
-        session['was_playing'] = chosen_qp
-    else:
-        session['message'] = ""
+        if admin == 'User':
+            session['message'] = "You are currently not logged in. Your score will not be saved. Do you wish to create an account?"
+            session['was_playing'] = chosen_qp
+        else:
+            session['message'] = ""
 
-    return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id = qp_id, username = admin, msg = session['message'])
+        return render_template("in_game_show_question.html", questions = questions, admin = True, guest = False, qp_id = qp_id, username = admin, msg = session['message'])
+    except:
+        return redirect(url_for("view_all_question_package"))
 
 def ask_questions(question_list):
     question_list = execute_procedure(f"sp_get_questions '{question_list}'")
