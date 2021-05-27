@@ -245,7 +245,7 @@ def user_login():
             session['username'] = account[3]
             msg = 'Logged in'
         else:
-            session['message'] = 'Incorrect email och password.'
+            session['message'] = 'Incorrect email and password.'
     return redirect(url_for('my_profile'))
 
 @app.route('/logout')
