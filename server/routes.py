@@ -114,7 +114,7 @@ def edit_q(qp_name, question):
 
 @app.route('/view_all_question_package')
 def view_all_question_package():
-    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id]")
+    cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q left join [user] u on q.created_by = u.[user_id] where qp_id in (select qp_id from question)")
     qp_list = cursor.fetchall()
     list_of_tags = get_tags()
     return render_template("view_all_question_package.html", qp_list = qp_list, tags = list_of_tags)
