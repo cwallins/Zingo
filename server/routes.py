@@ -356,12 +356,12 @@ def search_form():
     if 'search_input' in request.form:
         search_input = request.form['search_input']
 
-        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id]  where q.qp_name like '%{search_input}%'")         
+        cursor.execute(f"exec sp_show_question_package_by_name '{search_input}'")         
         res = cursor.fetchall()
     elif 'qp_tag' in request.form:
         qp_tag = request.form['qp_tag']
 
-        cursor.execute(f"select q.qp_name, q.qp_description, u.nickname from question_package q full outer join [user] u on q.created_by = u.[user_id] join question_package_tag qt on q.qp_id = qt.qp_id join tag t on t.tag_id = qt.tag_id where t.tag_description = '{qp_tag}'")         
+        cursor.execute(f"exec sp_show_question_packages_by_tag '{qp_tag}'")         
         res = cursor.fetchall()
     
     list_of_tags = get_tags()
